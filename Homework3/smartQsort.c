@@ -11,7 +11,7 @@ void randomArrayFilling(unsigned int arraySize, int array[]) {
     srand((unsigned)time(0));
     
     for (int i = 0; i < arraySize; ++i) {
-        array[i] = rand();
+        array[i] = rand() % 50000;
     }
 }
 
@@ -70,14 +70,28 @@ void qsortRecursion(int low, int high, int array[]) {
 }
 
 int main () {
-    int array[10] = {6, 5, 2, 443434, 3, 1, 10, -10, 44444, 435155};
-    qsortRecursion(0, 9, array);
-    //semiQsort(10array);
+    printf("Enter a count of numbers, except zero: ");
+    unsigned int arraySize = 0;
+    scanf("%d", &arraySize);
+    while (arraySize < 1) {
+        printf("Count of numbers cannot be negative or zero, repeat input: ");
+        scanf("%d", &arraySize);
+    }
 
-    for (int i = 0; i < 10; ++i) {
+    int *array = (int*)(calloc(arraySize, sizeof(int)));
+    if (array == NULL) {
+        printf("Not enough memory");
+        return 1;
+    }
+    randomArrayFilling(arraySize, array);
+
+    qsortRecursion(0, arraySize - 1, array);
+    printf("Sorted array: ");
+    for (int i = 0; i < arraySize; ++i) {
         printf("%d ", array[i]);
     }
-    printf("\n");
+
+    free(array);
 
     return 0;
 }
