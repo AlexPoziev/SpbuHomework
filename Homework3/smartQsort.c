@@ -69,9 +69,9 @@ void qsortRecursion(int low, int high, int array[]) {
     }
 }
 
-bool testModel(int array[], const int arraySize, unsigned int differentNumbers) {
-    unsigned int sortedDifferentNumbers = 0;
-    for (int i = 1; i < arraySize - 1; ++i) {
+bool testModel(int array[], const int arraySize, int differentNumbers) {
+    int sortedDifferentNumbers = 1;
+    for (int i = 1; i < arraySize; ++i) {
         if (array[i - 1] != array[i]) {
             ++sortedDifferentNumbers;
         }
@@ -79,7 +79,6 @@ bool testModel(int array[], const int arraySize, unsigned int differentNumbers) 
             return false;
         }
     }
-
     return differentNumbers == sortedDifferentNumbers ? true : false;
 }
 
@@ -87,24 +86,22 @@ bool correctTest(void) {
     const int low = 0;
     int arrayCheckFirst[1] = {5};
     int arrayCheckSecond[10] = {-1, 10, 5, -10, -10, 1000000, -141414, 0, -123, 444};
-    int arrayCheckThird[100000] = {1};
-    int arrayCheckFourth[5] = {1, 2, 3, 4, 5};
-    int arrayCheckFifth[6] = {-5, -10, -4, -100, -16, -16};
+    int arrayCheckThird[5] = {1, 2, 3, 4, 5};
+    int arrayCheckFourth[6] = {-5, -10, -4, -100, -16, -16};
     //В моем алгоритме по semiSort функция с данным массивом работала неверно
-    int arrayCheckSixth[10] = {6, 5, 2, 443434, 3, 1, 10, -10, 44444, 435155};
+    int arrayCheckFifth[10] = {6, 5, 2, 443434, 3, 1, 10, -10, 44444, 435155};
     
     qsortRecursion(low, 0, arrayCheckFirst);
     qsortRecursion(low, 9, arrayCheckSecond);
-    qsortRecursion(low, 9999, arrayCheckThird);
-    qsortRecursion(low, 4, arrayCheckFourth);
-    qsortRecursion(low, 5, arrayCheckFifth);
-    qsortRecursion(low, 9, arrayCheckSixth);
+    qsortRecursion(low, 4, arrayCheckThird);
+    qsortRecursion(low, 5, arrayCheckFourth);
+    qsortRecursion(low, 9, arrayCheckFifth);
     
-    return testModel(arrayCheckFirst, 1, 1) && testModel(arrayCheckSecond, 10, 9) && testModel(arrayCheckThird, 100000, 2) && testModel(arrayCheckFourth, 5, 5) && testModel(arrayCheckFifth, 6, 5) && testModel(arrayCheckSixth, 10, 10);
+    return testModel(arrayCheckFirst, 1, 1) && testModel(arrayCheckSecond, 10, 9) && testModel(arrayCheckThird, 5, 5) && testModel(arrayCheckFourth, 6, 5) && testModel(arrayCheckFifth, 10, 10);
 }
 
 int main() {
-    if (!correctTest) {
+    if (!correctTest()) {
         printf("Test Failed");
         return 1;
     }
