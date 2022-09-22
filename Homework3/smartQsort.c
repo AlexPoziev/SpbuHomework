@@ -58,7 +58,6 @@ int semiQsort(int low, int high, int array[]) {
 
 void qsortRecursion(int low, int high, int array[]) {
     if (low < high) {
-
         if (high - low < 9) {
             insertionSort(low, high, array);
         } else {
@@ -90,14 +89,16 @@ bool correctTest(void) {
     int arrayCheckFourth[6] = {-5, -10, -4, -100, -16, -16};
     //В моем алгоритме по semiSort функция с данным массивом работала неверно
     int arrayCheckFifth[10] = {6, 5, 2, 443434, 3, 1, 10, -10, 44444, 435155};
+    int arrayCheckSixth[10000] = {1};
     
     qsortRecursion(low, 0, arrayCheckFirst);
     qsortRecursion(low, 9, arrayCheckSecond);
     qsortRecursion(low, 4, arrayCheckThird);
     qsortRecursion(low, 5, arrayCheckFourth);
     qsortRecursion(low, 9, arrayCheckFifth);
+    qsortRecursion(low, 9999, arrayCheckSixth);
     
-    return testModel(arrayCheckFirst, 1, 1) && testModel(arrayCheckSecond, 10, 9) && testModel(arrayCheckThird, 5, 5) && testModel(arrayCheckFourth, 6, 5) && testModel(arrayCheckFifth, 10, 10);
+    return testModel(arrayCheckFirst, 1, 1) && testModel(arrayCheckSecond, 10, 9) && testModel(arrayCheckThird, 5, 5) && testModel(arrayCheckFourth, 6, 5) && testModel(arrayCheckFifth, 10, 10) && testModel(arrayCheckSixth, 10000, 2);
 }
 
 int main() {
