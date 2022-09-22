@@ -69,7 +69,20 @@ void qsortRecursion(int low, int high, int array[]) {
     }
 }
 
-int main () {
+bool testModel(int array[], const int arraySize, int *differentNumbers) {
+    *differentNumbers = 0;
+    for (int i = 1; i < arraySize - 1; ++i) {
+        if (array[i - 1] != array[i]) {
+            ++(*differentNumbers);
+        }
+        if (!(array[i - 1] <= array[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int main() {
     printf("Enter a count of numbers, except zero: ");
     unsigned int arraySize = 0;
     scanf("%d", &arraySize);
