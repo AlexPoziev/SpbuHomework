@@ -31,7 +31,7 @@ void insertionSort(int low, int high, int array[]) {
     }
 }
 
-void semiQsort(int low, int high, int array[]) {
+int semiQsort(int low, int high, int array[]) {
     const int firstNumber = array[low];
     int border = high;
 
@@ -45,19 +45,39 @@ void semiQsort(int low, int high, int array[]) {
         }
     }
 
+    if (firstNumber < array[border]) {
+        --border;
+    }
+
     if (!(low == high)) {
         swap(&array[low], &array[border]);;
+    }
+
+    return border;
+}
+
+void qsortRecursion(int low, int high, int array[]) {
+    if (low < high) {
+
+        if (high - low < 9) {
+            insertionSort(low, high, array);
+        } else {
+            int border = semiQsort(low, high, array);
+            qsortRecursion(low, border - 1, array);
+            qsortRecursion(border + 1, high, array);
+        }
     }
 }
 
 int main () {
     int array[10] = {6, 5, 2, 443434, 3, 1, 10, -10, 44444, 435155};
-    semiQsort(2, 4, array);
+    qsortRecursion(0, 9, array);
     //semiQsort(10array);
 
     for (int i = 0; i < 10; ++i) {
         printf("%d ", array[i]);
     }
+    printf("\n");
 
     return 0;
 }
