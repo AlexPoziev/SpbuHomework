@@ -4,8 +4,8 @@
 #include <string.h>
 
 int compare(const void *x_void, const void *y_void) {
-    int x = *(int *)x_void;
-    int y = *(int *)y_void;
+    int x = *(int*)x_void;
+    int y = *(int*)y_void;
     
     return x - y;
 }
@@ -50,6 +50,31 @@ int main() {
         return 1;
     }
 
-    
+    printf("Enter a count of numbers, except zero: ");
+    int arrayLength = 0;
+    scanf("%d", &arrayLength);
+    while (arrayLength < 1) {
+        printf("Count of numbers cannot be negative or zero, repeat input: ");
+        scanf("%d", &arrayLength);
+    }
+
+    int* array = (int*)(calloc(arrayLength, sizeof(int)));
+    if (array == NULL) {
+        printf("Not enough memory");
+        return 1;
+    }
+
+    printf("Enter number: \n");
+    for (int i = 0; i < arrayLength; ++i) {
+        bool isString = scanf("%d", (&array[i]));
+        while (!isString) { // проверка, лежит в переменной тип int или строка
+            printf("Entered value isn't number, repeat enter: \n");
+            fflush(stdin);//очистка буфера
+            isString = scanf("%d", &array[i]);
+        }
+    }
+
+    printf("The most frequent number in array: %d \n", mostFrequentNumber(array, arrayLength));
+
     return 0;
 }
