@@ -10,7 +10,7 @@ int compare(const void *x_void, const void *y_void) {
     return x - y;
 }
 
-int mostFrequent(int array[], int arrayLength) {
+int mostFrequentNumber(int array[], int arrayLength) {
     unsigned int maxRow = 0;
     unsigned int recentCount = 1;
     int maxRowElement = 0;
@@ -35,9 +35,21 @@ int mostFrequent(int array[], int arrayLength) {
     return recentCount > maxRow ? sortedArray[arrayLength - 1] : maxRowElement;
 }
 
+bool correctTest(void) {
+    int arrayFirst[1] = {1000};
+    int arraySecond[8] = {1, 10, 5, 1, 10, 10, -1, -2};
+    int arrayThird[3] = {1, 2, 3};
+    int arrayFourth[3] = {0, 0, 0};
+
+    return mostFrequentNumber(arrayFirst, 1) == 1000 && mostFrequentNumber(arraySecond, 8) == 10 && mostFrequentNumber(arrayThird, 3) == 1 || mostFrequentNumber(arrayThird, 3) == 2 || mostFrequentNumber(arrayThird, 3) == 3 && mostFrequentNumber(arrayFourth, 3) == 0;
+}
+
 int main() {
-    int array[5] = {5, 2, 3, 1, 3};
-    int check = mostFrequent(array, 5);
-    printf("%d", check);
+    if (!correctTest()) {
+        printf("Test Failed");
+        return 1;
+    }
+
+    
     return 0;
 }
