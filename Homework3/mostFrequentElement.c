@@ -3,11 +3,43 @@
 #include <stdbool.h>
 #include <string.h>
 
-int compare(const void *x_void, const void *y_void) {
-    int x = *(int*)x_void;
-    int y = *(int*)y_void;
-    
-    return x - y;
+void swap(int *first, int *second) {
+    int temp = *first;
+    *first = *second;
+    *second = temp;
+}
+
+int semiQsort(int low, int high, int array[]) {
+    const int firstNumber = array[low];
+    int border = high;
+
+    for (int i = low + 1; i < border; ++i) {
+        if (array[i] >= firstNumber) {
+            while (array[border] >= firstNumber && i < border) {
+                --border;
+            }
+            swap(&array[i], &array[border]);
+            --border;
+        }
+    }
+
+    if (firstNumber < array[border]) {
+        --border;
+    }
+
+    if (!(low == high)) {
+        swap(&array[low], &array[border]);;
+    }
+
+    return border;
+}
+
+void qsortRecursion(int low, int high, int array[]) {
+    if (low < high) {
+            int border = semiQsort(low, high, array);
+            qsortRecursion(low, border - 1, array);
+            qsortRecursion(border + 1, high, array);
+    }
 }
 
 int mostFrequentNumber(int array[], int arrayLength) {
@@ -16,9 +48,9 @@ int mostFrequentNumber(int array[], int arrayLength) {
     int maxRowElement = 0;
     
     //создание копии массива, так как функция не всегда должна менять проверяемый массив
-    int *sortedArray =  (int *)(calloc(arrayLength, sizeof(int)));
+    int *sortedArray =  (int*)(calloc(arrayLength, sizeof(int)));
     memcpy(sortedArray, array, sizeof(int) * arrayLength);
-    qsort(sortedArray, arrayLength, sizeof(int), compare);
+    qsortRecursion(0, arrayLength - 1, sortedArray);
 
     for (int i = 1; i < arrayLength; ++i) {
         if (sortedArray[i] == sortedArray[i - 1]) {
@@ -37,7 +69,7 @@ int mostFrequentNumber(int array[], int arrayLength) {
 
 bool correctTest(void) {
     int arrayFirst[1] = {1000};
-    int arraySecond[8] = {1, 10, 5, 1, 10, 10, -1, -2};
+    int arraySecond[8] = {-2, 10, 5, 1, 10, 10, -1, 1};
     int arrayThird[3] = {1, 2, 3};
     int arrayFourth[3] = {0, 0, 0};
 
@@ -67,9 +99,9 @@ int main() {
     printf("Enter number: \n");
     for (int i = 0; i < arrayLength; ++i) {
         bool isString = scanf("%d", (&array[i]));
-        while (!isString) { // проверка, лежит в переменной тип int или строка
+        while (!isString) {
             printf("Entered value isn't number, repeat enter: \n");
-            fflush(stdin);//очистка буфера
+            fflush(stdin);
             isString = scanf("%d", &array[i]);
         }
     }
