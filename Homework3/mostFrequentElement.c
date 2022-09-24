@@ -36,9 +36,9 @@ int semiQsort(int low, int high, int array[]) {
 
 void qsortRecursion(int low, int high, int array[]) {
     if (low < high) {
-            int border = semiQsort(low, high, array);
-            qsortRecursion(low, border - 1, array);
-            qsortRecursion(border + 1, high, array);
+        int border = semiQsort(low, high, array);
+        qsortRecursion(low, border - 1, array);
+        qsortRecursion(border + 1, high, array);
     }
 }
 
