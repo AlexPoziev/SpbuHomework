@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+
+void swap(int *first, int *second) {
+    int temp = *first;
+    *first = *second;
+    *second = *first;
+}
 
 void randomArrayFilling(unsigned int arraySize, int array[]) {
     if (arraySize < 1) {
@@ -47,7 +54,24 @@ void qsortRecursion(int low, int high, int array[]) {
     }
 }
 
-int main() {
+bool search(int number, int array[], int arraySize) { 
+    int low = 0;
+    int high = arraySize - 1;
 
+    while (low <= high) {
+        int middle = (high + low) / 2;
+            
+        if (array[middle] == number) {
+            return true;
+        }
+        (array[middle] > number) ? (high = middle - 1) : (low = middle + 1);
+    }
+
+    return false;
+}
+
+int main() {
+    int array[6] = {1, 2, 3, 4, 5, 6};
+    printf("%d ", search(6, array, 6));
     return 0;
 }
