@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <string.h>
 
 void swap(int *first, int *second) {
     int temp = *first;
     *first = *second;
-    *second = *first;
+    *second = temp;
 }
 
 void randomArrayFilling(unsigned int arraySize, int array[]) {
@@ -58,20 +59,37 @@ bool search(int number, int array[], int arraySize) {
     int low = 0;
     int high = arraySize - 1;
 
+    int *sortedArray =  (int*)(calloc(arraySize, sizeof(int)));
+    memcpy(sortedArray, array, sizeof(int) * arraySize);
+    qsortRecursion(0, arraySize - 1, sortedArray);
+
     while (low <= high) {
         int middle = (high + low) / 2;
             
-        if (array[middle] == number) {
+        if (sortedArray[middle] == number) {
             return true;
         }
-        (array[middle] > number) ? (high = middle - 1) : (low = middle + 1);
+        (sortedArray[middle] > number) ? (high = middle - 1) : (low = middle + 1);
     }
 
     return false;
 }
 
+bool correctTest(void) {
+    int arrayFirst[8] = {9, 3535, -12414, 44434, 1111, 0, 0, 0};
+    int arraySecond[1] = {10};
+
+    return search(-12414, arrayFirst, 8) && search(44434, arrayFirst, 8) && search(9, arrayFirst, 8) && search(10, arraySecond, 1);
+}
+
+bool incorrectTest(void) {
+    int arrayFirst[8] = {9, 3535, -12414, 44434, 1111, 0, 0, 0};
+    int arraySecond[1] = {10};
+
+    return !search(-12444, arrayFirst, 8) && !search(44433, arrayFirst, 8) && !search(8, arrayFirst, 8) && !search(9, arraySecond, 1);
+}
+
 int main() {
-    int array[6] = {1, 2, 3, 4, 5, 6};
-    printf("%d ", search(6, array, 6));
+
     return 0;
 }
