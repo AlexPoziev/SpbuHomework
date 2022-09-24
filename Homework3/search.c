@@ -10,12 +10,12 @@ void swap(int *first, int *second) {
     *second = temp;
 }
 
-void randomArrayFilling(unsigned int arraySize, int array[]) {
+void randomArrayFilling(unsigned int arraySize, int array[], unsigned int callTime) {
     if (arraySize < 1) {
         return;
     }
     
-    srand((unsigned)time(0));
+    srand((unsigned)time(0) + callTime);
     
     for (int i = 0; i < arraySize; ++i) {
         array[i] = rand() % 10;
@@ -49,9 +49,9 @@ int semiQsort(int low, int high, int array[]) {
 
 void qsortRecursion(int low, int high, int array[]) {
     if (low < high) {
-            int border = semiQsort(low, high, array);
-            qsortRecursion(low, border - 1, array);
-            qsortRecursion(border + 1, high, array);
+        int border = semiQsort(low, high, array);
+        qsortRecursion(low, border - 1, array);
+        qsortRecursion(border + 1, high, array);
     }
 }
 
@@ -112,16 +112,17 @@ int main() {
     }
 
     int *arrayMain = (int*)(calloc(arraySizeMain, sizeof(int)));
-    randomArrayFilling(arraySizeMain, arrayMain);
+    randomArrayFilling(arraySizeMain, arrayMain, 1);
     int *arraySearch = (int*)(calloc(arraySizeSearch, sizeof(int)));
-    randomArrayFilling(arraySizeSearch, arraySearch);
+    randomArrayFilling(arraySizeSearch, arraySearch, 2);
 
+    printf("Main array: ");
     for (int i = 0; i < arraySizeMain; ++i) {
         printf("%d ", arrayMain[i]);
     }
     printf("\n");
     for (int i = 0; i < arraySizeSearch; ++i) {
-        printf("%d %s in array \n", arraySearch[i], (search(arraySearch[i], arrayMain, arraySizeSearch)) ? "contained" : "not contained");
+        printf("%d %s in array \n", arraySearch[i], (search(arraySearch[i], arrayMain, arraySizeMain)) ? "contained" : "not contained");
     }
 
     return 0;
