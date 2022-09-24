@@ -18,7 +18,7 @@ void randomArrayFilling(unsigned int arraySize, int array[]) {
     srand((unsigned)time(0));
     
     for (int i = 0; i < arraySize; ++i) {
-        array[i] = rand();
+        array[i] = rand() % 10;
     }
 }
 
@@ -90,6 +90,39 @@ bool incorrectTest(void) {
 }
 
 int main() {
+    if (!correctTest() || !incorrectTest()) {
+        printf("Tests Failed");
+        return 1;
+    }
+
+    printf("Enter main array size greater than zero: ");
+    int arraySizeMain = 0;
+    scanf("%d", &arraySizeMain);
+    while (arraySizeMain < 1) {
+        printf("Numbers count must be greater than zero: \n");
+        scanf("%d", &arraySizeMain);
+    }
+
+    printf("Enter search array size greater than zero: ");
+    int arraySizeSearch = 0;
+    scanf("%d", &arraySizeSearch);
+    while (arraySizeSearch < 1) {
+        printf("Numbers count must be greater than zero: \n");
+        scanf("%d", &arraySizeSearch);
+    }
+
+    int *arrayMain = (int*)(calloc(arraySizeMain, sizeof(int)));
+    randomArrayFilling(arraySizeMain, arrayMain);
+    int *arraySearch = (int*)(calloc(arraySizeSearch, sizeof(int)));
+    randomArrayFilling(arraySizeSearch, arraySearch);
+
+    for (int i = 0; i < arraySizeMain; ++i) {
+        printf("%d ", arrayMain[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < arraySizeSearch; ++i) {
+        printf("%d %s in array \n", arraySearch[i], (search(arraySearch[i], arrayMain, arraySizeSearch)) ? "contained" : "not contained");
+    }
 
     return 0;
 }
