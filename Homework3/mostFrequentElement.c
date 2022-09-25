@@ -64,7 +64,10 @@ int mostFrequentNumber(int array[], int arrayLength) {
         }
     }
     
-    return recentCount > maxRow ? sortedArray[arrayLength - 1] : maxRowElement;
+    int lastNumber = sortedArray[arrayLength - 1];
+    free(sortedArray);
+    
+    return recentCount > maxRow ? lastNumber : maxRowElement;
 }
 
 bool correctTest(void) {
