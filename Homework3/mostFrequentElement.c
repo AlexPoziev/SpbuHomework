@@ -111,5 +111,8 @@ int main() {
 
     printf("The most frequent number in array: %d \n", mostFrequentNumber(array, arrayLength));
 
+
+    free(array);
+    
     return 0;
 }
