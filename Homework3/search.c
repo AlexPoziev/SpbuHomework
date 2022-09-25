@@ -10,7 +10,7 @@ void swap(int *first, int *second) {
     *second = temp;
 }
 
-void randomArrayFilling(unsigned int arraySize, int array[], unsigned int callTime) {
+void fillRandomArray(unsigned int arraySize, int array[], unsigned int callTime) {
     if (arraySize < 1) {
         return;
     }
@@ -67,10 +67,13 @@ bool search(int number, int array[], int arraySize) {
         int middle = (high + low) / 2;
             
         if (sortedArray[middle] == number) {
+            free(sortedArray);
             return true;
         }
         (sortedArray[middle] > number) ? (high = middle - 1) : (low = middle + 1);
     }
+
+    free(sortedArray);
 
     return false;
 }
@@ -112,9 +115,9 @@ int main() {
     }
 
     int *arrayMain = (int*)(calloc(arraySizeMain, sizeof(int)));
-    randomArrayFilling(arraySizeMain, arrayMain, 1);
+    fillRandomArray(arraySizeMain, arrayMain, 1);
     int *arraySearch = (int*)(calloc(arraySizeSearch, sizeof(int)));
-    randomArrayFilling(arraySizeSearch, arraySearch, 2);
+    fillRandomArray(arraySizeSearch, arraySearch, 2);
 
     printf("Main array: ");
     for (int i = 0; i < arraySizeMain; ++i) {
@@ -125,5 +128,8 @@ int main() {
         printf("%d %s in array \n", arraySearch[i], (search(arraySearch[i], arrayMain, arraySizeMain)) ? "contained" : "not contained");
     }
 
+    free(arrayMain);
+    free(arraySearch);
+    
     return 0;
 }
