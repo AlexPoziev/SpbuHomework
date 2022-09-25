@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void randomArrayFilling(unsigned int arraySize, int array[]) {
+void fillRandomArray(unsigned int arraySize, int array[]) {
     if (arraySize < 1) {
         return;
     }
@@ -120,7 +120,7 @@ int main() {
         printf("Not enough memory");
         return 1;
     }
-    randomArrayFilling(arraySize, array);
+    fillRandomArray(arraySize, array);
 
     qsortRecursion(0, arraySize - 1, array);
     printf("Sorted array: ");
