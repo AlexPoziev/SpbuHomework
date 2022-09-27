@@ -33,10 +33,25 @@ void fillRandomArray(unsigned int arraySize, int array[], unsigned int callTime)
 }
 
 int semiQsort(int low, int high, int array[]) {
-    const int firstNumber = array[low];
-    int border = high;
+    int middle = (low + high) / 2;
 
-    for (int i = low + 1; i < border; ++i) {
+    int *tempArray = (int*)(calloc(3, sizeof(int)));
+    tempArray[0] = array[low];
+    tempArray[1] = array[middle];
+    tempArray[2] = array[high];
+    insertionSort(0, 2, tempArray);
+
+    array[0] = tempArray[0];
+    array[middle] = tempArray[1];
+    array[high] = tempArray[2];
+
+    free(tempArray);
+
+    swap(&array[1], &array[middle]);
+    int border = high - 1;
+    const int firstNumber = array[low + 1];
+
+    for (int i = low + 2; i < border; ++i) {
         if (array[i] >= firstNumber) {
             while (array[border] >= firstNumber && i < border) {
                 --border;
@@ -51,8 +66,13 @@ int semiQsort(int low, int high, int array[]) {
     }
 
     if (!(low == high)) {
-        swap(&array[low], &array[border]);;
+        swap(&array[low + 1], &array[border]);;
     }
+
+    for (int i = 0; i < 10; ++i) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
 
     return border;
 }
@@ -107,6 +127,12 @@ bool incorrectTest(void) {
 }
 
 int main() {
+    int array[10] = {10, 1, 5, 4, 8, 5, 1000, 4434, 4, 1};
+    qsortRecursion(0, 9, array);
+    for (int i = 0; i < 10; ++i) {
+        printf("%d ", array[i]);
+    }
+
     if (!correctTest() || !incorrectTest()) {
         printf("Tests Failed");
         return 1;
