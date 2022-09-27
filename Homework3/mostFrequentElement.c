@@ -9,11 +9,37 @@ void swap(int *first, int *second) {
     *second = temp;
 }
 
-int semiQsort(int low, int high, int array[]) {
-    const int firstNumber = array[low];
-    int border = high;
+void insertionSort(int low, int high, int array[]) {
+    for (int i = low; i <= high; ++i) {
+        int j = i;
+        while (j > low && array[j - 1] > array[j]) {
+            swap(&array[j - 1] , &array[j]);
+            --j;
+        }
+    }
+}
 
-    for (int i = low + 1; i < border; ++i) {
+int semiQsort(int low, int high, int array[]) {
+    int middle = (low + high) / 2;
+
+    int *tempArray = (int*)(calloc(3, sizeof(int)));
+
+    tempArray[0] = array[low];
+    tempArray[1] = array[middle];
+    tempArray[2] = array[high];
+    insertionSort(0, 2, tempArray);
+
+    array[0] = tempArray[0];
+    array[middle] = tempArray[1];
+    array[high] = tempArray[2];
+
+    free(tempArray);
+
+    swap(&array[1], &array[middle]);
+    int border = high - 1;
+    const int firstNumber = array[low + 1];
+
+    for (int i = low + 2; i < border; ++i) {
         if (array[i] >= firstNumber) {
             while (array[border] >= firstNumber && i < border) {
                 --border;
@@ -28,19 +54,23 @@ int semiQsort(int low, int high, int array[]) {
     }
 
     if (!(low == high)) {
-        swap(&array[low], &array[border]);;
+        swap(&array[low + 1], &array[border]);;
     }
 
     return border;
 }
 
 void qsortRecursion(int low, int high, int array[]) {
-    if (low < high) {
-        int border = semiQsort(low, high, array);
-        qsortRecursion(low, border - 1, array);
-        qsortRecursion(border + 1, high, array);
-    }
-}
+     if (low < high) {
+         if (high - low < 9) {
+             insertionSort(low, high, array);
+         } else {
+             int border = semiQsort(low, high, array);
+             qsortRecursion(low, border - 1, array);
+             qsortRecursion(border + 1, high, array);
+         }
+     }
+ }
 
 int mostFrequentNumber(int array[], int arrayLength) {
     unsigned int maxRow = 0;
@@ -99,7 +129,7 @@ int main() {
         return 1;
     }
 
-    printf("Enter number: \n");
+    printf("Enter numbers: \n");
     for (int i = 0; i < arrayLength; ++i) {
         bool isString = scanf("%d", (&array[i]));
         while (!isString) {
@@ -113,6 +143,6 @@ int main() {
 
 
     free(array);
-    
+
     return 0;
 }
