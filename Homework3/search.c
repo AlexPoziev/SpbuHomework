@@ -11,14 +11,14 @@ void swap(int *first, int *second) {
 }
 
 void insertionSort(int low, int high, int array[]) {
-     for (int i = low; i <= high; ++i) {
-         int j = i;
-         while (j > low && array[j - 1] > array[j]) {
-             swap(&array[j - 1] , &array[j]);
-             --j;
-         }
-     }
- }
+    for (int i = low; i <= high; ++i) {
+        int j = i;
+        while (j > low && array[j - 1] > array[j]) {
+            swap(&array[j - 1] , &array[j]);
+            --j;
+        }
+    }
+}
 
 void fillRandomArray(unsigned int arraySize, int array[], unsigned int callTime) {
     if (arraySize < 1) {
@@ -69,25 +69,20 @@ int semiQsort(int low, int high, int array[]) {
         swap(&array[low + 1], &array[border]);;
     }
 
-    for (int i = 0; i < 10; ++i) {
-        printf("%d ", array[i]);
-    }
-    printf("\n");
-
     return border;
 }
 
 void qsortRecursion(int low, int high, int array[]) {
-     if (low < high) {
-         if (high - low < 9) {
-             insertionSort(low, high, array);
-         } else {
-             int border = semiQsort(low, high, array);
-             qsortRecursion(low, border - 1, array);
-             qsortRecursion(border + 1, high, array);
-         }
-     }
- }
+    if (low < high) {
+        if (high - low < 9) {
+            insertionSort(low, high, array);
+        } else {
+            int border = semiQsort(low, high, array);
+            qsortRecursion(low, border - 1, array);
+            qsortRecursion(border + 1, high, array);
+        }
+    }
+}
 
 bool search(int number, int array[], int arraySize) { 
     int low = 0;
