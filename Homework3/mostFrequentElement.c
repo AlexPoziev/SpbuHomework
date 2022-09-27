@@ -61,16 +61,16 @@ int semiQsort(int low, int high, int array[]) {
 }
 
 void qsortRecursion(int low, int high, int array[]) {
-     if (low < high) {
-         if (high - low < 9) {
-             insertionSort(low, high, array);
-         } else {
-             int border = semiQsort(low, high, array);
-             qsortRecursion(low, border - 1, array);
-             qsortRecursion(border + 1, high, array);
-         }
-     }
- }
+    if (low < high) {
+        if (high - low < 9) {
+            insertionSort(low, high, array);
+        } else {
+            int border = semiQsort(low, high, array);
+            qsortRecursion(low, border - 1, array);
+            qsortRecursion(border + 1, high, array);
+        }
+    }
+}
 
 int mostFrequentNumber(int array[], int arrayLength) {
     unsigned int maxRow = 0;
