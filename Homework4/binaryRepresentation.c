@@ -12,13 +12,9 @@ void printArray(short *array, unsigned int size) {
     printf("\n");
 }
 
-short* columnAddition(short *first, short *second, unsigned numberDigits) {
-    short* sum = (short*)(calloc(numberDigits, sizeof(short)));
-    if (sum == NULL) {
-        return NULL;
-    }
+void columnAddition(short *first, short *second, unsigned numberDigits, short* sum) {
     bool anyRemainder = false;
-
+    
     for (int i = numberDigits - 1; i >= 0; --i) {
         if (first[i] && second[i]) {
             sum[i] = anyRemainder ? 1 : 0;
@@ -35,7 +31,6 @@ short* columnAddition(short *first, short *second, unsigned numberDigits) {
             }
         }
     }
-    return sum;
 }
 
 void binaryRepresentation(int number, unsigned int numberDigits, short* representation) {
@@ -61,8 +56,56 @@ int decimalRepresentation(unsigned int numberDigits, short *binary) {
     return sum;
 }
 
+bool compareTest(short *first, short *second, unsigned size) {
+    for (int i = 0; i < size; ++i) {
+        if (first[i] != second[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool correctTest(void) {
+    int first = 10;
+    int second = -50;
+    int third = 6;
+
+    short checkFirst[6] = {0};
+    short oneCheckFirst[6] = {0};
+    short checkSecond[7] = {0};
+    short oneCheckSecond[7] = {0};
+    binaryRepresentation(first, 6, checkFirst);
+    binaryRepresentation(first, 7, checkSecond);
+    binaryRepresentation(third, 6, oneCheckFirst);
+    binaryRepresentation(second, 7, oneCheckSecond);
+
+    
+    short correctCheckFirst[6] = {0, 0, 1, 0, 1, 0};
+    short correctOneCheckFirst[6] = {0, 0, 0, 1, 1, 0};
+    short correctOneCheckSecond[7] = {1, 0, 0, 1, 1, 1, 0};
+    short correctCheckSecond[7] = {0, 0, 0, 1, 0, 1, 0};
+
+    short correctFirstAddition[6] = {0, 1, 0, 0, 0, 0};
+    short correctSecondAddition[7] = {1, 0, 1, 1, 0, 0, 0};
+
+    short checkAdditionFirst[6] = {0};
+    short checkAdditionSecond[7] = {0};
+
+    columnAddition(correctCheckFirst, correctOneCheckFirst, 6, checkAdditionFirst);
+    columnAddition(correctCheckSecond, correctOneCheckSecond, 7, checkAdditionSecond);
+
+    return (compareTest(checkFirst, correctCheckFirst, 6) && compareTest(checkSecond, correctCheckSecond, 7) && compareTest(correctOneCheckFirst, oneCheckFirst, 6) && compareTest(correctOneCheckSecond, oneCheckSecond, 7) 
+    && compareTest(correctFirstAddition, checkAdditionFirst, 6) && compareTest(checkAdditionSecond, correctSecondAddition, 7) && decimalRepresentation(7, correctOneCheckSecond) == -50 && decimalRepresentation(6, correctFirstAddition) == 16);
+}
+
 int main() {
     setlocale(LC_ALL,"ru-RU");
+
+    if (!correctTest()) {
+        printf("Тесты провалены");
+        return 1;
+    }
 
     printf("Введите первое число: ");
     int first = 0;
@@ -106,11 +149,12 @@ int main() {
     printf("Двоичное представление в дополнительном коде второго числа: ");
     printArray(secondBinary, numberDigits);
 
-    short *sum = columnAddition(firstBinary, secondBinary, numberDigits);
+    short *sum = (short*)(calloc(numberDigits, sizeof(short)));
     if (sum == NULL) {
         printf("Недостаточно памяти");
         return 1;
     }
+    columnAddition(firstBinary, secondBinary, numberDigits, sum);
 
     free(firstBinary);
     free(secondBinary);
