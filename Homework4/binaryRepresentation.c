@@ -66,10 +66,20 @@ int main() {
 
     printf("Введите первое число: ");
     int first = 0;
-    scanf("%d", &first);
+    bool isString = scanf("%d", (&first));
+    while (!isString) {
+        printf("Введенное значение не является числом, произведите ввод снова: \n");
+        fflush(stdin);
+        isString = scanf("%d", &first);
+    }
     printf("Введите второе число: ");
     int second = 0;
-    scanf("%d", &second);
+    isString = scanf("%d", (&second));
+    while (!isString) {
+        printf("Введенное значение не является числом, произведите ввод снова: \n");
+        fflush(stdin);
+        isString = scanf("%d", &second);
+    }
 
     //определение количества разрядов
     unsigned int numberDigits = (unsigned int)ceil(log2(abs(first) > abs(second) ? abs(first) : abs(second))) + 1;
