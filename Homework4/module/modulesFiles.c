@@ -32,47 +32,35 @@ int mostFrequentNumber(int array[], int arrayLength) {
     return recentCount > maxRow ? lastNumber : maxRowElement;
 }
 
+void readFile(FILE *file ,int *array, int arrayLength) {
+    for (int i = 0; i < arrayLength; ++i) {
+        fscanf(file, "%d", &array[i]);
+    }
+}
+
 bool correctTest(void) {
+    int firstCheck[10] = {0};
+    FILE *file = fopen("test1.txt", "r");
+    readFile(file, firstCheck, 10);
+    fclose(file);
+    int secondCheck[1] = {0};
+    file = fopen("test2.txt", "r");
+    readFile(file, secondCheck, 1);
+    fclose(file);
+    int thirdCheck[5] = {0};
+    file = fopen("test3.txt", "r");
+    readFile(file, thirdCheck, 10);
+    fclose(file);
 
-
-    return mostFrequentNumber(arrayFirst, 1) == 1000 && mostFrequentNumber(arraySecond, 8) == 10 && mostFrequentNumber(arrayThird, 3) == 1 || mostFrequentNumber(arrayThird, 3) == 2 || mostFrequentNumber(arrayThird, 3) == 3 && mostFrequentNumber(arrayFourth, 3) == 0;
+    return mostFrequentNumber(firstCheck, 10) == -6 && mostFrequentNumber(secondCheck, 1) == 50 && (mostFrequentNumber(thirdCheck, 5) == 100 || mostFrequentNumber(thirdCheck, 5) == 15);
 }
 
 int main() {
-    /*if (!correctTest()) {
+    if (!correctTest()) {
         printf("Test Failed");
         return 1;
     }
 
-    printf("Enter a count of numbers, except zero: ");
-    int arrayLength = 0;
-    scanf("%d", &arrayLength);
-    while (arrayLength < 1) {
-        printf("Count of numbers cannot be negative or zero, repeat input: ");
-        scanf("%d", &arrayLength);
-    }
-
-    int* array = (int*)(calloc(arrayLength, sizeof(int)));
-    if (array == NULL) {
-        printf("Not enough memory");
-        return 1;
-    }
-
-    printf("Enter numbers: \n");
-    for (int i = 0; i < arrayLength; ++i) {
-        bool isString = scanf("%d", (&array[i]));
-        while (!isString) {
-            printf("Entered value isn't number, repeat enter: \n");
-            fflush(stdin);
-            isString = scanf("%d", &array[i]);
-        }
-    }
-
-    printf("The most frequent number in array: %d \n", mostFrequentNumber(array, arrayLength));
-
-
-    free(array);
-*/
     FILE *file = fopen("data.txt", "r");
 
     int arrayLength = 0;
@@ -101,9 +89,8 @@ int main() {
     }
 
     fclose(file);
-
     printf("Most frequent number: %d", mostFrequentNumber(array, arrayLength));
-
     free(array);
+
     return 0;
 }
