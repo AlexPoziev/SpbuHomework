@@ -1,76 +1,8 @@
+#include "sort.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-
-void swap(int *first, int *second) {
-    int temp = *first;
-    *first = *second;
-    *second = temp;
-}
-
-void insertionSort(int low, int high, int array[]) {
-    for (int i = low; i <= high; ++i) {
-        int j = i;
-        while (j > low && array[j - 1] > array[j]) {
-            swap(&array[j - 1] , &array[j]);
-            --j;
-        }
-    }
-}
-
-int semiQsort(int low, int high, int array[]) {
-    int middle = (low + high) / 2;
-
-    int *tempArray = (int*)(calloc(3, sizeof(int)));
-
-    tempArray[0] = array[low];
-    tempArray[1] = array[middle];
-    tempArray[2] = array[high];
-    insertionSort(0, 2, tempArray);
-
-    array[0] = tempArray[0];
-    array[middle] = tempArray[1];
-    array[high] = tempArray[2];
-
-    free(tempArray);
-
-    swap(&array[1], &array[middle]);
-    int border = high - 1;
-    const int firstNumber = array[low + 1];
-
-    for (int i = low + 2; i < border; ++i) {
-        if (array[i] >= firstNumber) {
-            while (array[border] >= firstNumber && i < border) {
-                --border;
-            }
-            swap(&array[i], &array[border]);
-            --border;
-        }
-    }
-
-    if (firstNumber < array[border]) {
-        --border;
-    }
-
-    if (!(low == high)) {
-        swap(&array[low + 1], &array[border]);;
-    }
-
-    return border;
-}
-
-void qsortRecursion(int low, int high, int array[]) {
-    if (low < high) {
-        if (high - low < 9) {
-            insertionSort(low, high, array);
-        } else {
-            int border = semiQsort(low, high, array);
-            qsortRecursion(low, border - 1, array);
-            qsortRecursion(border + 1, high, array);
-        }
-    }
-}
 
 int mostFrequentNumber(int array[], int arrayLength) {
     unsigned int maxRow = 0;
@@ -101,16 +33,13 @@ int mostFrequentNumber(int array[], int arrayLength) {
 }
 
 bool correctTest(void) {
-    int arrayFirst[1] = {1000};
-    int arraySecond[8] = {-2, 10, 5, 1, 10, 10, -1, 1};
-    int arrayThird[3] = {1, 2, 3};
-    int arrayFourth[3] = {0, 0, 0};
+
 
     return mostFrequentNumber(arrayFirst, 1) == 1000 && mostFrequentNumber(arraySecond, 8) == 10 && mostFrequentNumber(arrayThird, 3) == 1 || mostFrequentNumber(arrayThird, 3) == 2 || mostFrequentNumber(arrayThird, 3) == 3 && mostFrequentNumber(arrayFourth, 3) == 0;
 }
 
 int main() {
-    if (!correctTest()) {
+    /*if (!correctTest()) {
         printf("Test Failed");
         return 1;
     }
@@ -143,6 +72,38 @@ int main() {
 
 
     free(array);
+*/
+    FILE *file = fopen("data.txt", "r");
 
+    int arrayLength = 0;
+    fscanf(file, "%d", &arrayLength);
+    if (arrayLength < 1) {
+        printf("Numbers count less or equal zero");
+        return 2;
+    }
+
+    int *array = (int*)(calloc(arrayLength, sizeof(int)));
+    if (array == NULL) {
+        printf("Not enough memory");
+        return 1;
+    }
+
+    int i = 0;
+    for (; i < arrayLength && !(feof(file)); ++i) {
+        if (!(fscanf(file, "%d", &array[i]))) {
+            printf("Not a number");
+            return 2;
+        }
+    }
+    if (i != arrayLength) {
+        printf("Not enough numbers");
+        return 2;
+    }
+
+    fclose(file);
+
+    printf("Most frequent number: %d", mostFrequentNumber(array, arrayLength));
+
+    free(array);
     return 0;
 }
