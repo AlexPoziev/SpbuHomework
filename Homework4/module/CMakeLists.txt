@@ -3,4 +3,4 @@ project(module C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(module main.c)
+add_executable(module modulesFiles.c sort.c sort.h)
