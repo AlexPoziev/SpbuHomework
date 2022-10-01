@@ -32,7 +32,7 @@ int mostFrequentNumber(int array[], int arrayLength) {
     return recentCount > maxRow ? lastNumber : maxRowElement;
 }
 
-void readFile(FILE *file ,int *array, int arrayLength) {
+void readFile(FILE *file, int *array, int arrayLength) {
     for (int i = 0; i < arrayLength; ++i) {
         fscanf(file, "%d", &array[i]);
     }
@@ -55,13 +55,27 @@ bool correctTest(void) {
     return mostFrequentNumber(firstCheck, 10) == -6 && mostFrequentNumber(secondCheck, 1) == 50 && (mostFrequentNumber(thirdCheck, 5) == 100 || mostFrequentNumber(thirdCheck, 5) == 15);
 }
 
+//first number in file is arrayLength
 int main() {
     if (!correctTest()) {
         printf("Test Failed");
         return 1;
     }
-
     FILE *file = fopen("data.txt", "r");
+    if (file == NULL) {
+        printf("File not found");
+        return 1;
+    }
+
+    fseek(file, 0, SEEK_END);
+    long size = ftell(file);
+
+    if (size == 0) {
+        printf("File is empty\n");
+        return 1;
+    }
+
+    fseek(file, 0, SEEK_SET);
 
     int arrayLength = 0;
     fscanf(file, "%d", &arrayLength);
