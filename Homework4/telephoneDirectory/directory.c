@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define MAXPHONE = 15
+
 typedef struct {
     char *phone;
     char *name;
@@ -43,11 +45,58 @@ int main() {
             }
             case 3:
             {
+                PhoneBook number;
+
+                printf("Input phone number with length below 15 to find name: ");
+                number.phone = (char*)(calloc(15, sizeof(char)));
+                if (number.phone == NULL) {
+                    printf("Not enough memory for program work");
+                }
+                number.name = (char*)(calloc(15, sizeof(char)));
+                if (number.name == NULL) {
+                    printf("Not enough memory for program work");
+                }
+                scanf("%s", number.phone);
+                int check = findByString(file, number.phone, number.name);
+                if (check == 1) {
+                    printf("Not enough memory to find \n");
+                } else if (check == 2){
+                    printf("No same number in the phone directory \n");
+                } else {
+                    printf("name: %s \n", number.name);
+                }
+
+                free(number.phone);
+                free(number.name);
 
                 continue;
             }
             case 4:
             {
+                file = fopen("telephoneNumbers.txt", "r");
+                PhoneBook number;
+
+                printf("Input phone number with length below 15 to find name: ");
+                number.phone = (char*)(calloc(15, sizeof(char)));
+                if (number.phone == NULL) {
+                    printf("Not enough memory for program work");
+                }
+                number.name = (char*)(calloc(15, sizeof(char)));
+                if (number.name == NULL) {
+                    printf("Not enough memory for program work");
+                }
+                scanf("%s", number.name);
+                int check = findByString(file, number.name, number.phone);
+                if (check == 1) {
+                    printf("Not enough memory to find");
+                } else if (check == 2){
+                    printf("No same number in the phone directory");
+                } else {
+                    printf("phone number: %s \n", number.phone);
+                }
+
+                free(number.phone);
+                free(number.name);
 
                 continue;
             }

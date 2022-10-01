@@ -8,6 +8,8 @@ typedef struct {
     char *name;
 }PhoneBook;
 
+// code 1 - not enough memory, code 2 - no compares
+// find number/name by name/number in the file
 int findByString(FILE *file, char* string, char* answer) {
     PhoneBook entry;
 
