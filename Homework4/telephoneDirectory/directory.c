@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
-#define MAXPHONE = 15
-
-typedef struct {
+typedef struct PhoneBook{
     char *phone;
     char *name;
+    struct PhoneBook *next;
 }PhoneBook;
 
 int main() {
+    //check on file exist, if it doesnt, creates it
     FILE *file = fopen("telephoneNumbers.txt", "r");
     if (file == NULL) {
         file = fopen("telephoneNumbers.txt", "w");
@@ -18,7 +19,10 @@ int main() {
     fclose(file);
 
     printf(" 0 - exit \n 1 - add contact \n 2 - print all contacts \n 3 - print phone number by name \n 4 - print name by phone number \n 5 - save all current data \n");
-    
+
+    char *data[100] = {0};
+    int inputUse = 0;
+
     int choice = -1;
     while (choice != 0) {
         printf("Choose option 0 - 5: ");
@@ -26,16 +30,15 @@ int main() {
         while (choice > 5 && choice < 0) {
 
         }
-
+        bool useCaseOne = false;
         switch (choice) {
             case 1:
             {
-                char *check = (char*)(calloc(10,sizeof(char)));
-                if (findByString(file, "ekerre", check) == 1) {
-                    printf("No same number in the file \n");
-                } else {
-                    printf("%s \n", check);
-                }
+                data[inputUse] = (char*)(calloc(30, sizeof(char)));
+                printf("Input name and phone number, separated by space: ");
+                fflush(stdin);
+                scanf("%[^\n]", data[inputUse]);
+                ++inputUse;
                 continue;
             }
             case 2:
@@ -44,7 +47,7 @@ int main() {
                 printAllContacts(file);
                 continue;
             }
-            case 3:
+            case 4:
             {
                 PhoneBook number;
 
@@ -57,7 +60,8 @@ int main() {
                 if (number.name == NULL) {
                     printf("Not enough memory for program work");
                 }
-                scanf("%s", number.phone);
+                fflush(stdin);
+                scanf("%[^\n]", number.phone);
                 int check = findByString(file, number.phone, number.name);
                 if (check == 1) {
                     printf("Not enough memory to find \n");
@@ -72,12 +76,12 @@ int main() {
 
                 continue;
             }
-            case 4:
+            case 3:
             {
                 file = fopen("telephoneNumbers.txt", "r");
                 PhoneBook number;
 
-                printf("Input phone number with length below 15 to find name: ");
+                printf("Input name with length below 15 to find name: ");
                 number.phone = (char*)(calloc(15, sizeof(char)));
                 if (number.phone == NULL) {
                     printf("Not enough memory for program work");
@@ -103,7 +107,11 @@ int main() {
             }
             case 5:
             {
-
+                if (!inputUse) {
+                    printf("Nothing to save");
+                } else {
+                    saveContacts(file, data, inputUse);
+                }
                 continue;
             }
 

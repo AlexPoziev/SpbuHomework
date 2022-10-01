@@ -52,6 +52,8 @@ int findByString(FILE *file, char* string, char* answer) {
     return 0;
 }
 
+
+//print all names and numbers
 void printAllContacts(FILE *file) {
     fopen("telephoneNumbers.txt", "r");
     char *input = (char*)(calloc(15, sizeof(char)));
@@ -63,5 +65,15 @@ void printAllContacts(FILE *file) {
     }
 
     free(input);
+    fclose(file);
+}
+
+void saveContacts(FILE *file, char* data[], int newContacts) {
+    file = fopen("telephoneNumbers.txt", "a");
+
+    for (int i = 0; i < newContacts; ++i) {
+        fprintf(file, "%s \n", data[i]);
+    }
+
     fclose(file);
 }
