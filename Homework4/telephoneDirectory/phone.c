@@ -51,3 +51,17 @@ int findByString(FILE *file, char* string, char* answer) {
 
     return 0;
 }
+
+void printAllContacts(FILE *file) {
+    fopen("telephoneNumbers.txt", "r");
+    char *input = (char*)(calloc(15, sizeof(char)));
+    while (!feof(file)) {
+        fscanf(file,"%s", input);
+        printf("%s ",input);
+        fscanf(file, "%[^\n]", input);
+        printf("%s \n", input);
+    }
+
+    free(input);
+    fclose(file);
+}

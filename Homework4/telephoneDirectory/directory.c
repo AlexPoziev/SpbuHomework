@@ -40,7 +40,8 @@ int main() {
             }
             case 2:
             {
-                printf("2");
+                printf("All contacts: \n");
+                printAllContacts(file);
                 continue;
             }
             case 3:
