@@ -2,15 +2,47 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct PhoneBook{
     char *phone;
     char *name;
 }PhoneBook;
 
+bool correctTests(void) {
+    const char *testFile = "test.txt";
+    FILE *file = fopen(testFile, "w");
+    fclose(file);
+
+    char* data[3] = {"Tarantino 8999133777", "Paradox 014-554-3", "Kel'Thas +7 (918) 147-14-70"};
+    saveContacts(file, data, 3,testFile);
+    char firstCheck[10] = {0};
+    char secondCheck[7] = {0};
+    char thirdCheck[18] = {0};
+
+    findByString(file, testFile, "Tarantino", firstCheck);
+    findByString(file, testFile, "014-554-3", secondCheck);
+    findByString(file, testFile, "Kel'Thas", thirdCheck);
+
+    char firstInputCheck[10] = {0};
+    char secondInputCheck[10] = {0};
+    file = fopen(testFile, "r");
+    fscanf(file, "%s", firstInputCheck);
+    fgetc(file);
+    fscanf(file, "%[^\n]", secondInputCheck);
+    fclose(file);
+
+    return !strcmp(firstCheck, "8999133777") && !strcmp(secondCheck, "Paradox") && !strcmp(thirdCheck, "+7 (918) 147-14-70") && !strcmp(firstInputCheck, "Tarantino") && !strcmp(secondInputCheck, "8999133777");
+}
+
 int main() {
+    if (!correctTests()) {
+        printf("Tests Failed");
+        return 1;
+    }
+
     const char *mainFile = "telephoneNumbers.txt";
-    const int lineLength = 15;
+    const int lineLength = 20;
     //check on file exist, if it doesn't, creates it
 
     FILE *file = fopen(mainFile, "r");
@@ -23,8 +55,8 @@ int main() {
 
     char *data[100] = {0};
     int inputUse = 0;
-
     int choice = -1;
+
     while (choice != 0) {
         printf("Choose option 0 - 5: ");
         scanf("%d", &choice);

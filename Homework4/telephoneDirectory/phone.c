@@ -35,7 +35,6 @@ int findByString(FILE *file, const char* fileName, char* string, char* answer) {
         fscanf(file, "%s", entry.name);
         getc(file);
         fscanf(file, "%[^\n]", entry.phone);
-        printf(" %s", entry.phone);
         checkName = strcmp(entry.name, string);
         checkPhone = strcmp(entry.phone, string);
     }
