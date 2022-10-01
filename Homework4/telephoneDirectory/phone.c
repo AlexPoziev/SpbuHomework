@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#define mainFile = "telephoneNumbers.txt"
-
 typedef struct {
     char *phone;
     char *name;
@@ -15,7 +13,7 @@ typedef struct {
 int findByString(FILE *file, const char* fileName, char* string, char* answer) {
     PhoneBook entry;
 
-    file = fopen("telephoneNumbers.txt", "r");
+    file = fopen(fileName, "r");
 
     entry.name = calloc(30, sizeof(char));
     if (entry.name == NULL) {
@@ -37,6 +35,7 @@ int findByString(FILE *file, const char* fileName, char* string, char* answer) {
         fscanf(file, "%s", entry.name);
         getc(file);
         fscanf(file, "%[^\n]", entry.phone);
+        printf(" %s", entry.phone);
         checkName = strcmp(entry.name, string);
         checkPhone = strcmp(entry.phone, string);
     }
@@ -57,7 +56,7 @@ int findByString(FILE *file, const char* fileName, char* string, char* answer) {
 
 //print all names and numbers
 void printAllContacts(FILE *file, const char* fileName) {
-    fopen("telephoneNumbers.txt", "r");
+    fopen(fileName, "r");
     char *input = (char*)(calloc(15, sizeof(char)));
     while (!feof(file)) {
         fscanf(file,"%s", input);
@@ -70,12 +69,19 @@ void printAllContacts(FILE *file, const char* fileName) {
     fclose(file);
 }
 
+//print all inserted contacts to file
 void saveContacts(FILE *file, char* data[], int newContacts, const char* fileName) {
-    file = fopen("telephoneNumbers.txt", "a");
-
-    for (int i = 0; i < newContacts; ++i) {
-        fprintf(file, "%s \n", data[i]);
+    file = fopen(fileName, "a");
+    fseek(file, 0, SEEK_END);
+    long size = ftell(file);
+    if (size) {
+        fprintf(file, "\n");
     }
+
+    for (int i = 0; i < newContacts - 1; ++i) {
+        fprintf(file, "%s\n", data[i]);
+    }
+    fprintf(file, "%s", data[newContacts - 1]);
 
     fclose(file);
 }
