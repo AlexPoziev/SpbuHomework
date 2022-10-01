@@ -1,9 +1,10 @@
+#include "phone.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 typedef struct {
-    char phone[10];
+    char *phone;
     char *name;
 }PhoneBook;
 
@@ -27,16 +28,12 @@ int main() {
         switch (choice) {
             case 1:
             {
-                PhoneBook entry;
-                entry.name = (char*)(calloc(30, sizeof(char)));
-                file = fopen("telephoneNumbers.txt", "r");
-                fscanf(file, "%s", entry.name);
-                fscanf(file, "%[^\n]", entry.phone);
-
-                printf("%s %s \n", entry.name, entry.phone);
-
-                fclose(file);
-                free(entry.name);
+                char *check = (char*)(calloc(10,sizeof(char)));
+                if (findByString(file, "ekerre", check) == 1) {
+                    printf("No same number in the file \n");
+                } else {
+                    printf("%s \n", check);
+                }
                 continue;
             }
             case 2:
