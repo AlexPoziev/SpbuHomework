@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#define mainFile = "telephoneNumbers.txt"
+
 typedef struct {
     char *phone;
     char *name;
@@ -10,7 +12,7 @@ typedef struct {
 
 // code 1 - not enough memory, code 2 - no compares
 // find number/name by name/number in the file
-int findByString(FILE *file, char* string, char* answer) {
+int findByString(FILE *file, const char* fileName, char* string, char* answer) {
     PhoneBook entry;
 
     file = fopen("telephoneNumbers.txt", "r");
@@ -54,7 +56,7 @@ int findByString(FILE *file, char* string, char* answer) {
 
 
 //print all names and numbers
-void printAllContacts(FILE *file) {
+void printAllContacts(FILE *file, const char* fileName) {
     fopen("telephoneNumbers.txt", "r");
     char *input = (char*)(calloc(15, sizeof(char)));
     while (!feof(file)) {
@@ -68,7 +70,7 @@ void printAllContacts(FILE *file) {
     fclose(file);
 }
 
-void saveContacts(FILE *file, char* data[], int newContacts) {
+void saveContacts(FILE *file, char* data[], int newContacts, const char* fileName) {
     file = fopen("telephoneNumbers.txt", "a");
 
     for (int i = 0; i < newContacts; ++i) {
