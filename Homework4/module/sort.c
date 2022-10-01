@@ -17,6 +17,7 @@ void insertionSort(int low, int high, int array[]) {
     }
 }
 
+// realization of partition
 int semiQsort(int low, int high, int array[]) {
     int middle = (low + high) / 2;
 
