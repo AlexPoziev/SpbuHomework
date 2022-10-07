@@ -16,20 +16,8 @@ void columnAddition(short *first, short *second, unsigned numberDigits, short* s
     bool anyRemainder = false;
     
     for (int i = numberDigits - 1; i >= 0; --i) {
-        if (first[i] && second[i]) {
-            sum[i] = anyRemainder ? 1 : 0;
-            anyRemainder = true;
-        } else {
-            if (anyRemainder && (first[i] || second[i])) {
-                sum[i] = 0;
-                anyRemainder = true;
-            } else {
-                sum[i] = anyRemainder || first[i] || second[i]
-                ? (sum[i] = 1)
-                : (sum[i] = 0);
-                anyRemainder = false;
-            }
-        }
+        sum[i] = (first[i] ^ second[i]) ^ anyRemainder;
+        anyRemainder = (first[i] + second[i] + anyRemainder) > 1 ? true : false; 
     }
 }
 
