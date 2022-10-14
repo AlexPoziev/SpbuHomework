@@ -15,7 +15,7 @@ int push(Stack **head, char value) {
     return 0;
 }
 
-int pop(Stack **head, int *errorCode) {
+char pop(Stack **head, int *errorCode) {
     if (*head == NULL) {
         if (errorCode != NULL) {
             *errorCode = -1;
