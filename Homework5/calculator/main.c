@@ -1,6 +1,5 @@
 #include "stack.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -49,7 +48,6 @@ double postfixCalculator(char *expression, unsigned expressionSize, int *errorCo
             //check that stack has enough numbers for completing operation
             if (*errorCode == -1) {
                 //code 2 incorrect expression
-                printf("1");
                 return 0;
             }
             double secondNumber = pop(&head, errorCode);
@@ -78,7 +76,36 @@ double postfixCalculator(char *expression, unsigned expressionSize, int *errorCo
     }
 }
 
+bool correctTest(void) {
+    char expressionFirst[13] = "9 6 - 1 2 + *";
+    char expressionSecond[13] = "4 2 / 1 3 + *";
+    char expressionThird[1] = "0";
+    int errorCode = 0;
+
+    return postfixCalculator(expressionFirst, 13, &errorCode) == 9 && postfixCalculator(expressionSecond, 13, &errorCode) == 8 && postfixCalculator(expressionThird, 1, &errorCode) == 0;
+}
+
+bool incorrectTest(void) {
+    char expressionFirst[15] = "9 6 - 1 2 + * -";
+    char expressionSecond[3] = "- +";
+    char expressionThird[3] = "- 3";
+    int errorCodeFirst = 0;
+    int errorCodeSecond = 0;
+    int errorCodeThird = 0;
+
+    postfixCalculator(expressionFirst, 15, &errorCodeFirst);
+    postfixCalculator(expressionSecond, 3, &errorCodeSecond);
+    postfixCalculator(expressionThird, 3, &errorCodeThird);
+
+    return errorCodeFirst == -1 & errorCodeSecond == -1 && errorCodeThird == -1;
+}
+
 int main() {
+    if (!incorrectTest() || !correctTest()) {
+        printf("Tests Failed");
+        return 1;
+    }
+
     char expression[1000] = {0};
 
     printf("Input postfix expression with length below 1000: ");
