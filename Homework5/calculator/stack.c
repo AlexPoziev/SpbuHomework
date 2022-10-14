@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-int push(Stack **head, int value) {
+int push(Stack **head, double value) {
     Stack *temp = (Stack*)(malloc(sizeof(Stack)));
     if (temp == NULL) {
         return 1;
@@ -18,7 +18,7 @@ int push(Stack **head, int value) {
     return 0;
 }
 
-int pop(Stack **head, int *errorCode) {
+double pop(Stack **head, int *errorCode) {
     if (*head == NULL) {
         if (errorCode != NULL) {
             *errorCode = -1;
@@ -30,7 +30,7 @@ int pop(Stack **head, int *errorCode) {
         *errorCode = 0;
     }
 
-    int value = (*head)->value;
+    double value = (*head)->value;
     Stack *temp = (*head)->next;
     free(*head);
     *head = temp;

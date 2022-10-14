@@ -3,17 +3,18 @@
 #include <stdbool.h>
 
 typedef struct Stack {
-    int value;
+    double value;
     struct Stack *next;
 }Stack;
 
 //add value to stack
-int push(Stack **head, int value);
+int push(Stack **head, double value);
 
 //delete value from stack
-int pop(Stack **head, int *errorCode);
+double pop(Stack **head, int *errorCode);
 
 //clear memory
 void clearStack(Stack **head);
 
 //check for empty head
+bool isEmpty(Stack *head);
