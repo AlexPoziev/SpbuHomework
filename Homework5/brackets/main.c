@@ -54,7 +54,7 @@ int main() {
         return 1;
     }
 
-    char string[1000];
+    char string[1000] = {0};
 
     printf("Input a string of brackets balance with length below 1000: ");
     fgets(string, sizeof string, stdin);
