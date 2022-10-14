@@ -3,11 +3,11 @@
 #include <stdbool.h>
 
 typedef struct Stack {
-    int value;
+    char value;
     struct Stack *next;
 }Stack;
 
-int push(Stack **head, int value);
+int push(Stack **head, char value);
 
 int pop(Stack **head, int *errorCode);
 
