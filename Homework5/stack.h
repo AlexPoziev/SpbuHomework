@@ -1,6 +1,40 @@
-#ifndef HOMEWORK5_STACK_H
-#define HOMEWORK5_STACK_H
+#pragma once
 
-void hello(void);
+#include <stdbool.h>
 
-#endif //HOMEWORK5_STACK_H
+// int stack struct
+typedef struct IntStack {
+    int value;
+    struct IntStack *next;
+}IntStack;
+
+//double stack struct
+typedef struct DoubleStack {
+    double value;
+    struct DoubleStack *next;
+}DoubleStack;
+
+// add value to stack
+int pushInt(IntStack **head, int value);
+
+// add value to stack
+int pushDouble(DoubleStack **head, int value);
+
+// delete value from stack
+int popInt(IntStack **head, int *errorCode);
+
+// delete value from stack
+int popDouble(DoubleStack **head, int *errorCode);
+
+// clear memory of int stack
+void clearIntStack(IntStack **head);
+
+// clear memory of double stack
+void clearDoubleStack(DoubleStack **head);
+
+// check for empty int stack head
+bool isIntEmpty(IntStack *head);
+
+// check for empty double stack head
+bool isDoubleEmpty(DoubleStack *head);
+
