@@ -25,11 +25,11 @@ bool isEmptyTest(void) {
 
     pushInt(&intHead, 10);
     bool checkInt = isIntEmpty(intHead);
-    free(intHead);
+    clearIntStack(&intHead);
 
     pushDouble(&doubleHead, 10);
     bool checkDouble = isDoubleEmpty(doubleHead);
-    free(doubleHead);
+    clearDoubleStack(&doubleHead);
 
     return isIntEmpty(intHead) && (isDoubleEmpty(doubleHead)) && !checkDouble && !checkInt;
 }
