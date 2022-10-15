@@ -13,3 +13,6 @@ bool correctTest(void);
 
 // incorrect test of postfixCalculator
 bool incorrectTest(void);
+
+// full test of postfixCalculator
+bool postfixCalculatorTest(void);
