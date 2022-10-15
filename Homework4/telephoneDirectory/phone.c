@@ -15,11 +15,11 @@ int findByString(FILE *file, const char* fileName, char* string, char* answer) {
 
     file = fopen(fileName, "r");
 
-    entry.name = calloc(30, sizeof(char));
+    entry.name = calloc(maxContactSize, sizeof(char));
     if (entry.name == NULL) {
         return 1;
     }
-    entry.phone = calloc(15,sizeof(char));
+    entry.phone = calloc(maxContactSize,sizeof(char));
     if (entry.phone == NULL) {
         return 1;
     }
@@ -56,7 +56,7 @@ int findByString(FILE *file, const char* fileName, char* string, char* answer) {
 //print all names and numbers
 void printAllContacts(FILE *file, const char* fileName) {
     fopen(fileName, "r");
-    char *input = (char*)(calloc(15, sizeof(char)));
+    char *input = (char*)(calloc(maxContactSize, sizeof(char)));
     while (!feof(file)) {
         fscanf(file,"%s", input);
         printf("%s ",input);

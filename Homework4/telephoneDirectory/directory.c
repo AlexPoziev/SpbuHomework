@@ -20,6 +20,7 @@ bool correctTests(void) {
     char secondCheck[7] = {0};
     char thirdCheck[18] = {0};
 
+    // test to find by name/phone number
     findByString(file, testFile, "Tarantino", firstCheck);
     findByString(file, testFile, "014-554-3", secondCheck);
     findByString(file, testFile, "Kel'Thas", thirdCheck);
@@ -42,9 +43,8 @@ int main() {
     }
 
     const char *mainFile = "telephoneNumbers.txt";
-    const int lineLength = 20;
-    //check on file exist, if it doesn't, creates it
 
+    // check on file exist, if it doesn't, creates it
     FILE *file = fopen(mainFile, "r");
     if (file == NULL) {
         file = fopen(mainFile, "w");
@@ -53,22 +53,20 @@ int main() {
 
     printf(" 0 - exit \n 1 - add contact \n 2 - print all contacts \n 3 - print phone number by name \n 4 - print name by phone number \n 5 - save all current data \n");
 
+    // create array with size of max contact number
     char *data[100] = {0};
+    // variable to check any changes in file
     int inputUse = 0;
     int choice = -1;
 
     while (choice != 0) {
         printf("Choose option 0 - 5: ");
         scanf("%d", &choice);
-        while (choice > 5 || choice < 0) {
-            printf("That is not option number, repeat input: ");
-            scanf("%d", &choice);
-        }
 
         switch (choice) {
             case 1:
             {
-                data[inputUse] = (char*)(calloc(lineLength * 2, sizeof(char)));
+                data[inputUse] = (char*)(calloc(maxContactSize * 2, sizeof(char)));
                 printf("Input name and phone number, separated by space: ");
                 fflush(stdin);
                 scanf("%[^\n]", data[inputUse]);
@@ -86,12 +84,12 @@ int main() {
                 PhoneBook number;
 
                 printf("Input name with length below 15 to find name: ");
-                number.phone = (char*)(calloc(lineLength, sizeof(char)));
+                number.phone = (char*)(calloc(maxContactSize, sizeof(char)));
                 if (number.phone == NULL) {
                     printf("Not enough memory for program work");
                     return 1;
                 }
-                number.name = (char*)(calloc(lineLength, sizeof(char)));
+                number.name = (char*)(calloc(maxContactSize, sizeof(char)));
                 if (number.name == NULL) {
                     printf("Not enough memory for program work\n");
                     return 1;
@@ -116,12 +114,12 @@ int main() {
                 PhoneBook number;
 
                 printf("Input phone number with length below 15 to find name: ");
-                number.phone = (char*)(calloc(lineLength, sizeof(char)));
+                number.phone = (char*)(calloc(maxContactSize, sizeof(char)));
                 if (number.phone == NULL) {
                     printf("Not enough memory for program work");
                     return 1;
                 }
-                number.name = (char*)(calloc(lineLength, sizeof(char)));
+                number.name = (char*)(calloc(maxContactSize, sizeof(char)));
                 if (number.name == NULL) {
                     printf("Not enough memory for program work");
                     return 1;
@@ -150,6 +148,11 @@ int main() {
                     saveContacts(file, data, inputUse,mainFile);
                     printf("Save completed \n");
                 }
+                continue;
+            }
+            default:
+            {
+                printf("That is not option number, repeat input \n");
                 continue;
             }
         }

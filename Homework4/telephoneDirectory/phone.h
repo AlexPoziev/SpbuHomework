@@ -1,6 +1,8 @@
 #pragma once
 #include <stdio.h>
 
+#define maxContactSize 20
+
 // find number/name by name/number in the file
 int findByString(FILE *file, const char* fileName, char* string, char* answer);
 
