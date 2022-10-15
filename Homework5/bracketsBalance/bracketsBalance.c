@@ -33,3 +33,21 @@ bool bracketsBalance(char *string, unsigned long size) {
         return false;
     }
 }
+
+bool correctTest(void) {
+    char firstCheck[6] = "()[]{}";
+    char secondCheck[0] = "";
+    char thirdCheck[16] = "([{}]){}{}[]{()}";
+
+    return bracketsBalance(firstCheck, 6) && bracketsBalance(secondCheck, 0) && bracketsBalance(thirdCheck, 16);
+}
+
+
+bool incorrectTest(void) {
+    char firstCheck[1] = "(";
+    char secondCheck[3] = "())";
+    char thirdCheck[2] = "(}";
+    char fourthCheck[4] = "{(})";
+
+    return !bracketsBalance(firstCheck, 1) && !bracketsBalance(secondCheck, 3) && !bracketsBalance(thirdCheck, 2) && !bracketsBalance(fourthCheck, 4);
+}
