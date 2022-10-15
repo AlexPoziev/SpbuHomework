@@ -24,7 +24,7 @@ int pushDouble(DoubleStack **head, int value);
 int popInt(IntStack **head, int *errorCode);
 
 // delete value from stack
-int popDouble(DoubleStack **head, int *errorCode);
+double popDouble(DoubleStack **head, int *errorCode);
 
 // clear memory of int stack
 void clearIntStack(IntStack **head);
