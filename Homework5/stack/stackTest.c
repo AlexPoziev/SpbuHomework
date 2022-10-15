@@ -55,12 +55,12 @@ bool popTest(void) {
     && (doubleCheckFirst - 10.0 < delta) && isDoubleEmpty(doubleHead) && isIntEmpty(intHead));
 }
 
-bool clearStack(void) {
+bool clearStackTest(void) {
     IntStack *intHead = NULL;
     DoubleStack *doubleHead = NULL;
 
-    pushDouble(&doubleHead, 10);
-    pushDouble(&doubleHead, 10);
+    pushDouble(&doubleHead, 10.0);
+    pushDouble(&doubleHead, 10.0);
     pushInt(&intHead, 10);
     pushInt(&intHead, 10);
 
@@ -68,4 +68,8 @@ bool clearStack(void) {
     clearIntStack(&intHead);
 
     return isIntEmpty(intHead) && isDoubleEmpty(doubleHead);
+}
+
+bool stackTest(void) {
+    return pushTest() && popTest() && clearStackTest() && isEmptyTest();
 }

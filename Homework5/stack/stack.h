@@ -37,4 +37,3 @@ bool isIntEmpty(IntStack *head);
 
 // check for empty double stack head
 bool isDoubleEmpty(DoubleStack *head);
-

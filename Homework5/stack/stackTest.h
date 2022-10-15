@@ -12,4 +12,7 @@ bool popTest(void);
 bool isEmptyTest(void);
 
 // test clearIntStack and clearDoubleStack
-bool clearStack(void);
+bool clearStackTest(void);
+
+// full test, include all upper tests
+bool stackTest(void);
