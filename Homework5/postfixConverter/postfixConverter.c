@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 int priorityDeterminant(char operation) {
     switch (operation) {
@@ -16,10 +17,6 @@ int priorityDeterminant(char operation) {
         {
             return 2;
         }
-        case ')':
-        {
-            return 0;
-        }
         default:
         {
             return -1;
@@ -28,39 +25,42 @@ int priorityDeterminant(char operation) {
 }
 
 int postfixConverter(char *expression, unsigned size) {
-    char *tempString = (char*)(malloc(sizeof(char) * size));
+    char *tempString = (char*)(calloc(size, sizeof(char)));
     if (tempString == NULL) {
         return 1;
     }
-    IntStack *head = (IntStack*)(malloc(sizeof(IntStack)));
-    if (head == NULL) {
-        return 1;
-    }
+    IntStack *head = NULL;
+
     int errorCode = 0;
     unsigned postfixStep = 0;
 
     for (int i = 0; i < size; ++i) {
-        // if number than add to string
+        if (expression[i] == ' ') {
+            continue;
+        }
+        // if number then add to string
         if ((expression[i] >= '0' && expression[i] <= '9')) {
             inputChar(tempString, &postfixStep, expression[i]);
         } else if (expression[i] == '(') {
             if (pushInt(&head, expression[i])) {
+                free(tempString);
+                clearIntStack(&head);
                 return 1;
             }
         } else if (expression[i] == ')') {
             if (closingParentheses(tempString, &postfixStep, &head)) {
+                free(tempString);
+                clearIntStack(&head);
                 return -1;
-            }
-        } else if (head == NULL) {
-            if (pushInt(&head, expression[i])) {
-                return 1;
             }
         } else {
             int current = priorityDeterminant(expression[i]);
-            while (priorityDeterminant((char)(head->value)) >= current) {
+            while (head != NULL && priorityDeterminant((char)(head->value)) >= current) {
                 inputChar(tempString, &postfixStep, (char)popInt(&head, &errorCode));
             }
             if (pushInt(&head, expression[i])) {
+                free(tempString);
+                clearIntStack(&head);
                 return 1;
             }
         }
@@ -68,6 +68,11 @@ int postfixConverter(char *expression, unsigned size) {
     while (head != NULL) {
         inputChar(tempString, &postfixStep, (char)popInt(&head, &errorCode));
     }
+    strcpy(expression, tempString);
+
+    free(tempString);
+    free(head);
+
     return 0;
 }
 
