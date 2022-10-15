@@ -1,6 +1,0 @@
-cmake_minimum_required(VERSION 3.23)
-project(stack C)
-
-set(CMAKE_C_STANDARD 99)
-
-add_library(stack stack.c)
