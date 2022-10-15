@@ -15,7 +15,7 @@ int pushInt(IntStack **head, int value) {
     return 0;
 }
 
-int pushDouble(DoubleStack **head, int value) {
+int pushDouble(DoubleStack **head, double value) {
     DoubleStack *temp = (DoubleStack *)(malloc(sizeof(DoubleStack)));
     if (temp == NULL) {
         return 1;

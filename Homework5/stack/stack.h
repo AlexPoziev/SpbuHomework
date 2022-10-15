@@ -18,7 +18,7 @@ typedef struct DoubleStack {
 int pushInt(IntStack **head, int value);
 
 // add value to stack
-int pushDouble(DoubleStack **head, int value);
+int pushDouble(DoubleStack **head, double value);
 
 // delete value from stack
 int popInt(IntStack **head, int *errorCode);

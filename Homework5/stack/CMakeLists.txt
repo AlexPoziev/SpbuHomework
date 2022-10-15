@@ -3,4 +3,4 @@ project(Homework5 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_library(Homework5 stack.c)
+add_library(Homework5 stack.c stackTest.c stackTest.h)
