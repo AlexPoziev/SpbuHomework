@@ -1,9 +1,7 @@
 #include "postfixConverter.h"
-#include "../stack/stack.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 int priorityDeterminant(char operation) {
     switch (operation) {
@@ -72,6 +70,7 @@ int postfixConverter(char *expression, unsigned size) {
 
     free(tempString);
     free(head);
+    clearIntStack(&head);
 
     return 0;
 }
@@ -94,4 +93,19 @@ void inputChar(char *tempString, unsigned *postfixStep, char value) {
     ++(*postfixStep);
     tempString[*postfixStep] = ' ';
     ++(*postfixStep);
+}
+
+bool correctTest(void) {
+    char expressionFirst[17] = "(1 + 2) * (3 + 4)";
+    char expressionSecond[17] = "1 + 2 / 3 * 5 + 3";
+    char expressionThird[13] = "1 + 2 + 3 + 4";
+    char expressionsFourth[6] = "1 + 2)";
+
+    postfixConverter(expressionFirst, 17);
+    postfixConverter(expressionSecond, 17);
+    postfixConverter(expressionThird, 13);
+    int check = postfixConverter(expressionsFourth, 6);
+
+    return !strcmp(expressionFirst, "1 2 + 3 4 + * ") && !strcmp(expressionSecond, "1 2 3 / 5 * + 3 + ")
+    && !strcmp(expressionThird, "1 2 + 3 + 4 + ") && check == -1;
 }

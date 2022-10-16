@@ -15,4 +15,4 @@ int closingParentheses(char *tempString, unsigned *postfixStep, IntStack **head)
 // put char to string and add space
 void inputChar(char *tempString, unsigned *postfixStep, char value);
 
-bool
+bool correctTest(void);

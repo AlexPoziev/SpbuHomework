@@ -4,6 +4,11 @@
 
 
 int main() {
+    if (!correctTest()) {
+        printf("Tests Failed");
+        return 1;
+    }
+
     char expression[1000] = {0};
 
     printf("Input postfix expression with length below 1000: ");
