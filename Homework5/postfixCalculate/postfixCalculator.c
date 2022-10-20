@@ -5,24 +5,19 @@
 
 double performOperation(double firstNumber, double secondNumber, char operation, int *errorCode) {
     switch (operation) {
-        case '*':
-        {
+        case '*': {
             return firstNumber * secondNumber;
         }
-        case '-':
-        {
+        case '-': {
             return secondNumber - firstNumber;
         }
-        case '+':
-        {
+        case '+': {
             return firstNumber + secondNumber;
         }
-        case '/':
-        {
+        case '/': {
             return secondNumber / firstNumber;
         }
-        default:
-        {
+        default: {
             *errorCode = -1;
             return 0;
         }
