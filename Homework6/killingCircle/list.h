@@ -8,9 +8,6 @@ typedef struct List List;
 // cycling list
 int cycleList(List *list);
 
-// create list, need to check for not NULL
-List* createList(void);
-
 // add an element to the list
 int insert(List *list, int value);
 
@@ -32,4 +29,5 @@ int clear(List *list);
 // find value by position in list, errorCode == -1 if position below zero or more than real size of list
 int findNode(List *list, int position, int *errorCode);
 
-
+// create list, need to check for not NULL
+List* createList(void);
