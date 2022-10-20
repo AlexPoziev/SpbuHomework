@@ -64,8 +64,7 @@ int main() {
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1:
-            {
+            case 1: {
                 data[inputUse] = (char*)(calloc(maxContactSize * 2, sizeof(char)));
                 printf("Input name and phone number, separated by space: ");
                 fflush(stdin);
@@ -73,14 +72,12 @@ int main() {
                 ++inputUse;
                 continue;
             }
-            case 2:
-            {
+            case 2: {
                 printf("All contacts: \n");
                 printAllContacts(file, mainFile);
                 continue;
             }
-            case 3:
-            {
+            case 3: {
                 PhoneBook number;
 
                 printf("Input name with length below 15 to find name: ");
@@ -109,8 +106,7 @@ int main() {
 
                 continue;
             }
-            case 4:
-            {
+            case 4: {
                 PhoneBook number;
 
                 printf("Input phone number with length below 15 to find name: ");
@@ -140,8 +136,7 @@ int main() {
 
                 continue;
             }
-            case 5:
-            {
+            case 5: {
                 if (!inputUse) {
                     printf("Nothing to save\n");
                 } else {
