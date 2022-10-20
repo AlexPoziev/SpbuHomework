@@ -6,17 +6,14 @@
 int priorityDeterminant(char operation) {
     switch (operation) {
         case '+':
-        case '-':
-        {
+        case '-': {
             return 1;
         }
         case '*':
-        case '/':
-        {
+        case '/': {
             return 2;
         }
-        default:
-        {
+        default: {
             return -1;
         }
     }
