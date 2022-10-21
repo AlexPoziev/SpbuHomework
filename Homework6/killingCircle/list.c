@@ -207,12 +207,13 @@ int cycleListInsert(List *list, int value, int position){
     return 0;
 }
 
-
 void clear(List* list) {
-    while (!isEmpty(list)) {
-        int errorCode = 0;
+    int errorCode = 0;
+    int border = list->lastElement->position;
+    for (int i = 0; i <= border; ++i) {
         delete(list, 0, &errorCode);
     }
+    free(list);
 }
 
 void print(List *list) {
