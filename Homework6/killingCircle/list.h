@@ -9,7 +9,7 @@ typedef struct List List;
 int cycleList(List *list);
 
 // add an element to the list
-int insert(List *list, int value);
+int insert(List *list, int value, int position);
 
 // print full list
 void print(List *list);
