@@ -20,6 +20,10 @@ List* createList(void) {
     return malloc(sizeof(List));
 }
 
+int listSize(List *list) {
+    return list->head == NULL ? 0 : list->lastElement->position;
+}
+
 bool isNodeEmpty(Node *head) {
     return head == NULL;
 }
@@ -91,6 +95,21 @@ int insert(List *list, int value, int position) {
         return 0;
     }
 
+    if (position == list->lastElement->position + 1) {
+        temp = malloc(sizeof(Node));
+        temp->value = value;
+        temp->position = position;
+        temp->next = list->head;
+        list->lastElement->next = temp;
+        list->lastElement = temp;
+
+        return 0;
+    }
+
+    if (!checkCorrectivePosition(list, position)) {
+        return -1;
+    }
+
     Node *currentNode = list->head->next;
     Node *lastNode = list->head;
     while (currentNode->position != position) {
@@ -100,15 +119,12 @@ int insert(List *list, int value, int position) {
         lastNode = currentNode;
         currentNode = currentNode->next;
     }
+    printf("%d %d", currentNode->position, lastNode->position);
     temp = malloc(sizeof(Node));
     lastNode->next = temp;
     temp->value = value;
     temp->position = position;
     temp->next = currentNode;
-    if (position == list->lastElement->position + 1) {
-        list->lastElement = currentNode;
-    }
-    list->lastElement = currentNode;
 
     plusOnePosition(currentNode, list);
 
@@ -164,6 +180,39 @@ int delete(List *list, int position, int *errorCode) {
 
 
     return temp;
+}
+
+int cycleListDelete(List *list, int position) {
+    if (isEmpty(list)) {
+        return -1;
+    }
+    int errorCode = 0;
+    int temp = delete(list, position % (listSize(list) + 1), &errorCode);
+    if (errorCode == -1) {
+        return -1;
+    }
+
+    return temp;
+}
+
+int cycleListInsert(List *list, int value, int position){
+    if (isEmpty(list)) {
+        return -1;
+    }
+    int errorCode = insert(list, value, position % (listSize(list) + 1));
+    if (errorCode == -1) {
+        return -1;
+    }
+
+    return 0;
+}
+
+
+void clear(List* list) {
+    while (!isEmpty(list)) {
+        int errorCode = 0;
+        delete(list, 0, &errorCode);
+    }
 }
 
 void print(List *list) {
