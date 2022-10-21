@@ -6,6 +6,7 @@ int main() {
     insert(check, 0, 0);
     insert(check, 3, 1);
     insert(check, 4, 2);
+    insert(check, 4, 0);
     print(check);
 
     return 0;

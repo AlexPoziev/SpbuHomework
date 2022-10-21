@@ -86,6 +86,7 @@ int insert(List *list, int value, int position) {
         temp = malloc(sizeof(Node));
         temp->value = value;
         temp->position = position;
+        temp->next = list->head;
         list->lastElement->next = temp;
         list->lastElement = temp;
 
@@ -98,9 +99,9 @@ int insert(List *list, int value, int position) {
 
     Node *currentNode = list->head->next;
     Node *lastNode = list->head;
-    while (temp->position != position) {
+    while (currentNode->position != position) {
         if (currentNode->next == NULL) {
-            return NULL;
+            return -1;
         }
         lastNode = currentNode;
         currentNode = currentNode->next;
@@ -116,14 +117,17 @@ int insert(List *list, int value, int position) {
     return 0;
 }
 
+int delete(List *list, int position, int *errorCode) {
+    if ()
+}
+
 void print(List *list) {
     Node *temp = list->head;
     printf("The list is: ");
-    while(temp->next != NULL)
-    {
+    while(temp->position != list->lastElement->position) {
         printf("%d ", temp->value);
         temp = temp->next;
     }
     printf("%d ", temp->value);
     printf("\n");
-}//
+}
