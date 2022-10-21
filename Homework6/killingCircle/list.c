@@ -1,10 +1,6 @@
 #include "list.h"
 #include <stdio.h>
 
-// реализовать добавление после определенного номера элемента
-// додумать как создавать место если нет там ничего возмонж гварды но не точно
-// ну и в целом доделать
-
 typedef struct Node {
     int value;
     int position;
@@ -17,7 +13,7 @@ typedef struct List {
 } List;
 
 bool checkCorrectivePosition(List* list, int position) {
-    return list->lastElementPosition >= position;
+    return list->lastElement->position >= position && position > 0;
 }
 
 List* createList(void) {
@@ -33,7 +29,7 @@ bool isEmpty(List *list) {
 }
 
 Node* findPosition(List *list, int position) {
-    if (isEmpty(list) || position < 0) {
+    if (isEmpty(list) || checkCorrectivePosition(list, position)) {
         return NULL;
     }
     Node *temp = list->head;
@@ -49,32 +45,75 @@ Node* findPosition(List *list, int position) {
     return temp;
 }
 
-Node* lastElement(List *list) {
-    Node *temp = list->head;
-    while (!isNodeEmpty(temp)) {
+void plusOnePosition(Node *next, List *list) {
+    Node *temp = next;
+    while(temp != list->lastElement) {
+        ++(temp ->position);
         temp = temp->next;
     }
-
-    return temp;
+    ++(list->lastElement->position);
 }
 
 int insert(List *list, int value, int position) {
-    if (list->lastElementPosition == -1 && position != 0) {
+    if (list->lastElement == NULL && position != 0) {
         return -1;
     }
-    if (list->lastElementPosition == -1 && position == 0) {
-        Node *temp = malloc(sizeof(Node));
+    Node *temp = NULL;
+    if (list->lastElement == NULL && position == 0) {
+        temp = malloc(sizeof(Node));
         temp->value = value;
-        temp->value = 0;
-        list->lastElementPosition = 0;
+        temp->position = position;
+        list->lastElement = temp;
         list->head = temp;
 
         return 0;
     }
 
-    if (list->lastElementPosition)
+    if (position == 0) {
+        temp = malloc(sizeof(Node));
+        plusOnePosition(list->head, list);
 
-    if (position)
+        temp->value = value;
+        temp->position = position;
+        temp->next = list->head;
+        list->lastElement->next = temp;
+        list->head = temp;
+
+        return 0;
+    }
+
+    if (position == list->lastElement->position + 1) {
+        temp = malloc(sizeof(Node));
+        temp->value = value;
+        temp->position = position;
+        list->lastElement->next = temp;
+        list->lastElement = temp;
+
+        return 0;
+    }
+
+    if (!checkCorrectivePosition(list, position)) {
+        return -1;
+    }
+
+    Node *currentNode = list->head->next;
+    Node *lastNode = list->head;
+    while (temp->position != position) {
+        if (currentNode->next == NULL) {
+            return NULL;
+        }
+        lastNode = currentNode;
+        currentNode = currentNode->next;
+    }
+    temp = malloc(sizeof(Node));
+    lastNode->next = temp;
+    temp->value = value;
+    temp->position = position;
+    temp->next = currentNode;
+
+    plusOnePosition(currentNode, list);
+
+    return 0;
 }
 
 void print(List *list) {
