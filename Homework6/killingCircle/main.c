@@ -3,11 +3,9 @@
 
 int main() {
     List *check = createList();
-    insert(check, 0, 0);
-    insert(check, 3, 1);
-    insert(check, 4, 2);
-    insert(check, 4, 0);
-    print(check);
+    int errorCode = 0;
+    insert(check, 0, 9);
+    delete(check, 0, &errorCode);
 
     return 0;
 }

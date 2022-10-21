@@ -5,9 +5,6 @@
 
 typedef struct List List;
 
-// cycling list
-int cycleList(List *list);
-
 // add an element to the list, position not greater than list size
 int insert(List *list, int value, int position);
 

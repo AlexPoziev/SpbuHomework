@@ -54,8 +54,17 @@ void plusOnePosition(Node *next, List *list) {
     ++(list->lastElement->position);
 }
 
+void minusOnePosition(Node *next, List *list) {
+    Node *temp = next;
+    while(temp != list->lastElement) {
+        --(temp ->position);
+        temp = temp->next;
+    }
+    --(list->lastElement->position);
+}
+
 int insert(List *list, int value, int position) {
-    if (list->lastElement == NULL && position != 0) {
+    if ((list->lastElement == NULL && position != 0) || position < 0) {
         return -1;
     }
     Node *temp = NULL;
@@ -82,21 +91,6 @@ int insert(List *list, int value, int position) {
         return 0;
     }
 
-    if (position == list->lastElement->position + 1) {
-        temp = malloc(sizeof(Node));
-        temp->value = value;
-        temp->position = position;
-        temp->next = list->head;
-        list->lastElement->next = temp;
-        list->lastElement = temp;
-
-        return 0;
-    }
-
-    if (!checkCorrectivePosition(list, position)) {
-        return -1;
-    }
-
     Node *currentNode = list->head->next;
     Node *lastNode = list->head;
     while (currentNode->position != position) {
@@ -111,6 +105,10 @@ int insert(List *list, int value, int position) {
     temp->value = value;
     temp->position = position;
     temp->next = currentNode;
+    if (position == list->lastElement->position + 1) {
+        list->lastElement = currentNode;
+    }
+    list->lastElement = currentNode;
 
     plusOnePosition(currentNode, list);
 
@@ -118,7 +116,54 @@ int insert(List *list, int value, int position) {
 }
 
 int delete(List *list, int position, int *errorCode) {
-    if ()
+    if (isEmpty(list)) {
+        return 0;
+        *errorCode = -1;
+    }
+    int temp = 0;
+
+    if (position == 0 && list->head == list->lastElement) {
+        temp = list->head->value;
+        free(list->head);
+
+        return temp;
+    }
+
+    if (position == 0) {
+        minusOnePosition(list->head->next, list);
+
+        list->lastElement->next = list->head->next;
+        temp = list->head->value;
+        free(list->head);
+        list->head = list->lastElement->next;
+
+        return temp;
+    }
+
+    if (!checkCorrectivePosition(list, position)) {
+        return -1;
+    }
+
+    Node *currentNode = list->head->next;
+    Node *lastNode = list->head;
+    while (currentNode->position != position) {
+        if (currentNode->next == NULL) {
+            *errorCode = -1;
+            return 0;
+        }
+        lastNode = currentNode;
+        currentNode = currentNode->next;
+    }
+    temp = currentNode->value;
+    if (currentNode == list->lastElement) {
+        list->lastElement = lastNode;
+    }
+    lastNode->next = currentNode->next;
+    minusOnePosition(currentNode, list);
+    free(currentNode);
+
+
+    return temp;
 }
 
 void print(List *list) {
