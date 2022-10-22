@@ -1,8 +1,9 @@
-//
-// Created by Aleksey Poziev on 20/10/2022.
-//
+#pragma once
 
-#ifndef KILLINGCIRCLE_TESTLIST_H
-#define KILLINGCIRCLE_TESTLIST_H
+#include "list.h"
 
-#endif //KILLINGCIRCLE_TESTLIST_H
+bool insertTest(void);
+
+bool isSingleTest(void);
+
+bool FullTest(void);
