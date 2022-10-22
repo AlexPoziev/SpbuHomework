@@ -17,7 +17,10 @@ bool checkCorrectivePosition(List* list, int position) {
 }
 
 List* createList(void) {
-    return malloc(sizeof(List));
+    List *temp = malloc(sizeof(List));
+    temp->lastElement = NULL;
+    temp->head = NULL;
+    return temp;
 }
 
 int listSize(List *list) {
@@ -52,7 +55,7 @@ Node* findPosition(List *list, int position) {
 void plusOnePosition(Node *next, List *list) {
     Node *temp = next;
     while(temp != list->lastElement) {
-        ++(temp ->position);
+        ++(temp->position);
         temp = temp->next;
     }
     ++(list->lastElement->position);
@@ -61,7 +64,7 @@ void plusOnePosition(Node *next, List *list) {
 void minusOnePosition(Node *next, List *list) {
     Node *temp = next;
     while(temp != list->lastElement) {
-        --(temp ->position);
+        --(temp->position);
         temp = temp->next;
     }
     --(list->lastElement->position);
@@ -119,7 +122,6 @@ int insert(List *list, int value, int position) {
         lastNode = currentNode;
         currentNode = currentNode->next;
     }
-    printf("%d %d", currentNode->position, lastNode->position);
     temp = malloc(sizeof(Node));
     lastNode->next = temp;
     temp->value = value;
@@ -132,22 +134,24 @@ int insert(List *list, int value, int position) {
 }
 
 int delete(List *list, int position, int *errorCode) {
-    if (isEmpty(list)) {
-        return 0;
+    if (isEmpty(list) || position < 0 || list->lastElement->position < position ) {
         *errorCode = -1;
+        return 0;
+        *errorCode = 1;
     }
     int temp = 0;
 
-    if (position == 0 && list->head == list->lastElement) {
+    if (list->head == list->lastElement) {
         temp = list->head->value;
         free(list->head);
+        list->head = NULL;
+        list->lastElement = NULL;
 
         return temp;
     }
 
     if (position == 0) {
         minusOnePosition(list->head->next, list);
-
         list->lastElement->next = list->head->next;
         temp = list->head->value;
         free(list->head);
@@ -207,16 +211,19 @@ int cycleListInsert(List *list, int value, int position){
     return 0;
 }
 
-void clear(List* list) {
+void clear(List** list) {
     int errorCode = 0;
-    int border = list->lastElement->position;
-    for (int i = 0; i <= border; ++i) {
-        delete(list, 0, &errorCode);
+    while (!isEmpty(*list)){
+        delete(*list, 0, &errorCode);
     }
-    free(list);
+    free(*list);
+    *list = NULL;
 }
 
-void print(List *list) {
+int print(List *list) {
+    if (list == NULL) {
+        return -1;
+    }
     Node *temp = list->head;
     printf("The list is: ");
     while(temp->position != list->lastElement->position) {

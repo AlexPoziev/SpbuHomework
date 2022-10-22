@@ -12,7 +12,7 @@ int insert(List *list, int value, int position);
 int listSize(List *list);
 
 // print full list
-void print(List *list);
+int print(List *list);
 
 // delete element with index position below size of list
 // Count starts by 0. Return deleted value. errorCode -1 means that position incorrect
@@ -25,7 +25,7 @@ int changeNode(List *list, int position, int value);
 bool isEmpty(List *list);
 
 // delete list and clear memory
-void clear(List *list);
+void clear(List **list);
 
 // find value by position in list, errorCode == -1 if position below zero or more than real size of list
 int findNode(List *list, int position, int *errorCode);
