@@ -24,7 +24,7 @@ List* createList(void) {
 }
 
 int listSize(List *list) {
-    return list->head == NULL ? 0 : list->lastElement->position;
+    return list->head == NULL ? 0 : (list->lastElement->position + 1);
 }
 
 bool isNodeEmpty(Node *head) {
@@ -137,7 +137,6 @@ int delete(List *list, int position, int *errorCode) {
     if (isEmpty(list) || position < 0 || list->lastElement->position < position ) {
         *errorCode = -1;
         return 0;
-        *errorCode = 1;
     }
     int temp = 0;
 
@@ -151,7 +150,7 @@ int delete(List *list, int position, int *errorCode) {
     }
 
     if (position == 0) {
-        minusOnePosition(list->head->next, list);
+        minusOnePosition(list->head, list);
         list->lastElement->next = list->head->next;
         temp = list->head->value;
         free(list->head);
@@ -175,25 +174,27 @@ int delete(List *list, int position, int *errorCode) {
         currentNode = currentNode->next;
     }
     temp = currentNode->value;
-    if (currentNode == list->lastElement) {
+    if (currentNode->position == (list->lastElement->position)) {
         list->lastElement = lastNode;
+        lastNode->next = currentNode->next;
+        free(currentNode);
+    } else {
+        lastNode->next = currentNode->next;
+        minusOnePosition(currentNode, list);
+        free(currentNode);
     }
-    lastNode->next = currentNode->next;
-    minusOnePosition(currentNode, list);
-    free(currentNode);
-
 
     return temp;
 }
 
-int cycleListDelete(List *list, int position) {
+int cycleListDelete(List *list, int position, int *errorCode) {
     if (isEmpty(list)) {
         return -1;
     }
-    int errorCode = 0;
-    int temp = delete(list, position % (listSize(list) + 1), &errorCode);
-    if (errorCode == -1) {
-        return -1;
+    printf(" %d ", list->lastElement->position);
+    int temp = delete(list, position % (listSize(list)), errorCode);
+    if (*errorCode == -1) {
+        return 0;
     }
 
     return temp;
@@ -221,7 +222,7 @@ void clear(List** list) {
 }
 
 int print(List *list) {
-    if (list == NULL) {
+    if (list == NULL || list->head == NULL) {
         return -1;
     }
     Node *temp = list->head;

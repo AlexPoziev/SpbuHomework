@@ -1,21 +1,37 @@
 #include <stdio.h>
 #include "list.h"
 
-int main() {
-
-    List *check = createList();
+int circleOfDeath(int elementsCount, int gap) {
     int errorCode = 0;
-    int *lol = &errorCode;
-    int *chec = lol;
-
-    insert(check, 0, 0);
-    insert(check, 0, 0);
-    insert(check, 0, 0);
-    clear(&check);
-    if (check == NULL) {
-        printf("ewkere");
+    List *list = createList();
+    for (int i = 0; i < elementsCount; ++i) {
+        insert(list, i, i);
     }
-    print(check);x
+    print(list);
+    while (listSize(list) > 1) {
+        gap+=gap;
+        cycleListDelete(list, gap, &errorCode);
+        print(list);
+    }
+
+    return delete(list, 0, &errorCode);
+}
+
+int main() {
+    int elementsCount = 5;
+    int errorCode = 0;
+    List *list = createList();
+    for (int i = 0; i < elementsCount; ++i) {
+        insert(list, i, i);
+    }
+    print(list);
+    cycleListDelete(list, 2, &errorCode);
+    print(list);
+    cycleListDelete(list, 2, &errorCode);
+    print(list);
+    cycleListDelete(list, 7, &errorCode);
+    print(list);
+    printf("%d %d", listSize(list), errorCode);
 
     return 0;
 }

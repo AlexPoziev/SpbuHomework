@@ -34,10 +34,7 @@ int findNode(List *list, int position, int *errorCode);
 List* createList(void);
 
 // delete element in cycle list, position may be greater than size of list. Return errorCode -1 or 0 if all ok
-int cycleListDelete(List *list, int position);
+int cycleListDelete(List *list, int position, int *errorCode);
 
 // insert element in cycle list, position may be greater than size of list. Return errorCode -1 or 0 if all ok
 int cycleListInsert(List *list, int value, int position);
-
-// return length of list
-int listSize(List *list);
