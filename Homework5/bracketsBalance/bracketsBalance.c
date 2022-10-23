@@ -48,7 +48,8 @@ bool incorrectTest(void) {
     char thirdCheck[2] = "(}";
     char fourthCheck[4] = "{(})";
 
-    return !bracketsBalance(firstCheck, 1) && !bracketsBalance(secondCheck, 3) && !bracketsBalance(thirdCheck, 2) && !bracketsBalance(fourthCheck, 4);
+    return !bracketsBalance(firstCheck, 1) && !bracketsBalance(secondCheck, 3)
+    && !bracketsBalance(thirdCheck, 2) && !bracketsBalance(fourthCheck, 4);
 }
 
 bool bracketsBalanceTest(void) {
