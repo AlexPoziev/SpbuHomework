@@ -18,10 +18,10 @@ void insertionSort(int low, int high, int array[]) {
 }
 
 // realization of partition
-int semiQsort(int low, int high, int array[]) {
+int partition(int low, int high, int array[]) {
     int middle = (low + high) / 2;
 
-    int *tempArray = (int*)(calloc(3, sizeof(int)));
+    int tempArray[3] = {0};
 
     tempArray[0] = array[low];
     tempArray[1] = array[middle];
@@ -31,8 +31,6 @@ int semiQsort(int low, int high, int array[]) {
     array[0] = tempArray[0];
     array[middle] = tempArray[1];
     array[high] = tempArray[2];
-
-    free(tempArray);
 
     swap(&array[1], &array[middle]);
     int border = high - 1;
@@ -52,7 +50,7 @@ int semiQsort(int low, int high, int array[]) {
         --border;
     }
 
-    if (!(low == high)) {
+    if (low != high) {
         swap(&array[low + 1], &array[border]);;
     }
 
@@ -64,7 +62,7 @@ void qsortRecursion(int low, int high, int array[]) {
         if (high - low < 9) {
             insertionSort(low, high, array);
         } else {
-            int border = semiQsort(low, high, array);
+            int border = partition(low, high, array);
             qsortRecursion(low, border - 1, array);
             qsortRecursion(border + 1, high, array);
         }

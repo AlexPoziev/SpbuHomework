@@ -9,7 +9,7 @@ int mostFrequentNumber(int array[], int arrayLength) {
     unsigned int recentCount = 1;
     int maxRowElement = 0;
 
-    //создание копии массива, так как функция не всегда должна менять проверяемый массив
+    // создание копии массива, так как функция не всегда должна менять проверяемый массив
     int *sortedArray =  (int*)(calloc(arrayLength, sizeof(int)));
     memcpy(sortedArray, array, sizeof(int) * arrayLength);
     qsortRecursion(0, arrayLength - 1, sortedArray);
@@ -55,7 +55,7 @@ bool correctTest(void) {
     return mostFrequentNumber(firstCheck, 10) == -6 && mostFrequentNumber(secondCheck, 1) == 50 && (mostFrequentNumber(thirdCheck, 5) == 100 || mostFrequentNumber(thirdCheck, 5) == 15);
 }
 
-//first number in file is arrayLength
+// first number in file is arrayLength
 int main() {
     if (!correctTest()) {
         printf("Test Failed");
