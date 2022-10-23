@@ -8,7 +8,7 @@ void fillRandomArray(unsigned int arraySize, int array[]) {
         return;
     }
     
-    srand((unsigned)time(0));
+    srand((unsigned)time(NULL));
     
     for (int i = 0; i < arraySize; ++i) {
         array[i] = rand() % 50000;
@@ -31,7 +31,7 @@ void insertionSort(int low, int high, int array[]) {
     }
 }
 
-int semiQsort(int low, int high, int array[]) {
+int partition(int low, int high, int array[]) {
     const int firstNumber = array[low];
     int border = high;
 
@@ -49,8 +49,8 @@ int semiQsort(int low, int high, int array[]) {
         --border;
     }
 
-    if (!(low == high)) {
-        swap(&array[low], &array[border]);;
+    if (low != high) {
+        swap(&array[low], &array[border]);
     }
 
     return border;
@@ -61,7 +61,7 @@ void qsortRecursion(int low, int high, int array[]) {
         if (high - low < 9) {
             insertionSort(low, high, array);
         } else {
-            int border = semiQsort(low, high, array);
+            int border = partition(low, high, array);
             qsortRecursion(low, border - 1, array);
             qsortRecursion(border + 1, high, array);
         }
@@ -78,7 +78,7 @@ bool testModel(int array[], const int arraySize, int differentNumbers) {
             return false;
         }
     }
-    return differentNumbers == sortedDifferentNumbers ? true : false;
+    return differentNumbers == sortedDifferentNumbers;
 }
 
 bool correctTest(void) {
