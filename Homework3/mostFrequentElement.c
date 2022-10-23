@@ -19,10 +19,10 @@ void insertionSort(int low, int high, int array[]) {
     }
 }
 
-int semiQsort(int low, int high, int array[]) {
+int partition(int low, int high, int array[]) {
     int middle = (low + high) / 2;
 
-    int *tempArray = (int*)(calloc(3, sizeof(int)));
+    int tempArray[3] = {0};
 
     tempArray[0] = array[low];
     tempArray[1] = array[middle];
@@ -53,7 +53,7 @@ int semiQsort(int low, int high, int array[]) {
         --border;
     }
 
-    if (!(low == high)) {
+    if (low != high) {
         swap(&array[low + 1], &array[border]);;
     }
 
@@ -65,7 +65,7 @@ void qsortRecursion(int low, int high, int array[]) {
         if (high - low < 9) {
             insertionSort(low, high, array);
         } else {
-            int border = semiQsort(low, high, array);
+            int border = partition(low, high, array);
             qsortRecursion(low, border - 1, array);
             qsortRecursion(border + 1, high, array);
         }
@@ -77,7 +77,7 @@ int mostFrequentNumber(int array[], int arrayLength) {
     unsigned int recentCount = 1;
     int maxRowElement = 0;
     
-    //создание копии массива, так как функция не всегда должна менять проверяемый массив
+    // создание копии массива, так как функция не всегда должна менять проверяемый массив
     int *sortedArray =  (int*)(calloc(arrayLength, sizeof(int)));
     memcpy(sortedArray, array, sizeof(int) * arrayLength);
     qsortRecursion(0, arrayLength - 1, sortedArray);
@@ -106,7 +106,9 @@ bool correctTest(void) {
     int arrayThird[3] = {1, 2, 3};
     int arrayFourth[3] = {0, 0, 0};
 
-    return mostFrequentNumber(arrayFirst, 1) == 1000 && mostFrequentNumber(arraySecond, 8) == 10 && mostFrequentNumber(arrayThird, 3) == 1 || mostFrequentNumber(arrayThird, 3) == 2 || mostFrequentNumber(arrayThird, 3) == 3 && mostFrequentNumber(arrayFourth, 3) == 0;
+    return mostFrequentNumber(arrayFirst, 1) == 1000 && mostFrequentNumber(arraySecond, 8) == 10 
+    && (mostFrequentNumber(arrayThird, 3) == 1 || mostFrequentNumber(arrayThird, 3) == 2 || mostFrequentNumber(arrayThird, 3) == 3)
+    && mostFrequentNumber(arrayFourth, 3) == 0;
 }
 
 int main() {
@@ -140,7 +142,6 @@ int main() {
     }
 
     printf("The most frequent number in array: %d \n", mostFrequentNumber(array, arrayLength));
-
 
     free(array);
 
