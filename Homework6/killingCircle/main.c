@@ -51,11 +51,16 @@ int circleOfDeath(int numbersCount, int gap, int *errorCode) {
 bool correctTests(void) {
     int errorCode = 0;
     int firstTest = circleOfDeath(17, 2, &errorCode);
-    if ()
+    int secondTest = circleOfDeath(1, 15, &errorCode);
+    int thirdTest = circleOfDeath(15, 1, &errorCode);
+    int errorCodeCheck = 0;
+    circleOfDeath(-1, -5, &errorCodeCheck);
+
+    return firstTest == 3 && secondTest == 1 && thirdTest == 15 && !errorCode && errorCodeCheck;
 }
 
 int main() {
-    if (!fullTest()) {
+    if (!fullTest() || !correctTests()) {
         printf("Tests Failed");
         return 1;
     }
