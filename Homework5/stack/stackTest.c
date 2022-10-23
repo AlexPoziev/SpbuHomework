@@ -2,7 +2,6 @@
 #include "stack.h"
 #include <stdlib.h>
 #include <stdio.h>
-
 #include <stdbool.h>
 
 bool pushTest(void) {
@@ -16,7 +15,8 @@ bool pushTest(void) {
     pushDouble(&doubleHead, 10.0);
     pushDouble(&doubleHead, 20.0);
 
-    return intHead->value == 20 && intHead->next->value == 10 && (doubleHead->value - 20.0) < delta && (doubleHead->next->value - 20.0) < delta;
+    return intHead->value == 20 && intHead->next->value == 10 && (doubleHead->value - 20.0) < delta
+    && (doubleHead->next->value - 20.0) < delta;
 }
 
 bool isEmptyTest(void) {
