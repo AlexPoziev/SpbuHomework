@@ -2,39 +2,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 
 typedef struct PhoneBook{
     char *phone;
     char *name;
 }PhoneBook;
-
-bool correctTests(void) {
-    const char *testFile = "test.txt";
-    FILE *file = fopen(testFile, "w");
-    fclose(file);
-
-    char* data[3] = {"Tarantino 8999133777", "Paradox 014-554-3", "Kel'Thas +7 (918) 147-14-70"};
-    saveContacts(file, data, 3,testFile);
-    char firstCheck[10] = {0};
-    char secondCheck[7] = {0};
-    char thirdCheck[18] = {0};
-
-    // test to find by name/phone number
-    findByString(file, testFile, "Tarantino", firstCheck);
-    findByString(file, testFile, "014-554-3", secondCheck);
-    findByString(file, testFile, "Kel'Thas", thirdCheck);
-
-    char firstInputCheck[10] = {0};
-    char secondInputCheck[10] = {0};
-    file = fopen(testFile, "r");
-    fscanf(file, "%s", firstInputCheck);
-    fgetc(file);
-    fscanf(file, "%[^\n]", secondInputCheck);
-    fclose(file);
-
-    return !strcmp(firstCheck, "8999133777") && !strcmp(secondCheck, "Paradox") && !strcmp(thirdCheck, "+7 (918) 147-14-70") && !strcmp(firstInputCheck, "Tarantino") && !strcmp(secondInputCheck, "8999133777");
-}
 
 int main() {
     if (!correctTests()) {
