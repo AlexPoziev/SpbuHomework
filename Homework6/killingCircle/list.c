@@ -148,12 +148,19 @@ bool isEmpty(List *list) {
     return list == NULL;
 }
 
-void clear(List **list, Position *position) {
-    int errorCode = 0;
-    position->position = (*list)->head;
-    while(!isSingle(*list)) {
-        deletePosition(*list, position, &errorCode);
+void clear(List **list) {
+    Node *next = (*list)->head;
+    while (next != (*list)->head) {
+        (*list)->head = (*list)->head->next;
+        free(next);
+        next = (*list)->head;
     }
-    free(position);
     free(*list);
+    (*list) = NULL;
+}
+
+void deletePositionMemory(Position** position)
+{
+    free(*position);
+    *position = NULL;
 }

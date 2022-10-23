@@ -23,11 +23,14 @@ int getNextPosition(Position *position);
 int deletePosition(List *list, Position *position, int *errorCode);
 
 // clear list and position
-void clear(List **list, Position *position);
+void clear(List **list);
 
 // checks is list empty
 bool isEmpty(List *list);
 
 // create list, need to check for not NULL
 List* createList(void);
+
+// free memory of position
+void deletePositionMemory(Position** position);
 

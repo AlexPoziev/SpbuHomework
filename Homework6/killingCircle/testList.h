@@ -6,4 +6,6 @@ bool insertTest(void);
 
 bool isSingleTest(void);
 
-bool FullTest(void);
+bool fullTest(void);
+
+bool positionTest(void);

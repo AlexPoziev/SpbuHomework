@@ -14,6 +14,9 @@ bool insertTest(void) {
     int secondTest = deletePosition(list, position, &errorCode);
     int thirdTest = deletePosition(list, position, &errorCode);
 
+    clear(&list);
+    deletePositionMemory(&position);
+
     return firstTest == 2 && secondTest == 0 && thirdTest == 1 && fourthTest == -1 && fifthTest == -1;
 }
 
@@ -23,11 +26,15 @@ bool isSingleTest(void) {
     bool firstTest = isSingle(list);
     insert(list, 1, 0);
     bool secondTest = isSingle(list);
+    Position *position = createPosition(list);
+
+    clear(&list);
+    deletePositionMemory(&position);
 
     return firstTest && !secondTest;
 }
 
-bool PositionTest(void) {
+bool positionTest(void) {
     int errorCode = 0;
     List *list = createList();
     insert(list, 0, 0);
@@ -38,9 +45,16 @@ bool PositionTest(void) {
     Position *firstTest = position;
     getNextPosition(firstTest);
     int thirdTest = deletePosition(list, position, &errorCode);
-    bool fourthTest = isSingle(list);
 
-    
-    return firstTest == position && !secondTest && fourthTest && thirdTest == 1;
+    bool test = firstTest == position && !secondTest && thirdTest == 0;
+
+    clear(&list);
+    deletePositionMemory(&position);
+
+    return test;
+}
+
+bool fullTest(void) {
+    return insertTest() && isSingleTest() && positionTest();
 }
 

@@ -4,8 +4,13 @@
 
 int circleOfDeath(int numbersCount, int gap, int *errorCode) {
     if (numbersCount <= 0 || gap <= 0) {
+        *errorCode = -1;
         return -1;
     }
+    if (gap == 1) {
+        return numbersCount;
+    }
+
     List *list = createList();
     if (list == NULL) {
         *errorCode = 1;
@@ -36,15 +41,43 @@ int circleOfDeath(int numbersCount, int gap, int *errorCode) {
     }
 
     int temp = deletePosition(list, position, errorCode);
-    clear(&list, position);
+
+    clear(&list);
+    deletePositionMemory(&position);
 
     return temp;
 }
 
+bool correctTests(void) {
+    int errorCode = 0;
+    int firstTest = circleOfDeath(17, 2, &errorCode);
+    if ()
+}
+
 int main() {
-    if (!isSingleTest()) {
+    if (!fullTest()) {
         printf("Tests Failed");
         return 1;
     }
+    int errorCode = 0;
+    printf("Input count of Suicide Squad, greater than zero: ");
+    int numbers = 0;
+    scanf("%d", &numbers);
+    printf("Input gap, greater than zero: ");
+    int gap = 0;
+    scanf("%d", &gap);
+
+    int lastStand = circleOfDeath(numbers, gap, &errorCode);
+    if (errorCode == -1) {
+        printf("Incorrect entered data");
+        return -1;
+    }
+    if (errorCode == 1) {
+        printf("Not enough memory");
+        return 1;
+    }
+
+    printf("Last survivor: %d", lastStand);
+
     return 0;
 }
