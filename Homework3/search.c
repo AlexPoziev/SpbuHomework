@@ -45,8 +45,6 @@ int partition(int low, int high, int array[]) {
     array[middle] = tempArray[1];
     array[high] = tempArray[2];
 
-    free(tempArray);
-
     swap(&array[1], &array[middle]);
     int border = high - 1;
     const int firstNumber = array[low + 1];
