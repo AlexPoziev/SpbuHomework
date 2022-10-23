@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
@@ -12,29 +11,29 @@ void printArray(short *array, unsigned int size) {
     printf("\n");
 }
 
-void columnAddition(short *first, short *second, unsigned numberDigits, short* sum) {
+void columnAddition(const short *first, const short *second, unsigned numberDigits, short* sum) {
     bool anyRemainder = false;
-    
-    for (int i = numberDigits - 1; i >= 0; --i) {
-        sum[i] = (first[i] ^ second[i]) ^ anyRemainder;
-        anyRemainder = (first[i] + second[i] + anyRemainder) > 1 ? true : false; 
+
+    for (int i = (int)numberDigits - 1; i >= 0; --i) {
+        sum[i] = (short)((first[i] ^ second[i]) ^ anyRemainder);
+        anyRemainder = (first[i] + second[i] + anyRemainder) > 1 ? true : false;
     }
 }
 
 void binaryRepresentation(int number, unsigned int numberDigits, short* representation) {
     number = number > 0 ? number : (int)pow(2, numberDigits) + number;
 
-    for (int i = numberDigits - 1; i >= 0; --i) {
-        representation[i] = number & 1;
+    for (int i = (int)numberDigits - 1; i >= 0; --i) {
+        representation[i] = (short)(number & 1);
         number = number >> 1;
     }
-} 
+}
 
-int decimalRepresentation(unsigned int numberDigits, short *binary) {
+int decimalRepresentation(unsigned int numberDigits, const short *binary) {
     int sum = 0;
     int current = 1;
 
-    for (int i = numberDigits - 1; i > 0; --i) {
+    for (int i = (int)numberDigits - 1; i > 0; --i) {
         sum += binary[i] * current;
         current <<= 1;
     }
@@ -44,7 +43,7 @@ int decimalRepresentation(unsigned int numberDigits, short *binary) {
     return sum;
 }
 
-bool compareTest(short *first, short *second, unsigned size) {
+bool compareTest(const short *first, const short *second, unsigned size) {
     for (int i = 0; i < size; ++i) {
         if (first[i] != second[i]) {
             return false;
@@ -68,7 +67,7 @@ bool correctTest(void) {
     binaryRepresentation(third, 6, oneCheckFirst);
     binaryRepresentation(second, 7, oneCheckSecond);
 
-    
+
     short correctCheckFirst[6] = {0, 0, 1, 0, 1, 0};
     short correctOneCheckFirst[6] = {0, 0, 0, 1, 1, 0};
     short correctOneCheckSecond[7] = {1, 0, 0, 1, 1, 1, 0};
@@ -83,8 +82,10 @@ bool correctTest(void) {
     columnAddition(correctCheckFirst, correctOneCheckFirst, 6, checkAdditionFirst);
     columnAddition(correctCheckSecond, correctOneCheckSecond, 7, checkAdditionSecond);
 
-    return (compareTest(checkFirst, correctCheckFirst, 6) && compareTest(checkSecond, correctCheckSecond, 7) && compareTest(correctOneCheckFirst, oneCheckFirst, 6) && compareTest(correctOneCheckSecond, oneCheckSecond, 7) 
-    && compareTest(correctFirstAddition, checkAdditionFirst, 6) && compareTest(checkAdditionSecond, correctSecondAddition, 7) && decimalRepresentation(7, correctOneCheckSecond) == -50 && decimalRepresentation(6, correctFirstAddition) == 16);
+    return (compareTest(checkFirst, correctCheckFirst, 6) && compareTest(checkSecond, correctCheckSecond, 7)
+    && compareTest(correctOneCheckFirst, oneCheckFirst, 6) && compareTest(correctOneCheckSecond, oneCheckSecond, 7)
+    && compareTest(correctFirstAddition, checkAdditionFirst, 6) && compareTest(checkAdditionSecond, correctSecondAddition, 7)
+    && decimalRepresentation(7, correctOneCheckSecond) == -50 && decimalRepresentation(6, correctFirstAddition) == 16);
 }
 
 int main() {
@@ -112,9 +113,9 @@ int main() {
         isString = scanf("%d", &second);
     }
 
-    //определение количества разрядов
+    // определение количества разрядов
     unsigned int numberDigits = (unsigned int)ceil(log2(abs(first) > abs(second) ? abs(first) : abs(second))) + 1;
-    //для предотвращение превращения положительных чисел в отрицательные
+    // для предотвращения превращения положительных чисел в отрицательные
     if (abs(first + second) >= (pow(2, numberDigits - 1))) {
         ++numberDigits;
     }
