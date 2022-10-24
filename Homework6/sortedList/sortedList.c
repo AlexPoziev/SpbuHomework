@@ -105,6 +105,10 @@ int delete(List *list, int value) {
 }
 
 void deleteList(List **list) {
+    if (*list == NULL) {
+        free(*list);
+        return;
+    }
     Node *currentNode = (*list)->head;
     while (currentNode != NULL) {
         delete(*list, currentNode->value);
@@ -118,6 +122,7 @@ int printList(List *list) {
     if (list == NULL) {
         return -1;
     }
+    printf("Sorted list: ");
     Node *temp = list->head;
     while (temp != NULL) {
         printf("%d ", temp->value);
