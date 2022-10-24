@@ -39,6 +39,7 @@ int insert(List *list, int value) {
         return 0;
     }
 
+    // if find Node with greater value, stay before it. May be case with end no greater value in list.
     Node *currentNode = list->head;
     while (currentNode->next != NULL) {
         if (currentNode->value >= value) {
@@ -71,18 +72,28 @@ int insert(List *list, int value) {
     return 0;
 }
 
-/*int delete(List *list, int value) {
+int delete(List **list, int value) {
     if (list == NULL) {
         return -1;
     }
 
     bool isEnd = 0;
-    Node *currentNode = getNode(list, value, &isEnd);
-    if (isEnd == 0 && currentNode == NULL) {
+    Node *currentNode = (*list)->head;
+    while (currentNode != NULL) {
+        if (currentNode->value == value) {
+            break;
+        }
+
+        currentNode = currentNode->next;
+    }
+
+    if (currentNode == NULL) {
         return -1;
     }
     if (currentNode->previous != NULL) {
         currentNode->previous->next = currentNode->next;
+    } else {
+        (*list)->head = currentNode->next;
     }
     if (currentNode->next != NULL) {
         currentNode->next->previous = currentNode->previous;
@@ -91,7 +102,15 @@ int insert(List *list, int value) {
     free(currentNode);
 
     return 0;
-}*/
+}
+
+void deleteList(List **list) {
+    Node *currentNode = (*list)->head;
+    while (currentNode != NULL) {
+        delete(&list, currentNode->value);
+        currentNode = currentNode->next;
+    }
+}
 
 int printList(List *list) {
     if (list == NULL) {
