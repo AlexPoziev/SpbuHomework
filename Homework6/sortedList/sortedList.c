@@ -60,9 +60,13 @@ int insert(List *list, int value) {
     if (currentNode->previous != NULL) {
         currentNode->previous->next = temp;
     }
+    temp->value = value;
     temp->previous = currentNode->previous;
     currentNode->previous = temp;
     temp->next = currentNode;
+    if (list->head == currentNode) {
+        list->head = temp;
+    }
 
     return 0;
 }
