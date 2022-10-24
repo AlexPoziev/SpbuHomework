@@ -9,7 +9,7 @@ List* createList(void);
 int insert(List *list, int value);
 
 // delete list element by value. Returns -1 if no equal value in list
-int delete(List **list, int value);
+int delete(List *list, int value);
 
 // print list
 int printList(List *list);

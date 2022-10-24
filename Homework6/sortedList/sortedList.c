@@ -72,13 +72,13 @@ int insert(List *list, int value) {
     return 0;
 }
 
-int delete(List **list, int value) {
+int delete(List *list, int value) {
     if (list == NULL) {
         return -1;
     }
 
     bool isEnd = 0;
-    Node *currentNode = (*list)->head;
+    Node *currentNode = list->head;
     while (currentNode != NULL) {
         if (currentNode->value == value) {
             break;
@@ -93,7 +93,7 @@ int delete(List **list, int value) {
     if (currentNode->previous != NULL) {
         currentNode->previous->next = currentNode->next;
     } else {
-        (*list)->head = currentNode->next;
+        list->head = currentNode->next;
     }
     if (currentNode->next != NULL) {
         currentNode->next->previous = currentNode->previous;
@@ -107,9 +107,11 @@ int delete(List **list, int value) {
 void deleteList(List **list) {
     Node *currentNode = (*list)->head;
     while (currentNode != NULL) {
-        delete(&list, currentNode->value);
-        currentNode = currentNode->next;
+        delete(*list, currentNode->value);
+        currentNode = (*list)->head;
     }
+    free(*list);
+    list = NULL;
 }
 
 int printList(List *list) {
