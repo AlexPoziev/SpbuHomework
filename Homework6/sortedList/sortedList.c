@@ -115,7 +115,16 @@ void deleteList(List **list) {
         currentNode = (*list)->head;
     }
     free(*list);
-    list = NULL;
+    *list = NULL;
+}
+
+int getValue(List *list, int *errorCode) {
+    if (list == NULL || list->head == NULL) {
+        *errorCode = -1;
+        return 0;
+    }
+
+    return list->head->value;
 }
 
 int printList(List *list) {

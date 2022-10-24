@@ -16,3 +16,6 @@ int printList(List *list);
 
 // delete list
 void deleteList(List **list);
+
+// get value from head
+int getValue(List *list, int *errorCode);

@@ -1,4 +1,5 @@
 #include "sortedList.h"
+#include "sortedListTest.h"
 #include <stdio.h>
 
 void choose(void) {
@@ -9,6 +10,11 @@ void choose(void) {
 }
 
 int main() {
+    if (!fullTest()) {
+        printf("Tests failed");
+        return 1;
+    }
+
     List *list = createList();
     choose();
 
