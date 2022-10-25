@@ -14,40 +14,41 @@ typedef enum Priority {
     phoneNumber
 } Priority;
 
-// create list, need to check not NULL pointer
+// create list, need to check not NULL pointer \/
 List* createList(void);
 
-// create Position, need to check ton NULL pointer
+// create Position, need to check ton NULL pointer \/
 Position* createPosition(void);
 
 // get data from file and put it into the list
 void getFromFile(FILE* file, char* fileName, List* list);
 
-// print list
+// print list \/
 void printList (List *list);
 
-Position* getFirstPosition(List *list);
+// change input pointer to the first position of list \/
+void getFirstPosition(List *list, Position *position);
 
-// get position of next list element. If next doesn't exist, return NULL
-Position* getNextPosition(List *list, Position *position);
+// get position of next list element. If next doesn't exist, return NULL \/
+void getNextPosition(Position *position);
 
-// get value by Position
-char* getPositionValue(List *list, Position *position, Priority priority);
+// get position of middle element of list \/
+void getMiddlePosition(List *list, Position *position);
 
-// check is Position end of list
-bool isEnd(List *list, Position *position);
+// get value by Position \/
+char* getPositionValue(List *list, Position *position, Priority priority, int *errorCode);
 
-// insert value to end of list. Return 1 if not enough memory
-int insert(List *list, char *value);
+// add new element after current position with new position number \/
+void addNext(Position *currentPosition, Position *newPosition);
 
-// change value of position
-int changePositionValue(List *list, Position *position, char *value);
+// check is Position end of list \/
+bool isEnd(Position *position);
 
-// get position of middle element of list
-Position* getMiddlePosition(List *list);
+// insert value by position pointer to end of list. Return -1 if list doesn't exist \/
+int insert(List *list, Position *position);
 
-// delete Position
+// delete Position \/
 void deletePosition(Position **position);
 
-// delete List
+// delete List \/
 void deleteList(List **list);
