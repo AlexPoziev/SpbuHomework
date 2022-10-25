@@ -1,6 +1,12 @@
 #include <stdio.h>
+#include "list.h"
 
 int main() {
-    printf("Hello, World!\n");
-    return 0;
+    List *list = createList();
+    FILE *file = NULL;
+    const char* textName = "test.txt";
+    getFromFile(file, textName, list);
+    Position *check = createPosition();
+    getMiddlePosition(list, check);
+    printList(list);
 }

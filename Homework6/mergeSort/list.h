@@ -20,7 +20,7 @@ List* createList(void);
 // create Position, need to check ton NULL pointer \/
 Position* createPosition(void);
 
-// get data from file and put it into the list
+// get data from file and put it into the list \/
 void getFromFile(FILE* file, char* fileName, List* list);
 
 // print list \/

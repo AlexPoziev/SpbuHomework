@@ -1,6 +1,8 @@
 #include "list.h"
 #include <stdlib.h>
 
+#define MAX_SIZE 20
+
 typedef struct Contact {
     char* name;
     char* phoneNumber;
@@ -35,11 +37,38 @@ Position* createPosition(void) {
 
 void getFromFile(FILE* file, char* fileName, List* list) {
     file = fopen(fileName, "r");
-    while (!feof(file)) {
-        Contact *contact = malloc(sizeof(Contact));
-
-
+    if (feof(file)) {
+        fclose(file);
+        return;
     }
+
+    Node *temp = malloc(sizeof(Node));
+
+    temp->contact = malloc(sizeof(Contact));
+    temp->contact->name = calloc(MAX_SIZE, sizeof(char));
+    fscanf(file, "%s",  temp->contact->name);
+    temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
+    fscanf(file, "%[^\n]",  temp->contact->phoneNumber);
+
+    list->head = temp;
+    list->head->next = NULL;
+    Node *previousNode = list->head;
+
+    while (!feof(file)) {
+        temp = temp->next;
+        temp = malloc(sizeof(Node));
+        temp->contact = malloc(sizeof(Contact));
+        temp->contact = malloc(sizeof(Contact));
+        temp->contact->name = calloc(MAX_SIZE, sizeof(char));
+        fscanf(file, "%s", temp->contact->name);
+        temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
+        fscanf(file, "%[^\n]", temp->contact->phoneNumber);
+        temp->next = NULL;
+        previousNode->next = temp;
+        previousNode = temp;
+    }
+
+    fclose(file);
 }
 
 void getFirstPosition(List *list, Position *position) {
