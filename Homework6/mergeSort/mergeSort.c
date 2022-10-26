@@ -34,13 +34,10 @@ List* merge(List *firstOne, List *secondOne, Priority priority) {
     return temp;
 }
 
-List* sort(List* head) {
-    Priority priority = name;
-
+List* sort(List* head, Priority priority) {
     Position *first = createPosition();
     getFirstPosition(head, first);
-    getNextPosition(first);
-    if (isPositionNull(first)) {
+    if (isEnd(first)) {
         return head;
     }
 
@@ -54,12 +51,12 @@ List* sort(List* head) {
         Position *nextMiddle = createPosition();
         getMiddlePosition(head, nextMiddle);
         getNextPosition(nextMiddle);
-        secondHead = createPositionList(middle);
+        secondHead = createPositionList(nextMiddle);
     }
     cutList(middle);
 
-    List* finalHead = createList();
-    finalHead = merge(sort(head), sort(secondHead), priority);
+    List* finalHead = NULL;
+    finalHead = merge(sort(head, priority), sort(secondHead, priority), priority);
 
     return finalHead;
 }

@@ -100,15 +100,18 @@ int insert(List *list, Position *position) {
     }
 
     if (list->head == NULL) {
-        list->head = position->position;
-        list->head->next = NULL;
-
+        Node *temp = malloc(sizeof(Node));
+        temp->contact = position->position->contact;
+        temp->next = NULL;
+        list->head = temp;
         return 0;
     }
 
+    Node *temp = malloc(sizeof(Node));
+    temp->contact = position->position->contact;
+    temp->next = NULL;
     Node *lastElement = lastPosition(list);
-    lastElement->next = position->position;
-    lastElement->next->next = NULL;
+    lastElement->next = temp;
 
     return 0;
 }

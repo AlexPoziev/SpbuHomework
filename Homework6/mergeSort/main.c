@@ -10,6 +10,6 @@ int main() {
     Position *middle = createPosition();
     getMiddlePosition(list, middle);
     bool check = isEnd(middle);
-    list = sort(list);
+    list = sort(list, phoneNumber);
     printList(list);
 }
