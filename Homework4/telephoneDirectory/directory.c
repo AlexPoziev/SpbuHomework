@@ -6,7 +6,7 @@
 typedef struct PhoneBook{
     char *phone;
     char *name;
-}PhoneBook;
+} PhoneBook;
 
 int main() {
     if (!correctTests()) {
