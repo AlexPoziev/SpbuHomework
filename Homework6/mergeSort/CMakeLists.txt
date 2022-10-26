@@ -8,5 +8,5 @@ set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-point
 
 add_compile_options(-fsanitize=address -g)
 add_link_options(-fsanitize=address -g)
-add_executable(mergeSort main.c list.c list.h mergeSort.c mergeSort.h)
+add_executable(mergeSort main.c list.c list.h mergeSort.c mergeSort.h listTest.c listTest.h)
 

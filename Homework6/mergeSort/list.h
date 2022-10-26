@@ -23,8 +23,8 @@ List* createPositionList(Position *position);
 // create Position, need to check ton NULL pointer \/
 Position* createPosition(void);
 
-// get data from file and put it into the list \/
-void getFromFile(FILE* file, char* fileName, List* list);
+// get data from file and put it into the list, return 1 if not enough memory \/
+int getFromFile(FILE* file, char* fileName, List* list);
 
 // print list \/
 void printList (List *list);
@@ -41,11 +41,11 @@ void getMiddlePosition(List *list, Position *position);
 // get value by Position \/
 char* getPositionValue(Position *position, Priority priority, int *errorCode);
 
-// add new element after current position with new position number \/
-void addNext(Position *currentPosition, Position *newPosition);
-
 // cut list by position
 void cutList(Position *position);
+
+// put 
+void putHead
 
 // check is Position end of list \/
 bool isEnd(Position *position);

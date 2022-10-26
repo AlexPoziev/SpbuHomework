@@ -41,19 +41,31 @@ List* createPositionList(Position *position) {
     return temp;
 }
 
-void getFromFile(FILE* file, char* fileName, List* list) {
+int getFromFile(FILE* file, char* fileName, List* list) {
     file = fopen(fileName, "r");
     if (feof(file)) {
         fclose(file);
-        return;
+        return 1;
     }
 
     Node *temp = malloc(sizeof(Node));
+    if (temp == NULL) {
+        return 1;
+    }
 
     temp->contact = malloc(sizeof(Contact));
+    if (temp->contact == NULL) {
+        return 1;
+    }
     temp->contact->name = calloc(MAX_SIZE, sizeof(char));
+    if (temp->contact->name == NULL) {
+        return 1;
+    }
     fscanf(file, "%s",  temp->contact->name);
     temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
+    if (temp->contact->phoneNumber == NULL) {
+        return 1;
+    }
     fscanf(file, "%[^\n]",  temp->contact->phoneNumber);
 
     list->head = temp;
@@ -63,11 +75,22 @@ void getFromFile(FILE* file, char* fileName, List* list) {
     while (!feof(file)) {
         temp = temp->next;
         temp = malloc(sizeof(Node));
+        if (temp == NULL) {
+            return 1;
+        }
         temp->contact = malloc(sizeof(Contact));
-        temp->contact = malloc(sizeof(Contact));
+        if (temp->contact == NULL) {
+            return 1;
+        }
         temp->contact->name = calloc(MAX_SIZE, sizeof(char));
+        if (temp->contact->name == NULL) {
+            return 1;
+        }
         fscanf(file, "%s", temp->contact->name);
         temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
+        if (temp->contact->phoneNumber == NULL) {
+            return 1;
+        }
         fscanf(file, "%[^\n]", temp->contact->phoneNumber);
         temp->next = NULL;
         previousNode->next = temp;
@@ -75,6 +98,8 @@ void getFromFile(FILE* file, char* fileName, List* list) {
     }
 
     fclose(file);
+
+    return 0;
 }
 
 void cutList(Position *position) {
@@ -101,9 +126,13 @@ int insert(List *list, Position *position) {
 
     if (list->head == NULL) {
         Node *temp = malloc(sizeof(Node));
+        if (temp == NULL) {
+            return 1;
+        }
         temp->contact = position->position->contact;
         temp->next = NULL;
         list->head = temp;
+
         return 0;
     }
 
