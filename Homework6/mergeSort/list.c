@@ -35,6 +35,12 @@ Position* createPosition(void) {
     return temp;
 }
 
+List* createPositionList(Position *position) {
+    List *temp = malloc(sizeof(List));
+    temp->head = position->position;
+    return temp;
+}
+
 void getFromFile(FILE* file, char* fileName, List* list) {
     file = fopen(fileName, "r");
     if (feof(file)) {
@@ -69,6 +75,10 @@ void getFromFile(FILE* file, char* fileName, List* list) {
     }
 
     fclose(file);
+}
+
+void cutList(Position *position) {
+    position->position->next = NULL;
 }
 
 void getFirstPosition(List *list, Position *position) {
@@ -111,7 +121,7 @@ void getNextPosition(Position *position) {
     position->position = position->position->next;
 }
 
-char* getPositionValue(List *list, Position *position, Priority priority, int *errorCode) {
+char* getPositionValue(Position *position, Priority priority, int *errorCode) {
     if (position == NULL) {
         *errorCode = -1;
         return NULL;
@@ -180,4 +190,8 @@ void deleteList(List **list) {
 void deletePosition(Position **position) {
     free(*position);
     *position = NULL;
+}
+
+bool isPositionNull(Position *position) {
+    return position->position == NULL;
 }

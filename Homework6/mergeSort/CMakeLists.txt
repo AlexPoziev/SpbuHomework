@@ -3,4 +3,4 @@ project(mergeSort C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(mergeSort main.c list.c list.h)
+add_executable(mergeSort main.c list.c list.h mergeSort.c mergeSort.h)

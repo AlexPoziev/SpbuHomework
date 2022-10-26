@@ -17,6 +17,9 @@ typedef enum Priority {
 // create list, need to check not NULL pointer \/
 List* createList(void);
 
+// create list with started position \/
+List* createPositionList(Position *position);
+
 // create Position, need to check ton NULL pointer \/
 Position* createPosition(void);
 
@@ -36,10 +39,13 @@ void getNextPosition(Position *position);
 void getMiddlePosition(List *list, Position *position);
 
 // get value by Position \/
-char* getPositionValue(List *list, Position *position, Priority priority, int *errorCode);
+char* getPositionValue(Position *position, Priority priority, int *errorCode);
 
 // add new element after current position with new position number \/
 void addNext(Position *currentPosition, Position *newPosition);
+
+// cut list by position
+void cutList(Position *position);
 
 // check is Position end of list \/
 bool isEnd(Position *position);
@@ -52,3 +58,6 @@ void deletePosition(Position **position);
 
 // delete List \/
 void deleteList(List **list);
+
+// check is pointer to element NULL
+bool isPositionNull(Position *position);
