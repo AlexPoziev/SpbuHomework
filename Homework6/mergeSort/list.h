@@ -56,6 +56,9 @@ int insert(List *list, Position *position);
 // delete Position \/
 void deletePosition(Position **position);
 
+// clear memory only to list struct
+void deleteListMemory(List **list);
+
 // delete List \/
 void deleteList(List **list);
 

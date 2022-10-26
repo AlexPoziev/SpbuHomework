@@ -195,6 +195,11 @@ void deletePosition(Position **position) {
     *position = NULL;
 }
 
+void deleteListMemory(List **list) {
+    free(*list);
+    *list = NULL;
+}
+
 bool isPositionNull(Position *position) {
     return position->position == NULL;
 }
