@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include "list.h"
 #include "mergeSort.h"
+#include "listTest.h"
 
 int main() {
+    if (!createPositionListTest()) {
+        printf("Test Failed");
+        return 1;
+    }
     List *list = createList();
     printf("Please enter name of .txt file, with length less than 25: ");
     char fileName[25] = {0};
@@ -27,7 +32,6 @@ int main() {
     }
     printList(list);
 
-    deleteList(&list);
-
+    deleteList(&list, true);
     return 0;
 }

@@ -44,8 +44,8 @@ char* getPositionValue(Position *position, Priority priority, int *errorCode);
 // cut list by position
 void cutList(Position *position);
 
-// put 
-void putHead
+// put to head
+void putHead(List *list, char *name, char *phoneNumber);
 
 // check is Position end of list \/
 bool isEnd(Position *position);
@@ -59,8 +59,8 @@ void deletePosition(Position **position);
 // clear memory only to list struct
 void deleteListMemory(List **list);
 
-// delete List \/
-void deleteList(List **list);
+// delete List, second parameter if got 1 - free memory for pointers of contacts, else doesn't \/
+void deleteList(List **list, bool isAllocated);
 
 // check is pointer to element NULL
 bool isPositionNull(Position *position);

@@ -145,6 +145,29 @@ int insert(List *list, Position *position) {
     return 0;
 }
 
+void putHead(List *list, char *name, char *phoneNumber) {
+    Node *temp = malloc(sizeof(Node));
+    if (temp == NULL) {
+        return;
+    }
+    temp->contact = malloc(sizeof(Contact));
+
+    if (temp->contact == NULL) {
+        return;
+    }
+    temp->contact->name = name;
+    temp->contact->phoneNumber = phoneNumber;
+    if (list->head == NULL) {
+        temp->next = NULL;
+        list->head = temp;
+
+        return;
+    }
+
+    temp->next = list->head;
+    list->head = temp;
+}
+
 void getNextPosition(Position *position) {
     if (position->position == NULL) {
         return;
@@ -196,11 +219,7 @@ void printList (List *list) {
     }
 }
 
-void addNext(Position *currentPosition, Position *newPosition) {
-    currentPosition->position->next = newPosition->position;
-}
-
-void deleteList(List **list) {
+void deleteList(List **list, bool isAllocated) {
     if (*list == NULL) {
         free(*list);
         return;
@@ -209,8 +228,10 @@ void deleteList(List **list) {
     while (temp != NULL) {
         (*list)->head = (*list)->head->next;
         if (temp->contact != NULL) {
-            free(temp->contact->phoneNumber);
-            free(temp->contact->name);
+            if (isAllocated) {
+                free(temp->contact->phoneNumber);
+                free(temp->contact->name);
+            }
             free(temp->contact);
         }
         temp = (*list)->head;
