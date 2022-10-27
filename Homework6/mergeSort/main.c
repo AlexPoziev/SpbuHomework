@@ -4,7 +4,7 @@
 #include "listTest.h"
 
 int main() {
-    if (!isEndTest()) {
+    if (!fullTest()) {
         printf("Test Failed");
         return 1;
     }

@@ -1,10 +1,6 @@
 #include "listTest.h"
 #include <string.h>
 
-bool fullTest(void) {
-
-}
-
 bool createListTest(void) {
     List* list = createList();
     bool result = list != NULL;
@@ -24,7 +20,7 @@ bool createPositionTest(void) {
 bool deletePositionTest(void) {
     List* list = createList();
     putHead(list, "test", "1");
-    Position* position = NULL;
+    Position* position = createPosition();
     getFirstPosition(list, position);
     bool resultFirst = position != NULL;
     deletePosition(&position);
@@ -164,3 +160,62 @@ bool cutListTest(void) {
     return test;
 }
 
+bool deleteListTest(void) {
+    List *list = createList();
+    putHead(list, "Warian", "123");
+    putHead(list, "Thrall", "12415");
+    bool firstTest = list != NULL;
+    deleteList(&list, false);
+    bool secondTest = list == NULL;
+
+    return firstTest && secondTest;
+}
+
+bool getMiddlePositionTest(void) {
+    List *list = createList();
+    Position *position = createPosition();
+    int errorCode = 0;
+    putHead(list, "Warian", "123");
+    putHead(list, "Thrall", "12415");
+    putHead(list, "Vol-jin", "123");
+
+    getMiddlePosition(list, position);
+    bool test = strcmp(getPositionValue(position, name, &errorCode), "Thrall");
+
+    deleteList(&list, false);
+    deletePosition(&position);
+
+    return !test;
+}
+
+bool insertTest(void) {
+    List *firstList = createList();
+    int errorCode = 0;
+    putHead(firstList, "testFirst", "1");
+    putHead(firstList, "testSecond", "2");
+
+    List *secondList = createList();
+    Position *position = createPosition();
+    getFirstPosition(firstList, position);
+    insert(secondList, position);
+    getNextPosition(position);
+    insert(secondList, position);
+    getFirstPosition(secondList, position);
+
+    bool firstTest = strcmp(getPositionValue(position, name, &errorCode), "testSecond");
+    getNextPosition(position);
+    bool secondTest = strcmp(getPositionValue(position, name, &errorCode), "testFirst");
+
+    deleteList(&firstList, false);
+    deleteListMemory(&secondList);
+    deletePosition(&position);
+
+    return !firstTest && !secondTest;
+}
+
+bool fullTest(void) {
+    return createListTest() && createPositionListTest() && createPositionTest()
+    && deleteListTest() && deleteListMemoryTest() && deletePositionTest()
+    && getFromFileTest() && getFirstPositionTest() && getMiddlePositionTest()
+    && getNextPositionTest() && insertTest() && cutListTest() && isEndTest();
+}
