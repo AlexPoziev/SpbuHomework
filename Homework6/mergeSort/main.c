@@ -4,7 +4,7 @@
 #include "listTest.h"
 
 int main() {
-    if (!fullTest()) {
+    if (!fullTest() || mergeSortTest()) {
         printf("Test Failed");
         return 1;
     }
