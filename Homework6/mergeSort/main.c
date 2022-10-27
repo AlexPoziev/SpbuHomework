@@ -33,5 +33,6 @@ int main() {
     printList(list);
 
     deleteList(&list, true);
+
     return 0;
 }
