@@ -62,6 +62,7 @@ int getFromFile(FILE* file, char* fileName, List* list) {
         return 1;
     }
     fscanf(file, "%s",  temp->contact->name);
+    fgetc(file);
     temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
     if (temp->contact->phoneNumber == NULL) {
         return 1;
@@ -87,6 +88,7 @@ int getFromFile(FILE* file, char* fileName, List* list) {
             return 1;
         }
         fscanf(file, "%s", temp->contact->name);
+        fgetc(file);
         temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
         if (temp->contact->phoneNumber == NULL) {
             return 1;

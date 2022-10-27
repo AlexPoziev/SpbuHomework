@@ -88,5 +88,79 @@ bool getFirstPositionTest(void) {
 }
 
 bool getNextPositionTest(void) {
-    
+    List *list = createList();
+    int errorCode = 0;
+    putHead(list, "CheckFirst", "1");
+    putHead(list, "CheckSecond", "2");
+    Position *position = createPosition();
+    getFirstPosition(list, position);
+    getNextPosition(position);
+    char *test = getPositionValue(position, name, &errorCode);
+    bool correctTest = strcmp(test, "CheckFirst");
+
+    deletePosition(&position);
+    deleteList(&list, false);
+
+    return !correctTest;
 }
+
+bool getFromFileTest(void) {
+    char *fileName = "test.txt";
+    List *list = createList();
+    FILE* file = NULL;
+    int errorCode = 0;
+
+    getFromFile(file, fileName, list);
+    Position *position = createPosition();
+    getFirstPosition(list, position);
+
+    bool firstTest = strcmp(getPositionValue(position, name, &errorCode), "bobbyKotik")
+            || strcmp(getPositionValue(position, phoneNumber, &errorCode), "999");
+    getNextPosition(position);
+
+    bool secondTest = strcmp(getPositionValue(position, name, &errorCode), "uchkuduk")
+                     || strcmp(getPositionValue(position, phoneNumber, &errorCode), "3");
+    getNextPosition(position);
+
+    bool thirdTest = strcmp(getPositionValue(position, name, &errorCode), "qaraquyunlyu")
+                      || strcmp(getPositionValue(position, phoneNumber, &errorCode), "880");
+    getNextPosition(position);
+
+    deletePosition(&position);
+    deleteList(&list, true);
+
+    return !firstTest && !secondTest && !thirdTest;
+}
+
+bool isEndTest(void) {
+    List *list = createList();
+    putHead(list, "JustTest", "1024");
+    Position *position = createPosition();
+    getFirstPosition(list, position);
+    bool test = isEnd(position);
+
+    deleteList(&list, false);
+    deletePosition(&position);
+
+    return test;
+}
+
+bool cutListTest(void) {
+    List *list = createList();
+    Position *position = createPosition();
+    putHead(list, "JustTest", "1024");
+    putHead(list, "JustTestt", "10234");
+    putHead(list, "JustTesttt", "10244");
+
+    getFirstPosition(list, position);
+    getNextPosition(position);
+
+    cutList(position);
+    bool test = isEnd(position);
+
+    deleteList(&list, false);
+    deletePosition(&position);
+
+    return test;
+}
+

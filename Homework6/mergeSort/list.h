@@ -41,7 +41,7 @@ void getMiddlePosition(List *list, Position *position);
 // get value by Position \/
 char* getPositionValue(Position *position, Priority priority, int *errorCode);
 
-// cut list by position
+// cut list by position \/
 void cutList(Position *position);
 
 // put to head

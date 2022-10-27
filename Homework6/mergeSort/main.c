@@ -4,7 +4,7 @@
 #include "listTest.h"
 
 int main() {
-    if (!createPositionListTest()) {
+    if (!isEndTest()) {
         printf("Test Failed");
         return 1;
     }
