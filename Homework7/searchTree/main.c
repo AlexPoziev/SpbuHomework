@@ -3,7 +3,7 @@
 #include "binaryTreeTest.h"
 
 int main() {
-    if (!createDictionaryTest()) {
+    if (!fullTest()) {
         printf("Tests Failed");
         return 1;
     }

@@ -165,7 +165,10 @@ int deleteWord(Dictionary *dictionary, int token) {
     if (mostRight->leftChild != NULL) {
         mostRight->leftChild->parent = mostRight->parent;
     }
-    mostRight->parent->rightChild = mostRight->leftChild;
+    // case if most right is first right child of current
+    mostRight->parent != currentNode
+    ? (mostRight->parent->rightChild = mostRight->leftChild)
+    : (mostRight->parent->leftChild = mostRight->leftChild);
 
     free(mostRight);
 

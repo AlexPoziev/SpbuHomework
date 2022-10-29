@@ -12,6 +12,23 @@ bool createDictionaryTest(void) {
     return test;
 }
 
+bool deleteTreeTest(void) {
+    Dictionary *dictionary = createDictionary();
+    int errorCode = 0;
+    errorCode = addWord(dictionary, 10, "ParahodEntertainment");
+    if (errorCode) {
+        return false;
+    }
+    errorCode = addWord(dictionary, 100, "Jaina");
+    if (errorCode) {
+        return false;
+    }
+
+    deleteTree(&dictionary);
+
+    return dictionary == NULL;
+}
+
 bool addWordTest(void) {
     Dictionary *dictionary = createDictionary();
     int errorCode = 0;
@@ -23,7 +40,6 @@ bool addWordTest(void) {
     if (errorCode) {
         return false;
     }
-
     errorCode = addWord(dictionary, 0, "Uther");
     if (errorCode) {
         return false;
@@ -41,4 +57,85 @@ bool addWordTest(void) {
     deleteTree(&dictionary);
 
     return !firstTest && !secondTest && !thirdTest && !fourthTest;
+}
+
+bool getWordTest(void) {
+    Dictionary *dictionary = createDictionary();
+    int errorCode = 0;
+    errorCode = addWord(dictionary, 10, "Osman");
+    if (errorCode) {
+        return false;
+    }
+    errorCode = addWord(dictionary, 100, "Commonwealth");
+    if (errorCode) {
+        return false;
+    }
+
+    bool firstTest = strcmp(getWord(dictionary, 10), "Osman");
+    bool secondTest = strcmp(getWord(dictionary, 100), "Commonwealth");
+    bool thirdTest = getWord(dictionary, 0) == NULL;
+
+    deleteTree(&dictionary);
+
+    return !firstTest && !secondTest && thirdTest;
+}
+
+bool deleteWordTest(void) {
+    Dictionary *dictionary = createDictionary();
+    int errorCode = 0;
+    errorCode = addWord(dictionary, 10, "Osman");
+    if (errorCode) {
+        return false;
+    }
+    errorCode = addWord(dictionary, 100, "Commonwealth");
+    if (errorCode) {
+        return false;
+    }
+    errorCode = addWord(dictionary, 3, "Uther");
+    if (errorCode) {
+        return false;
+    }
+    errorCode = addWord(dictionary, 0, "Scorch");
+    if (errorCode) {
+        return false;
+    }
+
+    deleteWord(dictionary, 10);
+    bool firstTest = !isContain(dictionary, 10);
+    deleteWord(dictionary, 0);
+    bool secondTest = !isContain(dictionary, 0);
+    bool thirdTest = isContain(dictionary, 100);
+    bool fourthTest = isContain(dictionary, 3);
+
+    deleteTree(&dictionary);
+
+    return firstTest && secondTest && thirdTest && fourthTest;
+}
+
+bool isContainTest(void) {
+    Dictionary *dictionary = createDictionary();
+    int errorCode = 0;
+    errorCode = addWord(dictionary, 10, "ParahodEntertainment");
+    if (errorCode) {
+        return false;
+    }
+    errorCode = addWord(dictionary, 100, "Jaina");
+    if (errorCode) {
+        return false;
+    }
+
+    bool firstTest = isContain(dictionary, 10);
+    bool secondTest = isContain(dictionary, 100);
+    bool thirdTest = !isContain(dictionary, 0);
+    deleteWord(dictionary, 100);
+    bool fourthTest = !isContain(dictionary, 100);
+
+    deleteTree(&dictionary);
+
+    return firstTest && secondTest && thirdTest && fourthTest;
+}
+
+bool fullTest(void) {
+    return createDictionaryTest() && deleteWordTest() && deleteTreeTest()
+    && addWordTest() && isContainTest() && getWordTest();
 }
