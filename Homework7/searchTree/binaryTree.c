@@ -1,6 +1,7 @@
 #include "binaryTree.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct Node {
     int token;
@@ -54,7 +55,9 @@ int addWord(Dictionary *dictionary, int token, char* word) {
         dictionary->root->rightChild = NULL;
         dictionary->root->parent = NULL;
         dictionary->root->token = token;
-        dictionary->root->word = word;
+        char *newWord = calloc(strlen(word), sizeof(char));
+        stpcpy(newWord, word);
+        dictionary->root->word = newWord;
 
         return 0;
     }
@@ -73,7 +76,9 @@ int addWord(Dictionary *dictionary, int token, char* word) {
     }
     newNode->parent = currentNode;
     newNode->token = token;
-    newNode->word = word;
+    char *newWord = calloc(strlen(word), sizeof(char));
+    stpcpy(newWord, word);
+    newNode->word = newWord;
     newNode->rightChild = NULL;
     newNode->leftChild = NULL;
 
@@ -101,4 +106,25 @@ bool isContain(Dictionary *dictionary, int token) {
     findPosition(dictionary, token, &isEnd);
 
     return !isEnd;
+}
+
+int deleteWord(Dictionary *dictionary, int token) {
+    if (dictionary == NULL) {
+        return 1;
+    }
+
+    bool isEnd = false;
+    Node *currentNode = findPosition(dictionary, token, &isEnd);
+    if (isEnd) {
+        return 0;
+    }
+    if (currentNode->leftChild == NULL && currentNode ->rightChild == NULL) {
+        currentNode->parent->token > token
+        ? (currentNode->parent->leftChild = NULL)
+        : (currentNode->parent->rightChild = NULL);
+        free(currentNode->word);
+        free(currentNode);
+
+        return 0;
+    }
 }

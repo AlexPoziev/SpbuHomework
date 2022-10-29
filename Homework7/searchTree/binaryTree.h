@@ -14,3 +14,6 @@ char* getWord(Dictionary *dictionary, int token);
 
 // check containing token in dictionary
 bool isContain(Dictionary *dictionary, int token);
+
+// delete element of dictionary by token, if no token doing nothing
+int deleteWord(Dictionary *dictionary, int token);
