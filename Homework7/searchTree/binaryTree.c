@@ -22,12 +22,18 @@ Dictionary* createDictionary(void) {
 
 Node* findPosition(Dictionary *dictionary, int token, bool *isEnd) {
     Node *currentNode = dictionary->root;
-    Node *nextNode = currentNode->token < token ? currentNode->leftChild : currentNode->rightChild;
-    while (nextNode != NULL && nextNode->token != token) {
+    Node *nextNode = currentNode->token > token ? currentNode->leftChild : currentNode->rightChild;
+    while (nextNode != NULL) {
         currentNode = nextNode;
+        if (currentNode->token == token) {
+            *isEnd = false;
+            return currentNode;
+        }
         nextNode = currentNode->token < token ? currentNode->leftChild : currentNode->rightChild;
     }
 
+    *isEnd = true;
+    return currentNode;
 }
 
 int addWord(Dictionary *dictionary, int token, char* word) {
@@ -49,5 +55,27 @@ int addWord(Dictionary *dictionary, int token, char* word) {
         return 0;
     }
 
+    bool isEnd = false;
+    Node *currentNode = findPosition(dictionary, token, &isEnd);
+    if (isEnd == false) {
+        free(currentNode->word);
+        currentNode->word = word;
 
+        return 0;
+    }
+    Node *newNode = malloc(sizeof(Node));
+    if (newNode == NULL) {
+        return 1;
+    }
+    newNode->parent = currentNode;
+    newNode->token = token;
+    newNode->word = word;
+    newNode->rightChild = NULL;
+    newNode->leftChild = NULL;
+
+    newNode->token < currentNode->token
+    ? (currentNode->leftChild = newNode)
+    : (currentNode->rightChild = newNode);
+
+    return 0;
 }
