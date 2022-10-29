@@ -22,6 +22,10 @@ Dictionary* createDictionary(void) {
 
 Node* findPosition(Dictionary *dictionary, int token, bool *isEnd) {
     Node *currentNode = dictionary->root;
+    if (currentNode->token == token) {
+        *isEnd = false;
+        return currentNode;
+    }
     Node *nextNode = currentNode->token > token ? currentNode->leftChild : currentNode->rightChild;
     while (nextNode != NULL) {
         currentNode = nextNode;
@@ -87,4 +91,14 @@ char* getWord(Dictionary *dictionary, int token) {
     bool isEnd = false;
     Node *currentNode = findPosition(dictionary, token, &isEnd);
     return isEnd ? NULL : currentNode->word;
+}
+
+bool isContain(Dictionary *dictionary, int token) {
+    if (dictionary == NULL) {
+        return false;
+    }
+    bool isEnd = false;
+    findPosition(dictionary, token, &isEnd);
+
+    return !isEnd;
 }

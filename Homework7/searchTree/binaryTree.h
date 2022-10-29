@@ -11,3 +11,6 @@ int addWord(Dictionary *dictionary, int token, char* word);
 
 // get word by token
 char* getWord(Dictionary *dictionary, int token);
+
+// check containing token in dictionary
+bool isContain(Dictionary *dictionary, int token);
