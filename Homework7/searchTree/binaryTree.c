@@ -34,7 +34,7 @@ Node* findPosition(Dictionary *dictionary, int token, bool *isEnd) {
             *isEnd = false;
             return currentNode;
         }
-        nextNode = currentNode->token < token ? currentNode->leftChild : currentNode->rightChild;
+        nextNode = currentNode->token > token ? currentNode->leftChild : currentNode->rightChild;
     }
 
     *isEnd = true;
@@ -108,6 +108,18 @@ bool isContain(Dictionary *dictionary, int token) {
     return !isEnd;
 }
 
+// get most right of left children
+Node* getMostRight(Node* root) {
+    Node *currentNode = root->leftChild;
+    Node *next = currentNode->rightChild;
+    while (next != NULL) {
+        currentNode = next;
+        next = currentNode->rightChild;
+    }
+
+    return currentNode;
+}
+
 int deleteWord(Dictionary *dictionary, int token) {
     if (dictionary == NULL) {
         return 1;
@@ -118,7 +130,8 @@ int deleteWord(Dictionary *dictionary, int token) {
     if (isEnd) {
         return 0;
     }
-    if (currentNode->leftChild == NULL && currentNode ->rightChild == NULL) {
+    // childfree case
+    if (currentNode->leftChild == NULL && currentNode->rightChild == NULL) {
         currentNode->parent->token > token
         ? (currentNode->parent->leftChild = NULL)
         : (currentNode->parent->rightChild = NULL);
@@ -127,4 +140,25 @@ int deleteWord(Dictionary *dictionary, int token) {
 
         return 0;
     }
+    // case only child
+    if (currentNode->leftChild == NULL || currentNode->rightChild == NULL) {
+        Node *temp = currentNode->leftChild == NULL ? currentNode->rightChild : currentNode->leftChild;
+        temp->parent = currentNode->parent;
+        currentNode->parent->token > token
+        ? (currentNode->parent->leftChild = temp)
+        : (currentNode->parent->rightChild = temp);
+        free(currentNode->word);
+        free(currentNode);
+
+        return 0;
+    }
+    // case two children
+    Node *mostRight = getMostRight(currentNode);
+    currentNode->token = mostRight->token;
+    free(currentNode->word);
+    currentNode->word = mostRight->word;
+    mostRight->parent->rightChild = mostRight->leftChild;
+    free(mostRight);
+
+    return 0;
 }
