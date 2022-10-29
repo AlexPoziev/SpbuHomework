@@ -18,7 +18,7 @@ typedef struct List {
 } List;
 
 typedef struct Position {
-    Node *position
+    Node *position;
 } Position;
 
 List* createList(void) {
