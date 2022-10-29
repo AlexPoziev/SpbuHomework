@@ -8,3 +8,6 @@ Dictionary* createDictionary(void);
 
 // add word to dictionary by token, if token already exists change to new value
 int addWord(Dictionary *dictionary, int token, char* word);
+
+// get word by token
+char* getWord(Dictionary *dictionary, int token);

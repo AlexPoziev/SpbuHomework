@@ -79,3 +79,12 @@ int addWord(Dictionary *dictionary, int token, char* word) {
 
     return 0;
 }
+
+char* getWord(Dictionary *dictionary, int token) {
+    if (dictionary == NULL) {
+        return NULL;
+    }
+    bool isEnd = false;
+    Node *currentNode = findPosition(dictionary, token, &isEnd);
+    return isEnd ? NULL : currentNode->word;
+}
