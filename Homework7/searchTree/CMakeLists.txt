@@ -3,4 +3,4 @@ project(searchTree C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(searchTree main.c binaryTree.c binaryTree.h)
+add_executable(searchTree main.c binaryTree.c binaryTree.h binaryTreeTest.c binaryTreeTest.h)

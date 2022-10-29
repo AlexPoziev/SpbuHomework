@@ -64,20 +64,23 @@ int addWord(Dictionary *dictionary, int token, char* word) {
 
     bool isEnd = false;
     Node *currentNode = findPosition(dictionary, token, &isEnd);
-    if (isEnd == false) {
-        free(currentNode->word);
-        currentNode->word = word;
-
-        return 0;
-    }
     Node *newNode = malloc(sizeof(Node));
+    char *newWord = calloc(strlen(word), sizeof(char));
+    stpcpy(newWord, word);
+
     if (newNode == NULL) {
         return 1;
     }
+    // if found same token
+    if (isEnd == false) {
+        free(currentNode->word);
+        currentNode->word = newWord;
+
+        return 0;
+    }
+    // if new token
     newNode->parent = currentNode;
     newNode->token = token;
-    char *newWord = calloc(strlen(word), sizeof(char));
-    stpcpy(newWord, word);
     newNode->word = newWord;
     newNode->rightChild = NULL;
     newNode->leftChild = NULL;
