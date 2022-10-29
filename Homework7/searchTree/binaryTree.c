@@ -135,6 +135,7 @@ int deleteWord(Dictionary *dictionary, int token) {
         currentNode->parent->token > token
         ? (currentNode->parent->leftChild = NULL)
         : (currentNode->parent->rightChild = NULL);
+
         free(currentNode->word);
         free(currentNode);
 
@@ -147,6 +148,7 @@ int deleteWord(Dictionary *dictionary, int token) {
         currentNode->parent->token > token
         ? (currentNode->parent->leftChild = temp)
         : (currentNode->parent->rightChild = temp);
+
         free(currentNode->word);
         free(currentNode);
 
@@ -157,8 +159,33 @@ int deleteWord(Dictionary *dictionary, int token) {
     currentNode->token = mostRight->token;
     free(currentNode->word);
     currentNode->word = mostRight->word;
+    if (mostRight->leftChild != NULL) {
+        mostRight->leftChild->parent = mostRight->parent;
+    }
     mostRight->parent->rightChild = mostRight->leftChild;
+
     free(mostRight);
 
     return 0;
+}
+
+void deleteTreeRecursion(Node *child) {
+    if (child == NULL) {
+        return;
+    }
+
+    deleteTreeRecursion(child->leftChild);
+    deleteTreeRecursion(child->rightChild);
+
+    free(child->word);
+    child->word = NULL;
+    free(child);
+    child = NULL;
+}
+
+void deleteTree(Dictionary **dictionary) {
+    deleteTreeRecursion((*dictionary)->root);
+
+    free(*dictionary);
+    *dictionary = NULL;
 }

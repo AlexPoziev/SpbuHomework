@@ -12,7 +12,7 @@ int main() {
     addWord(dictionary, 4, "abdffefff");
     char* temp = getWord(dictionary, 1);
     bool check = isContain(dictionary,1);
-    deleteWord(dictionary, 8);
+    deleteTree(&dictionary);
 
     return 0;
 }

@@ -17,3 +17,6 @@ bool isContain(Dictionary *dictionary, int token);
 
 // delete element of dictionary by token, if no token doing nothing
 int deleteWord(Dictionary *dictionary, int token);
+
+// deallocate dictionary's memory
+void deleteTree(Dictionary **dictionary);
