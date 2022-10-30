@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "binaryTree.h"
 
 void test(FILE *file) {
     char c = getc(file);
@@ -11,9 +12,8 @@ void test(FILE *file) {
 
 int main() {
     FILE *file = fopen("test.txt", "r");
-    char check[20] = {0};
-    scanf("%[^d]", check);
-    printf("%s", check);
+    Tree *tree = createTree();
+    fGetTree(file, "test.txt", tree);
 
     return 0;
 }
