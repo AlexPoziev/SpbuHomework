@@ -20,7 +20,7 @@ Tree* createTree(void) {
     return temp;
 }
 
-int fGetTreeRecursion(FILE *file, Node *node) {
+int fileGetTreeRecursion(FILE *file, Node *node) {
     int errorCode = 0;
 
     node->value = calloc(1, sizeof(char));
@@ -85,7 +85,7 @@ int fGetTreeRecursion(FILE *file, Node *node) {
     return 0;
 }
 
-int fGetTree(FILE *file, char *fileName, Tree *tree) {
+int fileGetTree(FILE *file, char *fileName, Tree *tree) {
     file = fopen(fileName, "r");
     if (file == NULL) {
         return -1;
