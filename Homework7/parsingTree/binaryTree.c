@@ -147,7 +147,7 @@ void printTreeRecursion(Node *child) {
         return;
     }
 
-    printf("(%s", child->value);
+    printf(" (%s", child->value);
     printTreeRecursion(child->leftChild);
     printTreeRecursion(child->rightChild);
     printf(")");
