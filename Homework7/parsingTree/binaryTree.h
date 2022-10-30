@@ -9,4 +9,4 @@ typedef struct Tree Tree;
 Tree* createTree(void);
 
 // build binary tree from file data
-Tree* fGetTree(FILE *file, char *fileName, Tree *tree);
+int fGetTree(FILE *file, char *fileName, Tree *tree);

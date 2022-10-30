@@ -13,7 +13,7 @@ void test(FILE *file) {
 int main() {
     FILE *file = fopen("test.txt", "r");
     Tree *tree = createTree();
-    fGetTree(file, "test.txt", tree);
+    int errorCode = fGetTree(file, "test.txt", tree);
 
     return 0;
 }
