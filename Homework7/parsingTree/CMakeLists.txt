@@ -3,4 +3,4 @@ project(parsingTree C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(parsingTree main.c binaryTree.c binaryTree.h)
+add_executable(parsingTree main.c binaryTree.c binaryTree.h testBinaryTree.c testBinaryTree.h)

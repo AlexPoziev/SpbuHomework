@@ -1,8 +1,14 @@
+#include "binaryTree.h"
+#include "testBinaryTree.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "binaryTree.h"
 
 int main() {
+    if (!deleteTreeTest() && !createTreeTest() && !calculateTreeTest() && !fileGetTreeTest()) {
+        printf("Tests Failed");
+        return 1;
+    }
+
     printf("Input name of file with length less than 20: ");
     char fileName[20] = {0};
     scanf("%s", fileName);
@@ -29,7 +35,9 @@ int main() {
     printf("Tree: ");
     printTree(tree);
 
-    printf("Value of tree is: %g", calculateTree(tree));
+    printf("\nValue of tree is: %g", calculateTree(tree));
+
+    deleteTree(&tree);
 
     return 0;
 }

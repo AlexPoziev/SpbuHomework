@@ -89,11 +89,13 @@ int fileGetTreeRecursion(FILE *file, Node *node) {
 int fileGetTree(FILE *file, char *fileName, Tree *tree) {
     file = fopen(fileName, "r");
     if (file == NULL) {
+        fclose(file);
         return -1;
     }
 
     tree->root = malloc(sizeof(Node));
     if (tree->root == NULL) {
+        fclose(file);
         return 1;
     }
 
@@ -135,7 +137,7 @@ void deleteTree(Tree **tree) {
     deleteTreeRecursion((*tree)->root);
 
     free(*tree);
-    *tree = NULL;
+    (*tree) = NULL;
 }
 
 void printTreeRecursion(Node *child) {
@@ -192,4 +194,8 @@ double calculateTreeRecursion(Node *root) {
 
 double calculateTree(Tree *tree) {
     return calculateTreeRecursion(tree->root);
+}
+
+bool isRootEmpty(Tree *tree) {
+    return tree->root == NULL;
 }

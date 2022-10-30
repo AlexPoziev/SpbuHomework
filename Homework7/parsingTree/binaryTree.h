@@ -19,3 +19,6 @@ int printTree(Tree *tree);
 
 // calculate value of expression in tree
 double calculateTree(Tree *tree);
+
+// check is root empty
+bool isRootEmpty(Tree *tree);
