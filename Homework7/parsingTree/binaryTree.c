@@ -38,7 +38,7 @@ int fileGetTreeRecursion(FILE *file, Node *node) {
         ungetc(next, file);
         Node *nextNode = malloc(sizeof(Node));
         node->leftChild = nextNode;
-        errorCode = fGetTreeRecursion(file, nextNode);
+        errorCode = fileGetTreeRecursion(file, nextNode);
         if (errorCode) {
             return 1;
         }
@@ -63,7 +63,7 @@ int fileGetTreeRecursion(FILE *file, Node *node) {
         ungetc(next, file);
         Node *nextNode = malloc(sizeof(Node));
         node->rightChild = nextNode;
-        errorCode = fGetTreeRecursion(file, nextNode);
+        errorCode = fileGetTreeRecursion(file, nextNode);
         if (errorCode) {
             return 1;
         }
@@ -96,8 +96,9 @@ int fileGetTree(FILE *file, char *fileName, Tree *tree) {
         return 1;
     }
 
-    int errorCode = fGetTreeRecursion(file, tree->root);
+    int errorCode = fileGetTreeRecursion(file, tree->root);
     if (errorCode == 1) {
+        deleteTree(&tree);
         fclose(file);
         return 1;
     }
@@ -106,3 +107,29 @@ int fileGetTree(FILE *file, char *fileName, Tree *tree) {
 
     return 0;
 }
+
+void deleteTreeRecursion(Node *child) {
+    if (child == NULL) {
+        return;
+    }
+
+    deleteTreeRecursion(child->leftChild);
+    deleteTreeRecursion(child->rightChild);
+
+    free(child->value);
+    child->value = NULL;
+    free(child);
+    child = NULL;
+}
+
+void deleteTree(Tree **tree) {
+    if (tree == NULL || *tree == NULL) {
+        return;
+    }
+
+    deleteTreeRecursion((*tree)->root);
+
+    free(*tree);
+    *tree = NULL;
+}
+

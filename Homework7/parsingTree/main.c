@@ -15,5 +15,6 @@ int main() {
     Tree *tree = createTree();
     int errorCode = fileGetTree(file, "test.txt", tree);
 
+    deleteTree(&tree);
     return 0;
 }
