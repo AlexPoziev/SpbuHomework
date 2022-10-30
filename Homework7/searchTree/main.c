@@ -53,6 +53,7 @@ int main() {
                     break;
                 }
                 printf("Value of token %d is '%s' \n", token, answer);
+
                 break;
             }
             case 3: {
