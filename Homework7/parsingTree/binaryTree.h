@@ -13,3 +13,5 @@ int fileGetTree(FILE *file, char *fileName, Tree *tree);
 
 // deallocate memory for binaryTree
 void deleteTree(Tree **tree);
+
+int printTree(Tree *tree);

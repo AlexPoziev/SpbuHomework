@@ -133,3 +133,16 @@ void deleteTree(Tree **tree) {
     *tree = NULL;
 }
 
+void printTreeRecursion(Node *child) {
+    if (child == NULL) {
+        return;
+    }
+
+    printf("%s", child->value);
+    printTreeRecursion(child->leftChild);
+    printTreeRecursion(child->rightChild);
+}
+
+int printTree(Tree *tree) {
+    printTreeRecursion(tree->root);
+}
