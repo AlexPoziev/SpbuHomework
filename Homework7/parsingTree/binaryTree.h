@@ -14,7 +14,7 @@ int fileGetTree(FILE *file, char *fileName, Tree *tree);
 // deallocate memory for binaryTree
 void deleteTree(Tree **tree);
 
-// print tree to console
+// print tree to console. Return 1 if tree doesn't exist
 int printTree(Tree *tree);
 
 // calculate value of expression in tree

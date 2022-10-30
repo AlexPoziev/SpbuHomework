@@ -15,7 +15,7 @@ int main() {
     Tree *tree = createTree();
     int errorCode = fileGetTree(file, "test.txt", tree);
 
-    printTree(tree);
+    printf("%g", calculateTree(tree));
 
     return 0;
 }

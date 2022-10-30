@@ -154,5 +154,42 @@ void printTreeRecursion(Node *child) {
 }
 
 int printTree(Tree *tree) {
+    if (tree == NULL) {
+        return 1;
+    }
     printTreeRecursion(tree->root);
+
+    return 0;
+}
+
+double operations(double firstNumber, double secondNumber, char operation) {
+    switch (operation) {
+        case '*': {
+            return firstNumber * secondNumber;
+        }
+        case '-': {
+            return secondNumber - firstNumber;
+        }
+        case '+': {
+            return firstNumber + secondNumber;
+        }
+        case '/': {
+            return secondNumber / firstNumber;
+        }
+        default: {
+            return 0;
+        }
+    }
+}
+
+double calculateTreeRecursion(Node *root) {
+    if (!isOperator(root->value)) {
+        return atoi(root->value);
+    }
+    return operations(calculateTreeRecursion(root->leftChild),
+                      calculateTreeRecursion(root->rightChild), root->value[0]);
+}
+
+double calculateTree(Tree *tree) {
+    return calculateTreeRecursion(tree->root);
 }
