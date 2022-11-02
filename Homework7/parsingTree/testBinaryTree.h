@@ -10,6 +10,4 @@ bool deleteTreeTest(void);
 
 bool calculateTreeTest(void);
 
-// full test for parsing binary tree
 bool fullTest(void);
-

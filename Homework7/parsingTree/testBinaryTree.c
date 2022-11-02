@@ -63,7 +63,5 @@ bool fileGetTreeTest(void) {
 }
 
 bool fullTest(void) {
-    bool testSecond = fileGetTreeTest();
-    bool testThird = calculateTreeTest();
-    bool testFourth = createTreeTest();
+    bool test = fileGetTreeTest() && createTreeTest() && calculateTreeTest() && deleteTreeTest();
 }
