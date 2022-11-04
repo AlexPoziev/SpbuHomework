@@ -11,7 +11,7 @@ int main() {
     addValue(dictionary, 4, "tete44t");
     addValue(dictionary, 3, "tete43t");
     addValue(dictionary, 2, "te3t");
-    addValue(dictionary, 1, "te3t");
+    int check = addValue(dictionary, 1, "te3t");
 
     return 0;
 }

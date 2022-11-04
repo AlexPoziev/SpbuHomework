@@ -29,6 +29,9 @@ Dictionary* createDictionary(void) {
 
 Node* createNode(int token, char *value) {
     Node *newNode = malloc(sizeof(Node));
+    if (newNode == NULL) {
+        return NULL;
+    }
     newNode->token = token;
     char *newValue = calloc(strlen(value), sizeof(char));
     stpcpy(newValue, value);
@@ -106,7 +109,7 @@ Node* rotateRight(Node *currentNode) {
     leftChild->rightChild = currentNode;
     currentNode->leftChild = rightGrandson;
 
-    // to ways
+    // two ways
     if (leftChild->balance) {
         currentNode->balance = 0;
         leftChild->balance = 0;
@@ -168,30 +171,42 @@ Node* balance(Node *node) {
     return node;
 }
 
-Node* insert(Node *node, int token, char *value, bool *isPart) {
+Node* insert(Node *node, int token, char *value, bool *isPart, int8_t *errorCode) {
+    // create leaf
     if (node == NULL) {
         Node *newNode = createNode(token, value);
+        if (newNode == NULL) {
+            *errorCode = 1;
+            *isPart = true;
+            return NULL;
+        }
         return newNode;
     }
 
     Direction direction = 0;
 
     if (token < node->token) {
-        node->leftChild = insert(node->leftChild, token, value, isPart);
+        node->leftChild = insert(node->leftChild, token, value, isPart, errorCode);
         direction = left;
     } else if (token > node->token) {
-        node->rightChild = insert(node->rightChild, token, value, isPart);
+        node->rightChild = insert(node->rightChild, token, value, isPart, errorCode);
         direction = right;
     } else {
-        // case find existing token
+        // case finding existing token
         *isPart = true;
         char *newValue = calloc(strlen(value), sizeof(char));
-        strcpy(newValue, value);
-        free(node->value);
-        node->value = newValue;
-        return node;
+        if (newValue == NULL) {
+            *errorCode = 1;
+        } else {
+            strcpy(newValue, value);
+            free(node->value);
+            node->value = newValue;
+            return node;
+        }
     }
 
+    // firstly was way to get from recursion without changing balance for create leaf case
+    // now just general way to skip recursion
     if (*isPart) {
         return node;
     }
@@ -205,9 +220,10 @@ Node* insert(Node *node, int token, char *value, bool *isPart) {
     return balance(node);
 }
 
+// just a shell, call insert function, that really adds values
 int addValue(Dictionary *dictionary, int token, char* value) {
     if (dictionary == NULL) {
-        return 1;
+        return -1;
     }
     if (dictionary->dictionary == NULL) {
         Node *newValue = createNode(token, value);
@@ -217,7 +233,8 @@ int addValue(Dictionary *dictionary, int token, char* value) {
     }
 
     bool isPart = false;
-    dictionary->dictionary = insert(dictionary->dictionary, token, value, &isPart);
+    int8_t errorCode = 0;
+    dictionary->dictionary = insert(dictionary->dictionary, token, value, &isPart, &errorCode);
 
-    return 0;
+    return errorCode;
 }

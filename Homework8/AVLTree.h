@@ -8,9 +8,12 @@ typedef struct Dictionary Dictionary;
 Dictionary* createDictionary(void);
 
 // add value to dictionary by token, if token already exists change to new value
+// return 0 if all OK
+// return -1 if dictionary pointer NULL
+// return 1 if not enough memory
 int addValue(Dictionary *dictionary, int token, char* value);
 
-// get value by token
+// get value by token, if no token in dictionary, returns NULL
 char* getValue(Dictionary *dictionary, int token);
 
 // check containing token in dictionary
