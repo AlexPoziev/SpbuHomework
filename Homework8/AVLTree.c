@@ -49,6 +49,20 @@ Node* rotateLeft(Node *currentNode) {
     return rightChild;
 }
 
+Node* rotateBigLeft(Node* currentNode) {
+    Node *rightChild = currentNode->rightChild;
+    Node *leftGrandson = rightChild->leftChild;
+    Node *leftGrandGrandson = leftGrandson->leftChild;
+    Node *rightGrandGrandson = leftGrandson->rightChild;
+
+    leftGrandson->leftChild = currentNode;
+    leftGrandson->rightChild = rightChild;
+    currentNode->rightChild = leftGrandGrandson;
+    rightChild->leftChild = rightGrandGrandson;
+
+    return leftGrandson;
+}
+
 Node* rotateRight(Node *currentNode) {
     Node *leftChild = currentNode->leftChild;
     Node *rightGrandson = leftChild->rightChild;
@@ -57,4 +71,18 @@ Node* rotateRight(Node *currentNode) {
     currentNode->leftChild = rightGrandson;
 
     return leftChild;
+}
+
+Node* rotateBigRight(Node* currentNode) {
+    Node *leftChild = currentNode->leftChild;
+    Node *rightGrandson = leftChild->rightChild;
+    Node *rightGrandGrandson = rightGrandson->rightChild;
+    Node *leftGrandGrandson = rightGrandson->leftChild;
+
+    rightGrandson->rightChild = currentNode;
+    rightGrandson->leftChild = leftChild;
+    currentNode->leftChild = rightGrandGrandson;
+    leftChild->rightChild = leftGrandGrandson;
+
+    return rightGrandson;
 }
