@@ -6,7 +6,7 @@
 typedef struct Node {
     char *value;
     int token;
-    int height;
+    int balance;
     struct Node *leftChild;
     struct Node *rightChild;
 } Node;
