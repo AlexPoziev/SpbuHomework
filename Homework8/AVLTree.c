@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 typedef struct Node {
     char *value;
     int token;
-    int balance;
+    int8_t balance;
     struct Node *leftChild;
     struct Node *rightChild;
 } Node;
@@ -39,18 +40,11 @@ Node* createNode(int token, char *value) {
     return newNode;
 }
 
-int getHeight(Node *node) {
+int8_t getBalance(Node *node) {
     if (node == NULL) {
         return 0;
     }
-    return node->height;
-}
-
-int getBalance(Node *node) {
-    if (node == NULL) {
-        return 0;
-    }
-    return getHeight(node->rightChild) - getHeight(node->leftChild);
+    return node->balance;
 }
 
 Node* rotateLeft(Node *currentNode) {
@@ -60,8 +54,14 @@ Node* rotateLeft(Node *currentNode) {
     rightChild->leftChild = currentNode;
     currentNode->rightChild = leftGrandson;
 
-    currentNode->balance = getBalance(currentNode->rightChild) - getBalance(currentNode->leftChild);
-    rightChild->balance = getBalance(rightChild->rightChild) - getBalance(rightChild->leftChild);
+    // two ways
+    if (rightChild->balance) {
+        currentNode->balance = 0;
+        rightChild->balance = 0;
+    } else {
+        currentNode->balance = 1;
+        rightChild->balance = -1;
+    }
 
     return rightChild;
 }
@@ -77,9 +77,24 @@ Node* bigRotateLeft(Node* currentNode) {
     currentNode->rightChild = leftGrandGrandson;
     rightChild->leftChild = rightGrandGrandson;
 
-    currentNode->balance = getBalance(currentNode->rightChild) - getBalance(currentNode->leftChild);
-    rightChild->balance = getBalance(rightChild->rightChild) - getBalance(rightChild->leftChild);
-    leftGrandson->balance = getBalance(leftGrandson->rightChild) - getBalance(leftGrandson->leftChild);
+    switch (leftGrandson->balance) {
+        case -1: {
+            currentNode->balance = 0;
+            rightChild->balance = 1;
+            break;
+        }
+        case 0: {
+            currentNode->balance = 0;
+            rightChild->balance = 0;
+            break;
+        }
+        case 1: {
+            currentNode->balance =-1;
+            rightChild->balance = 0;
+            break;
+        }
+    }
+    leftGrandson->balance = 0;
 
     return leftGrandson;
 }
@@ -91,8 +106,14 @@ Node* rotateRight(Node *currentNode) {
     leftChild->rightChild = currentNode;
     currentNode->leftChild = rightGrandson;
 
-    currentNode->balance = getBalance(currentNode->rightChild) - getBalance(currentNode->leftChild);
-    leftChild->balance = getBalance(leftChild->rightChild) - getBalance(leftChild->leftChild);
+    // to ways
+    if (leftChild->balance) {
+        currentNode->balance = 0;
+        leftChild->balance = 0;
+    } else {
+        currentNode->balance = -1;
+        leftChild->balance = 1;
+    }
 
     return leftChild;
 }
@@ -108,9 +129,24 @@ Node* bigRotateRight(Node* currentNode) {
     currentNode->leftChild = rightGrandGrandson;
     leftChild->rightChild = leftGrandGrandson;
 
-    currentNode->balance = getBalance(currentNode->rightChild) - getBalance(currentNode->leftChild);
-    leftChild->balance = getBalance(leftChild->rightChild) - getBalance(leftChild->leftChild);
-    rightGrandson->balance = getBalance(rightGrandson->rightChild) - getBalance(rightGrandson->leftChild);
+    switch (rightGrandson->balance) {
+        case -1: {
+            currentNode->balance = -1;
+            leftChild->balance = 0;
+            break;
+        }
+        case 0: {
+            currentNode->balance = 0;
+            leftChild->balance = 0;
+            break;
+        }
+        case 1: {
+            currentNode->balance =0;
+            leftChild->balance = 1;
+            break;
+        }
+    }
+    rightGrandson->balance = 0;
 
     return rightGrandson;
 }
@@ -132,20 +168,22 @@ Node* balance(Node *node) {
     return node;
 }
 
-Node* insert(Node *node, int token, char *value, bool *isPart, int *heightDifference) {
+Node* insert(Node *node, int token, char *value, bool *isPart) {
     if (node == NULL) {
         Node *newNode = createNode(token, value);
         return newNode;
     }
 
     Direction direction = 0;
+
     if (token < node->token) {
-        node->leftChild = insert(node->leftChild, token, value, isPart, heightDifference);
+        node->leftChild = insert(node->leftChild, token, value, isPart);
         direction = left;
     } else if (token > node->token) {
-        node->rightChild = insert(node->rightChild, token, value, isPart, heightDifference);
+        node->rightChild = insert(node->rightChild, token, value, isPart);
         direction = right;
     } else {
+        // case find existing token
         *isPart = true;
         char *newValue = calloc(strlen(value), sizeof(char));
         strcpy(newValue, value);
@@ -157,7 +195,13 @@ Node* insert(Node *node, int token, char *value, bool *isPart, int *heightDiffer
     if (*isPart) {
         return node;
     }
-    node->balance += direction;
+
+    node->balance = (int8_t)(node->balance + direction);
+    // if -2 or 2 no more changes in balance in recursive calls
+    // if 0 that means token get position of second child and if before it was ok, its will be ok after that :)
+    if (node->balance == 2 || node->balance == -2 || node->balance == 0) {
+        *isPart = true;
+    }
     return balance(node);
 }
 
