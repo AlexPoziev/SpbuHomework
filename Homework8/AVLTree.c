@@ -38,3 +38,23 @@ Node* createNode(int token, char *value) {
 
     return newNode;
 }
+
+Node* rotateLeft(Node *currentNode) {
+    Node *rightChild = currentNode->rightChild;
+    Node *leftGrandson = rightChild->leftChild;
+
+    rightChild->leftChild = currentNode;
+    currentNode->rightChild = leftGrandson;
+
+    return rightChild;
+}
+
+Node* rotateRight(Node *currentNode) {
+    Node *leftChild = currentNode->leftChild;
+    Node *rightGrandson = leftChild->rightChild;
+
+    leftChild->rightChild = currentNode;
+    currentNode->leftChild = rightGrandson;
+
+    return leftChild;
+}
