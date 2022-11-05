@@ -327,3 +327,33 @@ int deleteWord(Dictionary *dictionary, int token) {
 
     return errorCode;
 }
+
+Node* findPosition(Dictionary *dictionary, int token, bool *isEnd) {
+    Node *currentNode = dictionary->dictionary;
+    if (currentNode->token == token) {
+        *isEnd = false;
+        return currentNode;
+    }
+    Node *nextNode = currentNode->token > token ? currentNode->leftChild : currentNode->rightChild;
+    while (nextNode != NULL) {
+        currentNode = nextNode;
+        if (currentNode->token == token) {
+            *isEnd = false;
+            return currentNode;
+        }
+        nextNode = currentNode->token > token ? currentNode->leftChild : currentNode->rightChild;
+    }
+
+    *isEnd = true;
+    return currentNode;
+}
+
+bool isContain(Dictionary *dictionary, int token) {
+    if (dictionary == NULL) {
+        return false;
+    }
+    bool isEnd = false;
+    findPosition(dictionary, token, &isEnd);
+
+    return !isEnd;
+}

@@ -14,3 +14,5 @@ int main() {
     deleteWord(dictionary, 1);
     return 0;
 }
+
+
