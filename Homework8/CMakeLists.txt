@@ -3,4 +3,4 @@ project(Homework8 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Homework8 main.c AVLTree.c AVLTree.h)
+add_executable(Homework8 main.c AVLTree.c AVLTree.h treeTest.c treeTest.h)

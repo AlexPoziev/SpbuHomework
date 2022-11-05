@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "AVLTree.h"
+#include "treeTest.h"
 
 #define MAX_STRING_SIZE 100
 
@@ -12,7 +13,7 @@ void choose(void) {
 }
 
 int main() {
-    if (!AVLTreeBalanceTest()) {
+    if (!AVLTreeBalanceTest() || !fullTest()) {
         printf("Tests Failed");
         return 1;
     }

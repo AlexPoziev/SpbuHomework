@@ -1,6 +1,5 @@
 #include "AVLTree.h"
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include <stdint.h>
 
@@ -418,7 +417,7 @@ bool balanceTest(Node *node) {
         return false;
     }
 
-    int test = hardBalanceCalculate(node);
+    int test = (int)hardBalanceCalculate(node);
     return test == node->balance && node->balance >= -2 && node->balance <= 2;
 }
 
@@ -456,6 +455,6 @@ bool AVLTreeBalanceTest(void) {
     bool fifthTest = balanceTest(test->dictionary);
 
     deleteTree(&test);
-    
+
     return firstTest && secondTest && thirdTest && fourthTest && fifthTest;
 }
