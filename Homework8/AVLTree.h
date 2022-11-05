@@ -20,6 +20,9 @@ char* getValue(Dictionary *dictionary, int token);
 bool isContain(Dictionary *dictionary, int token);
 
 // delete element of dictionary by token, if no token doing nothing
+// return 0 if all OK
+// return -1 if dictionary pointer NULL
+// return 1 if not enough memory
 int deleteWord(Dictionary *dictionary, int token);
 
 // deallocate dictionary's memory

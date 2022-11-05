@@ -3,15 +3,14 @@
 
 int main() {
     Dictionary *dictionary = createDictionary();
-    addValue(dictionary, 9, "gg");
-    addValue(dictionary, 8, "check");
-    addValue(dictionary, 7, "ttet");
-    addValue(dictionary, 6, "tetetet");
-    addValue(dictionary, 5, "tetet");
-    addValue(dictionary, 4, "tete44t");
-    addValue(dictionary, 3, "tete43t");
-    addValue(dictionary, 2, "te3t");
-    int check = addValue(dictionary, 1, "te3t");
+    addValue(dictionary, 1, "gg");
+    addValue(dictionary, 2, "check");
+    addValue(dictionary, 4, "ttet");
+    addValue(dictionary, 5, "ttfet");
 
+    deleteWord(dictionary, 2);
+    deleteWord(dictionary,4);
+    deleteWord(dictionary, 5);
+    deleteWord(dictionary, 1);
     return 0;
 }

@@ -43,13 +43,6 @@ Node* createNode(int token, char *value) {
     return newNode;
 }
 
-int8_t getBalance(Node *node) {
-    if (node == NULL) {
-        return 0;
-    }
-    return node->balance;
-}
-
 Node* rotateLeft(Node *currentNode) {
     Node *rightChild = currentNode->rightChild;
     Node *leftGrandson = rightChild->leftChild;
@@ -132,6 +125,7 @@ Node* bigRotateRight(Node* currentNode) {
     currentNode->leftChild = rightGrandGrandson;
     leftChild->rightChild = leftGrandGrandson;
 
+    // really hope that a had correctly inverse big rotate left case
     switch (rightGrandson->balance) {
         case -1: {
             currentNode->balance = -1;
@@ -220,7 +214,7 @@ Node* insert(Node *node, int token, char *value, bool *isPart, int8_t *errorCode
     return balance(node);
 }
 
-// just a shell, call insert function, that really adds values
+// just a shell, call insert() function, that really adds values
 int addValue(Dictionary *dictionary, int token, char* value) {
     if (dictionary == NULL) {
         return -1;
@@ -235,6 +229,101 @@ int addValue(Dictionary *dictionary, int token, char* value) {
     bool isPart = false;
     int8_t errorCode = 0;
     dictionary->dictionary = insert(dictionary->dictionary, token, value, &isPart, &errorCode);
+
+    return errorCode;
+}
+
+// get most right of left subtree
+Node* getMostRight(Node* root) {
+    Node *currentNode = root->leftChild;
+    Node *next = currentNode->rightChild;
+    while (next != NULL) {
+        currentNode = next;
+        next = currentNode->rightChild;
+    }
+
+    return currentNode;
+}
+
+Node* delete(Node *node, int token, bool *isPart, int8_t *errorCode) {
+    if (node == NULL) {
+        // if not find node, then skip recursion
+        *isPart = true;
+        return node;
+    }
+
+    Direction direction = 0;
+
+    if (token < node->token) {
+        node->leftChild = delete(node->leftChild, token, isPart, errorCode);
+        direction = left;
+    } else if (token > node->token) {
+        node->rightChild = delete(node->rightChild, token, isPart, errorCode);
+        direction = right;
+    } else {
+        // check for delete case
+        if (node->rightChild == NULL || node->leftChild == NULL) {
+            Node *child = node->rightChild != NULL ? node->rightChild : node->leftChild;
+
+            // no children
+            if (child == NULL) {
+                free(node->value);
+                node->value = NULL;
+                free(node);
+                node = NULL;
+            } else {
+            // only child
+                free(node->value);
+                memcpy(node, child, sizeof(Node));
+                free(child);
+            }
+        } else {
+            // two children
+            Node* approachChild = getMostRight(node);
+
+            // copy values
+            int temp = approachChild->token;
+            char *tempValue = calloc(strlen(approachChild->value), sizeof(char));
+            if (tempValue == NULL) {
+                *errorCode = 1;
+                *isPart = true;
+                return node;
+            }
+
+            strcpy(tempValue, approachChild->value);
+
+            // carry pointer to node for change its token after delete recursion
+            node->value = tempValue;
+            Node *tempNode = node;
+            // recursion call to delete left most right element and balance it
+            node = delete(node, approachChild->token, isPart, errorCode);
+
+            tempNode->token = temp;
+        }
+    }
+
+    if (*isPart || node == NULL) {
+        return node;
+    }
+
+    // balance part
+    node->balance = (int8_t)(node->balance - direction);
+    if (node->balance == 1 || node->balance == -1) {
+        *isPart = true;
+    }
+
+    return balance(node);
+}
+
+// just a shell, call delete() function, that really delete values
+int deleteWord(Dictionary *dictionary, int token) {
+    if (dictionary == NULL) {
+        return -1;
+    }
+
+    bool isPart = false;
+    int8_t errorCode = 0;
+    dictionary->dictionary = delete(dictionary->dictionary, token, &isPart, &errorCode);
 
     return errorCode;
 }
