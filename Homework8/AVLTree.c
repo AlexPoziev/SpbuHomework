@@ -367,3 +367,28 @@ char* getWord(Dictionary *dictionary, int token) {
     return isEnd ? NULL : currentNode->value;
 }
 
+void deleteTreeRecursion(Node *child) {
+    if (child == NULL) {
+        return;
+    }
+
+    deleteTreeRecursion(child->leftChild);
+    deleteTreeRecursion(child->rightChild);
+
+    free(child->value);
+    child->value = NULL;
+    free(child);
+    child = NULL;
+}
+
+void deleteTree(Dictionary **dictionary) {
+    deleteTreeRecursion((*dictionary)->dictionary);
+
+    free(*dictionary);
+    *dictionary = NULL;
+}
+
+bool AVLTreeBalanceTest(void) {
+    Dictionary *test = createDictionary();
+    insert(test->dictionary, 5, "")
+}

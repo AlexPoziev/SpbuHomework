@@ -26,4 +26,7 @@ bool isContain(Dictionary *dictionary, int token);
 int deleteWord(Dictionary *dictionary, int token);
 
 // deallocate dictionary's memory
-void deleteTree(Dictionary *dictionary, int token);
+void deleteTree(Dictionary **dictionary);
+
+// test work of algorithm and save of a balance in AVL tree
+bool AVLTreeBalanceTest(void);
