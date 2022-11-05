@@ -23,7 +23,7 @@ bool isContain(Dictionary *dictionary, int token);
 // return 0 if all OK
 // return -1 if dictionary pointer NULL
 // return 1 if not enough memory
-int deleteWord(Dictionary *dictionary, int token);
+int deleteValue(Dictionary *dictionary, int token);
 
 // deallocate dictionary's memory
 void deleteTree(Dictionary **dictionary);

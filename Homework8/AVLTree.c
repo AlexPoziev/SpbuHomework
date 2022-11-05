@@ -316,7 +316,7 @@ Node* delete(Node *node, int token, bool *isPart, int8_t *errorCode) {
 }
 
 // just a shell, call delete() function, that really delete values
-int deleteWord(Dictionary *dictionary, int token) {
+int deleteValue(Dictionary *dictionary, int token) {
     if (dictionary == NULL) {
         return -1;
     }
@@ -358,7 +358,7 @@ bool isContain(Dictionary *dictionary, int token) {
     return !isEnd;
 }
 
-char* getWord(Dictionary *dictionary, int token) {
+char* getValue(Dictionary *dictionary, int token) {
     if (dictionary == NULL) {
         return NULL;
     }
@@ -388,7 +388,74 @@ void deleteTree(Dictionary **dictionary) {
     *dictionary = NULL;
 }
 
+int treeHeight(Node* node) {
+    if (node == NULL) {
+        return 0;
+    }
+    // Find the height of left, right subtrees
+    int leftHeight = treeHeight(node->leftChild);
+    int rightHeight = treeHeight(node->rightChild);
+
+    // Find max(subtree_height) + 1 to get the height of the tree
+    return (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
+}
+int8_t hardBalanceCalculate(Node *node) {
+
+    return (int8_t)(treeHeight(node->rightChild) - treeHeight(node->leftChild));
+}
+
+bool balanceTest(Node *node) {
+    if (node == NULL){
+        return true;
+    }
+
+    bool check = balanceTest(node->leftChild);
+    if (check == false) {
+        return false;
+    }
+    check = balanceTest(node->rightChild);
+    if (check == false) {
+        return false;
+    }
+
+    int test = hardBalanceCalculate(node);
+    return test == node->balance && node->balance >= -2 && node->balance <= 2;
+}
+
 bool AVLTreeBalanceTest(void) {
     Dictionary *test = createDictionary();
-    insert(test->dictionary, 5, "")
+    addValue(test, 5, "test");
+    addValue(test, 0, "test");
+    addValue(test, 10, "test");
+    addValue(test, 15, "test");
+    addValue(test, 20, "test");
+    bool firstTest = balanceTest(test->dictionary);
+
+    deleteValue(test, 5);
+    bool secondTest = balanceTest(test->dictionary);
+
+    addValue(test, 20, "test");
+    addValue(test, 25, "test");
+    addValue(test, 30, "test");
+    addValue(test, 35, "test");
+    addValue(test, 40, "test");
+    bool thirdTest = balanceTest(test->dictionary);
+
+    addValue(test, -10, "test");
+    addValue(test, -15, "test");
+    addValue(test, -20, "test");
+    addValue(test, -30, "test");
+    addValue(test, 50, "test");
+    bool fourthTest = balanceTest(test->dictionary);
+
+    deleteValue(test, 20);
+    deleteValue(test, 50);
+    deleteValue(test, -15);
+    deleteValue(test, 25);
+    deleteValue(test, 25);
+    bool fifthTest = balanceTest(test->dictionary);
+
+    deleteTree(&test);
+    
+    return firstTest && secondTest && thirdTest && fourthTest && fifthTest;
 }
