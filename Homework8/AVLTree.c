@@ -23,6 +23,7 @@ typedef enum Direction{
 Dictionary* createDictionary(void) {
     Dictionary *newDictionary = malloc(sizeof(Dictionary));
     newDictionary->dictionary = NULL;
+
     return newDictionary;
 }
 
@@ -344,6 +345,7 @@ Node* findPosition(Dictionary *dictionary, int token, bool *isEnd) {
     }
 
     *isEnd = true;
+
     return currentNode;
 }
 
@@ -363,6 +365,7 @@ char* getValue(Dictionary *dictionary, int token) {
     }
     bool isEnd = false;
     Node *currentNode = findPosition(dictionary, token, &isEnd);
+
     return isEnd ? NULL : currentNode->value;
 }
 
