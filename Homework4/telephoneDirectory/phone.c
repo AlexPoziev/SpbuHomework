@@ -21,20 +21,45 @@ int findByString(FILE *file, const char* fileName, char* string, char* answer) {
     }
     entry.phone = calloc(maxContactSize,sizeof(char));
     if (entry.phone == NULL) {
+        free(entry.name);
         return 1;
     }
 
-    fscanf(file, "%s", entry.name);
+    int eofCheck = fscanf(file, "%s", entry.name);
+    if (eofCheck == EOF) {
+        free(entry.name);
+        free(entry.phone);
+
+        return 2;
+    }
     getc(file);
-    fscanf(file, "%[^\n]", entry.phone);
+    eofCheck = fscanf(file, "%[^\n]", entry.phone);
+    if (eofCheck == EOF) {
+        free(entry.name);
+        free(entry.phone);
+
+        return 2;
+    }
 
     int checkName = strcmp(entry.name, string);
     int checkPhone = strcmp(entry.phone, string);
 
     while (!feof(file) && checkName && checkPhone) {
-        fscanf(file, "%s", entry.name);
+        eofCheck = fscanf(file, "%s", entry.name);
+        if (eofCheck == EOF) {
+            free(entry.name);
+            free(entry.phone);
+
+            return 2;
+        }
         getc(file);
-        fscanf(file, "%[^\n]", entry.phone);
+        eofCheck = fscanf(file, "%[^\n]", entry.phone);
+        if (eofCheck == EOF) {
+            free(entry.name);
+            free(entry.phone);
+
+            return 2;
+        }
         checkName = strcmp(entry.name, string);
         checkPhone = strcmp(entry.phone, string);
     }
