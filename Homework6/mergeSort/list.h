@@ -23,7 +23,10 @@ List* createPositionList(Position *position);
 // create Position, need to check ton NULL pointer \/
 Position* createPosition(void);
 
-// get data from file and put it into the list, return 1 if not enough memory \/
+// get data from file and put it into the list
+// return 1 if not enough memory
+// return -1 if no corresponding phone number or name
+// return -2 if file with fileName value doesn't exist\/
 int getFromFile(FILE* file, char* fileName, List* list);
 
 // print list \/

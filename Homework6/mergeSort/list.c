@@ -45,7 +45,7 @@ int getFromFile(FILE* file, char* fileName, List* list) {
     file = fopen(fileName, "r");
     if (feof(file)) {
         fclose(file);
-        return 1;
+        return -2;
     }
 
     Node *temp = malloc(sizeof(Node));
@@ -55,19 +55,43 @@ int getFromFile(FILE* file, char* fileName, List* list) {
 
     temp->contact = malloc(sizeof(Contact));
     if (temp->contact == NULL) {
+        free(temp);
         return 1;
     }
     temp->contact->name = calloc(MAX_SIZE, sizeof(char));
     if (temp->contact->name == NULL) {
+        free(temp->contact);
+        free(temp);
+
         return 1;
     }
-    fscanf(file, "%s",  temp->contact->name);
+    int eofCheck = fscanf(file, "%s",  temp->contact->name);
+    if (eofCheck == EOF) {
+        free(temp->contact->name);
+        free(temp->contact);
+        free(temp);
+
+        return -1;
+    }
+
     fgetc(file);
     temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
     if (temp->contact->phoneNumber == NULL) {
+        free(temp->contact->name);
+        free(temp->contact);
+        free(temp);
+
         return 1;
     }
-    fscanf(file, "%[^\n]",  temp->contact->phoneNumber);
+    eofCheck = fscanf(file, "%[^\n]",  temp->contact->phoneNumber);
+    if (eofCheck == EOF) {
+        free(temp->contact->phoneNumber);
+        free(temp->contact->name);
+        free(temp->contact);
+        free(temp);
+
+        return -1;
+    }
 
     list->head = temp;
     list->head->next = NULL;
@@ -81,19 +105,44 @@ int getFromFile(FILE* file, char* fileName, List* list) {
         }
         temp->contact = malloc(sizeof(Contact));
         if (temp->contact == NULL) {
+            free(temp);
+
             return 1;
         }
         temp->contact->name = calloc(MAX_SIZE, sizeof(char));
         if (temp->contact->name == NULL) {
+            free(temp->contact);
+            free(temp);
+
             return 1;
         }
-        fscanf(file, "%s", temp->contact->name);
+        eofCheck = fscanf(file, "%s", temp->contact->name);
+        if (eofCheck == EOF) {
+            free(temp->contact->name);
+            free(temp->contact);
+            free(temp);
+
+            return -1;
+        }
         fgetc(file);
         temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
         if (temp->contact->phoneNumber == NULL) {
+            free(temp->contact->name);
+            free(temp->contact);
+            free(temp);
+
             return 1;
         }
-        fscanf(file, "%[^\n]", temp->contact->phoneNumber);
+        eofCheck = fscanf(file, "%[^\n]", temp->contact->phoneNumber);
+        if (eofCheck == EOF) {
+            free(temp->contact->phoneNumber);
+            free(temp->contact->name);
+            free(temp->contact);
+            free(temp);
+
+            return -1;
+        }
+
         temp->next = NULL;
         previousNode->next = temp;
         previousNode = temp;
