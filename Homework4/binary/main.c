@@ -8,6 +8,7 @@ void printArray(short *array, unsigned int size) {
     for (int i = 0; i < size; ++i) {
         printf("%d", array[i]);
     }
+
     printf("\n");
 }
 
@@ -82,10 +83,14 @@ bool correctTest(void) {
     columnAddition(correctCheckFirst, correctOneCheckFirst, 6, checkAdditionFirst);
     columnAddition(correctCheckSecond, correctOneCheckSecond, 7, checkAdditionSecond);
 
-    return (compareTest(checkFirst, correctCheckFirst, 6) && compareTest(checkSecond, correctCheckSecond, 7)
-    && compareTest(correctOneCheckFirst, oneCheckFirst, 6) && compareTest(correctOneCheckSecond, oneCheckSecond, 7)
-    && compareTest(correctFirstAddition, checkAdditionFirst, 6) && compareTest(checkAdditionSecond, correctSecondAddition, 7)
-    && decimalRepresentation(7, correctOneCheckSecond) == -50 && decimalRepresentation(6, correctFirstAddition) == 16);
+    return (compareTest(checkFirst, correctCheckFirst, 6)
+        && compareTest(checkSecond, correctCheckSecond, 7)
+        && compareTest(correctOneCheckFirst, oneCheckFirst, 6)
+        && compareTest(correctOneCheckSecond, oneCheckSecond, 7)
+        && compareTest(correctFirstAddition, checkAdditionFirst, 6)
+        && compareTest(checkAdditionSecond, correctSecondAddition, 7)
+        && decimalRepresentation(7, correctOneCheckSecond) == -50
+        && decimalRepresentation(6, correctFirstAddition) == 16);
 }
 
 int main() {
@@ -104,6 +109,7 @@ int main() {
         fflush(stdin);
         isString = scanf("%d", &first);
     }
+
     printf("Введите второе число: ");
     int second = 0;
     isString = scanf("%d", (&second));
@@ -132,6 +138,8 @@ int main() {
     short* secondBinary = (short*)(calloc(numberDigits, sizeof(short)));
     if (secondBinary == NULL) {
         printf("Недостаточно памяти");
+        free(firstBinary);
+
         return 1;
     }
     binaryRepresentation(second, numberDigits, secondBinary);
@@ -141,8 +149,12 @@ int main() {
     short *sum = (short*)(calloc(numberDigits, sizeof(short)));
     if (sum == NULL) {
         printf("Недостаточно памяти");
+        free(firstBinary);
+        free(secondBinary);
+
         return 1;
     }
+
     columnAddition(firstBinary, secondBinary, numberDigits, sum);
 
     free(firstBinary);
