@@ -20,12 +20,10 @@ void insertionSort(int low, int high, int array[]) {
     }
 }
 
-void fillRandomArray(unsigned int arraySize, int array[], unsigned int callTime) {
+void fillRandomArray(unsigned int arraySize, int array[]) {
     if (arraySize < 1) {
         return;
     }
-    
-    srand((unsigned)time(NULL) + callTime);
     
     for (int i = 0; i < arraySize; ++i) {
         array[i] = rand() % 10;
@@ -33,7 +31,7 @@ void fillRandomArray(unsigned int arraySize, int array[], unsigned int callTime)
 }
 
 int partition(int low, int high, int array[]) {
-    int middle = (low + high) / 2;
+    const int middle = (low + high) / 2;
 
     int tempArray[3] = {0};
     tempArray[0] = array[low];
@@ -82,11 +80,16 @@ void qsortRecursion(int low, int high, int array[]) {
     }
 }
 
-bool search(int number, int array[], int arraySize) { 
+bool search(int number, int array[], int arraySize, int *errorCode) { 
     int low = 0;
     int high = arraySize - 1;
 
     int *sortedArray =  (int*)(calloc(arraySize, sizeof(int)));
+    if (sortedArray == NULL) {
+        *errorCode = 1;
+        return false;
+    }
+
     memcpy(sortedArray, array, sizeof(int) * arraySize);
     qsortRecursion(0, arraySize - 1, sortedArray);
 
@@ -106,17 +109,25 @@ bool search(int number, int array[], int arraySize) {
 }
 
 bool correctTest(void) {
+    int errorCode = 0;
     int arrayFirst[8] = {9, 3535, -12414, 44434, 1111, 0, 0, 0};
     int arraySecond[1] = {10};
 
-    return search(-12414, arrayFirst, 8) && search(44434, arrayFirst, 8) && search(9, arrayFirst, 8) && search(10, arraySecond, 1);
+    return search(-12414, arrayFirst, 8, &errorCode) 
+        && search(44434, arrayFirst, 8, &errorCode) 
+        && search(9, arrayFirst, 8, &errorCode) 
+        && search(10, arraySecond, 1, &errorCode);
 }
 
 bool incorrectTest(void) {
+    int errorCode = 0;
     int arrayFirst[8] = {9, 3535, -12414, 44434, 1111, 0, 0, 0};
     int arraySecond[1] = {10};
 
-    return !search(-12444, arrayFirst, 8) && !search(44433, arrayFirst, 8) && !search(8, arrayFirst, 8) && !search(9, arraySecond, 1);
+    return !search(-12444, arrayFirst, 8, &errorCode) 
+        && !search(44433, arrayFirst, 8, &errorCode) 
+        && !search(8, arrayFirst, 8, &errorCode) 
+        && !search(9, arraySecond, 1, &errorCode);
 }
 
 int main() {
@@ -124,6 +135,8 @@ int main() {
         printf("Tests Failed");
         return 1;
     }
+
+    srand((unsigned)time(NULL));
 
     printf("Enter main array size greater than zero: ");
     int arraySizeMain = 0;
@@ -142,17 +155,25 @@ int main() {
     }
 
     int *arrayMain = (int*)(calloc(arraySizeMain, sizeof(int)));
-    fillRandomArray(arraySizeMain, arrayMain, 1);
+    fillRandomArray(arraySizeMain, arrayMain);
     int *arraySearch = (int*)(calloc(arraySizeSearch, sizeof(int)));
-    fillRandomArray(arraySizeSearch, arraySearch, 2);
+    fillRandomArray(arraySizeSearch, arraySearch);
 
     printf("Main array: ");
     for (int i = 0; i < arraySizeMain; ++i) {
         printf("%d ", arrayMain[i]);
     }
+
     printf("\n");
+    int errorCode = 0;
     for (int i = 0; i < arraySizeSearch; ++i) {
-        printf("%d %s in array \n", arraySearch[i], (search(arraySearch[i], arrayMain, arraySizeMain)) ? "contained" : "not contained");
+        bool contains = search(arraySearch[i], arrayMain, arraySizeMain, &errorCode);
+        if (errorCode == 1) {
+            printf("Not enough memory");
+            return 1;
+        }
+        
+        printf("%d %s in array \n", arraySearch[i], co  ntains ? "contained" : "not contained");
     }
 
     free(arrayMain);
