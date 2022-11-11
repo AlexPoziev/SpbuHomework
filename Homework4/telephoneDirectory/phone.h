@@ -13,5 +13,5 @@ void printAllContacts(FILE *file, const char* fileName);
 // save all names and phone numbers to file
 void saveContacts(FILE *file, char* data[], int newContacts, const char* fileName);
 
-//  correct test
+// correct test
 bool correctTests(void);

@@ -38,15 +38,22 @@ int main() {
         switch (choice) {
             case 1: {
                 data[inputUse] = (char*)(calloc(maxContactSize * 2, sizeof(char)));
+                if (data[inputUse] == NULL) {
+                    printf("Not enough memory");
+                    return 1;
+                }
+
                 printf("Input name and phone number, separated by space: ");
                 fflush(stdin);
                 scanf("%[^\n]", data[inputUse]);
                 ++inputUse;
+
                 continue;
             }
             case 2: {
                 printf("All contacts: \n");
                 printAllContacts(file, mainFile);
+
                 continue;
             }
             case 3: {
@@ -58,11 +65,14 @@ int main() {
                     printf("Not enough memory for program work");
                     return 1;
                 }
+
                 number.name = (char*)(calloc(maxContactSize, sizeof(char)));
                 if (number.name == NULL) {
                     printf("Not enough memory for program work\n");
+                    free(number.phone);
                     return 1;
                 }
+
                 scanf("%s", number.name);
                 int check = findByString(file, mainFile, number.name, number.phone);
                 if (check == 1) {
@@ -87,11 +97,14 @@ int main() {
                     printf("Not enough memory for program work");
                     return 1;
                 }
+
                 number.name = (char*)(calloc(maxContactSize, sizeof(char)));
                 if (number.name == NULL) {
                     printf("Not enough memory for program work");
+                    free(number.phone);
                     return 1;
                 }
+
                 fflush(stdin);
                 scanf("%[^\n]", number.phone);
                 int check = findByString(file, mainFile, number.phone, number.name);
@@ -115,15 +128,18 @@ int main() {
                     saveContacts(file, data, inputUse,mainFile);
                     printf("Save completed \n");
                 }
+
                 continue;
             }
             default:
             {
                 printf("That is not option number, repeat input \n");
+
                 continue;
             }
         }
     }
+
     for (int i = 0; i < 100; ++i) {
         free(data[i]);
     }
