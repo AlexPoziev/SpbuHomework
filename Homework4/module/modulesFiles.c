@@ -4,13 +4,17 @@
 #include <stdbool.h>
 #include <string.h>
 
-int mostFrequentNumber(int array[], int arrayLength) {
+int mostFrequentNumber(int array[], int arrayLength, int *errorCode) {
     unsigned int maxRow = 0;
     unsigned int recentCount = 1;
     int maxRowElement = 0;
 
     // создание копии массива, так как функция не всегда должна менять проверяемый массив
     int *sortedArray =  (int*)(calloc(arrayLength, sizeof(int)));
+    if (sortedArray == NULL) {
+        *errorCode = 1;
+        return -1;
+    }
     memcpy(sortedArray, array, sizeof(int) * arrayLength);
     qsortRecursion(0, arrayLength - 1, sortedArray);
 
@@ -22,11 +26,13 @@ int mostFrequentNumber(int array[], int arrayLength) {
                 maxRowElement = sortedArray[i - 1];
                 maxRow = recentCount;
             }
+
             recentCount = 1;
         }
     }
 
     int lastNumber = sortedArray[arrayLength - 1];
+
     free(sortedArray);
 
     return recentCount > maxRow ? lastNumber : maxRowElement;
@@ -40,7 +46,9 @@ void readFile(FILE *file, int *array, int arrayLength) {
 
 bool correctTest(void) {
     int firstCheck[10] = {0};
+    int errorCode = 0;
     FILE *file = fopen("test1.txt", "r");
+
     readFile(file, firstCheck, 10);
     fclose(file);
     int secondCheck[1] = {0};
@@ -52,7 +60,10 @@ bool correctTest(void) {
     readFile(file, thirdCheck, 10);
     fclose(file);
 
-    return mostFrequentNumber(firstCheck, 10) == -6 && mostFrequentNumber(secondCheck, 1) == 50 && (mostFrequentNumber(thirdCheck, 5) == 100 || mostFrequentNumber(thirdCheck, 5) == 15);
+    return mostFrequentNumber(firstCheck, 10, &errorCode) == -6
+        && mostFrequentNumber(secondCheck, 1, &errorCode) == 50
+        && (mostFrequentNumber(thirdCheck, 5, &errorCode) == 100
+        || mostFrequentNumber(thirdCheck, 5, &errorCode) == 15);
 }
 
 // first number in file is arrayLength
@@ -81,12 +92,16 @@ int main() {
     fscanf(file, "%d", &arrayLength);
     if (arrayLength < 1) {
         printf("Numbers count less or equal zero");
+        fclose(file);
+
         return 2;
     }
 
     int *array = (int*)(calloc(arrayLength, sizeof(int)));
     if (array == NULL) {
         printf("Not enough memory");
+        fclose(file);
+
         return 1;
     }
 
@@ -94,16 +109,31 @@ int main() {
     for (; i < arrayLength && !(feof(file)); ++i) {
         if (!(fscanf(file, "%d", &array[i]))) {
             printf("Not a number");
+            free(array);
+            fclose(file);
+
             return 2;
         }
     }
     if (i != arrayLength) {
         printf("Not enough numbers");
+        free(array);
+        fclose(file);
+
         return 2;
     }
 
     fclose(file);
-    printf("Most frequent number: %d", mostFrequentNumber(array, arrayLength));
+
+    int errorCode = 0;
+    int mostFrequent = mostFrequentNumber(array, arrayLength, &errorCode);
+    if (errorCode == 1) {
+        printf("Not enough memory");
+        return 1;
+    }
+
+    printf("Most frequent number: %d", mostFrequent);
+    
     free(array);
 
     return 0;
