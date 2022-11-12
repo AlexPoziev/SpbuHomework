@@ -118,6 +118,22 @@ void deleteList(List **list) {
     *list = NULL;
 }
 
+unsigned int getListLength(List *list) {
+    if (list == NULL) {
+        return 0;
+    }
+
+    Node *currentNode = list->head;
+    unsigned int length = 0;
+
+    while (currentNode != NULL) {
+        ++length;
+        currentNode = currentNode->next;
+    }
+
+    return length;
+}
+
 // tests
 
 bool createListTest(void) {
@@ -149,6 +165,28 @@ bool addWordTest(void) {
     return firstTest && secondTest && thirdTest;
 }
 
+bool getListLengthTest(void) {
+    List *list = createList();
+
+    bool firstTest = getListLength(list) == 0;
+    addWord(list, "check");
+    addWord(list, "check");
+    addWord(list, "test");
+    addWord(list, "test");
+    addWord(list, "test");
+
+    bool secondTest = getListLength(list) == 2;
+
+    addWord(list, "CommonWealth");
+    addWord(list, "Burgundy");
+
+    bool thirdTest = getListLength(list) == 4;
+
+    deleteList(&list);
+
+    return firstTest && secondTest && thirdTest;
+}
+
 bool deleteListTest(void) {
     List *list = createList();
 
@@ -160,5 +198,5 @@ bool deleteListTest(void) {
 }
 
 bool listTest(void) {
-    return createListTest() && addWordTest() && deleteListTest();
+    return createListTest() && addWordTest() && deleteListTest() && getListLengthTest();
 }

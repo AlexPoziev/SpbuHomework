@@ -20,3 +20,6 @@ void deleteList(List **list);
 
 // test all lists functions
 bool listTest(void);
+
+// returns length of list
+unsigned int getListLength(List *list);
