@@ -9,6 +9,7 @@ List* createList(void);
 
 // add word to list by token, if token already exists change to new value
 // if word already exists then increases frequency by one
+// return 1 if not enough memory
 int addWord(List *list, char* word);
 
 // print full list.
