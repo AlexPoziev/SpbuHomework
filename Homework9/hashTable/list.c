@@ -79,3 +79,20 @@ int addWord(List *list, char *word) {
 
     return 0;
 }
+
+int printList(List *list) {
+    if (list == NULL) {
+        return 0;
+    }
+
+    Node *currentNode = list->head;
+    int printedCount = 0;
+
+    while (currentNode != NULL) {
+        printf("'%s' %d times \n", currentNode->word, currentNode->frequency);
+        currentNode = currentNode->next;
+        ++printedCount;
+    }
+
+    return printedCount;
+}
