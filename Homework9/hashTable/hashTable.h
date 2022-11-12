@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 typedef struct HashTable HashTable;
 
 // create Hash table, get hash table size, need to check for NULL
@@ -25,3 +27,5 @@ int getHashTablesListsInfo(HashTable *table, unsigned int *maxLength, double *av
 
 // delete hashTable and clear memory
 void deleteHashTable(HashTable **table);
+
+bool hashTableTest(void);

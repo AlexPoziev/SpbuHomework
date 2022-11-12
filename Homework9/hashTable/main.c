@@ -4,15 +4,20 @@
 #include <stdlib.h>
 
 int main() {
-    HashTable *table = createHashTable(10);
-    getFromFile("test.txt", table);
-    int occupancy = getHashTableOccupancy(table);
-    printf("%d", occupancy);
+    if (!hashTableTest() || !listTest()) {
+        printf("Tests Failed");
+        return 1;
+    }
 
+    HashTable *table = createHashTable(100);
+    getFromFile("testSecond.txt", table);
     printHashTable(table);
+    double test = getHashTableOccupancy(table);
+
     double check = 0;
-    int test = 0;
-    getHashTablesListsInfo(table, &test, &check);
+    int testik = 0;
+
+    getHashTablesListsInfo(table, &testik, &check);
 
     return 0;
 }
