@@ -2,6 +2,11 @@
 #include <stdio.h>
 
 int main() {
+    if (!listTest()) {
+        printf("Tests Failed");
+
+        return 1;
+    }
     List *list = createList();
 
     addWord(list, "check");

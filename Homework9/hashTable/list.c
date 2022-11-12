@@ -117,3 +117,48 @@ void deleteList(List **list) {
 
     *list = NULL;
 }
+
+// tests
+
+bool createListTest(void) {
+    List *list = createList();
+
+    bool test = list != NULL;
+
+    deleteList(&list);
+
+    return test;
+}
+
+bool addWordTest(void) {
+    List *list = createList();
+
+    addWord(list, "check");
+    addWord(list, "check");
+    addWord(list, "test");
+    addWord(list, "test");
+    addWord(list, "test");
+    addWord(list, "CommonWealth");
+
+    bool firstTest = !strcmp("check", list->head->word) && list->head->frequency == 2;
+    bool secondTest = !strcmp("test", list->head->next->word) && list->head->next->frequency == 3;
+    bool thirdTest = !strcmp("CommonWealth", list->head->next->next->word) && list->head->next->next->frequency == 1;
+
+    deleteList(&list);
+
+    return firstTest && secondTest && thirdTest;
+}
+
+bool deleteListTest(void) {
+    List *list = createList();
+
+    addWord(list, "test");
+
+    deleteList(&list);
+
+    return list == NULL;
+}
+
+bool listTest(void) {
+    return createListTest() && addWordTest() && deleteListTest();
+}
