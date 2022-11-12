@@ -96,3 +96,24 @@ int printList(List *list) {
 
     return printedCount;
 }
+
+void deleteList(List **list) {
+    if (*list == NULL) {
+        return;
+    }
+
+    Node *nextNode = (*list)->head;
+    Node *currentNode = NULL;
+
+    while (nextNode != NULL) {
+        currentNode = nextNode;
+        nextNode = nextNode->next;
+
+        free(currentNode->word);
+        free(currentNode);
+    }
+
+    free(*list);
+
+    *list = NULL;
+}

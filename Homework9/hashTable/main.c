@@ -13,6 +13,6 @@ int main() {
     addWord(list, "checkt");
     addWord(list, "check3");
 
-    printList(list);
+    deleteList(&list);
     return 0;
 }
