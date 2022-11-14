@@ -36,26 +36,34 @@ double postfixCalculator(char *expression, unsigned expressionSize, int *errorCo
             *errorCode = pushDouble(&head, expression[i] - '0');
             //check for memory in push
             if (*errorCode == 1) {
-                return -1;
+                clearDoubleStack(&head);
+                return 1;
             }
         } else {
             double firstNumber = popDouble(&head, errorCode);
             //check that stack has enough numbers for completing operation
             if (*errorCode == -1) {
+                clearDoubleStack(&head);
                 //code 2 incorrect expression
                 return 0;
             }
             double secondNumber = popDouble(&head, errorCode);
             if (*errorCode == -1) {
+                clearDoubleStack(&head);
                 return 0;
             }
             //get a result of operation
             firstNumber = performOperation(firstNumber, secondNumber, expression[i], errorCode);
             if (*errorCode == -1) {
+                clearDoubleStack(&head);
                 return 0;
             }
             //push result to stack
-            pushDouble(&head, firstNumber);
+            *errorCode = pushDouble(&head, firstNumber);
+            if (*errorCode == 1) {
+                clearDoubleStack(&head);
+                return 0;
+            }
         }
     }
 
