@@ -4,7 +4,7 @@
 #include <string.h>
 
 int main() {
-    if (!correctTest() || !incorrectTest()) {
+    if (!bracketsBalanceTest()) {
         printf("Tests failed");
         return 1;
     }
@@ -13,7 +13,14 @@ int main() {
 
     printf("Input a string of brackets balance with length below 1000: ");
     fgets(string, sizeof string, stdin);
-    printf("Balance of brackets: %s", (bracketsBalance(string, strlen(string) - 1)) ? "correct" : "incorrect");
+    int errorCode = 0;
+    bool isBalanced = bracketsBalance(string, strlen(string) - 1, &errorCode);
+    if (errorCode == 1) {
+        printf("Not enough memory");
+        return 1;
+    }
+    
+    printf("Balance of brackets: %s", isBalanced ? "correct" : "incorrect");
 
     return 0;
 }

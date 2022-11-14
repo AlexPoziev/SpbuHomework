@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-bool bracketsBalance(char *string, unsigned long size) {
+bool bracketsBalance(char *string, unsigned long size, int *errorCode) {
     if (size == 0) {
         return true;
     }
@@ -12,13 +12,16 @@ bool bracketsBalance(char *string, unsigned long size) {
 
     for (int i = 0; i < size; ++i) {
         if (string[i] == '{' || string[i] == '(' || string[i] == '[') {
-            pushInt(&head, string[i]);
+            *errorCode = pushInt(&head, string[i]);
+            if (*errorCode) {
+                clearIntStack(&head);
+                return false;
+            }
         } else {
-            int errorCode = 0;
             //get last value } ] )
-            int value = popInt(&head, &errorCode);
+            int value = popInt(&head, errorCode);
             //if stack empty and close bracket its false
-            if (errorCode == -1 ||
+            if (*errorCode == -1 ||
                 !((value == '(' && string[i] == ')') || (value == '[' && string[i] == ']') ||
                   (value == '{' && string[i] == '}'))) {
                 return false;
@@ -38,8 +41,11 @@ bool correctTest(void) {
     char firstCheck[6] = "()[]{}";
     char secondCheck[0] = "";
     char thirdCheck[16] = "([{}]){}{}[]{()}";
+    int errorCode = 0;
 
-    return bracketsBalance(firstCheck, 6) && bracketsBalance(secondCheck, 0) && bracketsBalance(thirdCheck, 16);
+    return bracketsBalance(firstCheck, 6, &errorCode)
+        && bracketsBalance(secondCheck, 0, &errorCode)
+        && bracketsBalance(thirdCheck, 16, &errorCode);
 }
 
 bool incorrectTest(void) {
@@ -47,9 +53,12 @@ bool incorrectTest(void) {
     char secondCheck[3] = "())";
     char thirdCheck[2] = "(}";
     char fourthCheck[4] = "{(})";
+    int errorCode = 0;
 
-    return !bracketsBalance(firstCheck, 1) && !bracketsBalance(secondCheck, 3)
-    && !bracketsBalance(thirdCheck, 2) && !bracketsBalance(fourthCheck, 4);
+    return !bracketsBalance(firstCheck, 1, &errorCode)
+        && !bracketsBalance(secondCheck, 3, &errorCode)
+        && !bracketsBalance(thirdCheck, 2, &errorCode)
+        && !bracketsBalance(fourthCheck, 4, &errorCode);
 }
 
 bool bracketsBalanceTest(void) {
