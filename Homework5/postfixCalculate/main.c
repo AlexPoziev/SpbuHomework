@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 int main() {
-    if (!postfixCalculatorTest() && !stackTest()) {
+    if (!postfixCalculatorTest() || !stackTest()) {
         printf("Tests Failed");
         return 1;
     }
