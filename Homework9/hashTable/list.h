@@ -20,7 +20,25 @@ int printList(List *list);
 void deleteList(List **list);
 
 // test all lists functions
+// returns true if all tests passed
+// returns false if tests didn't pass
 bool listTest(void);
 
 // returns length of list
 unsigned int getListLength(List *list);
+
+// return list with one element, which is the first element in incoming list and delete it from list
+// free and NULL List pointer if you get last element from it
+// return NULL if list is empty
+// errorCode is 1 if not enough memory
+List* getFirst(List *list, int *errorCode);
+
+// add sourceList into destinationList and delete sourceList
+// doesn't check for equal list elements
+// return 0 if all is ok
+// return -1 if some List doesn't exists
+int putList(List *destinationList, List *sourceList);
+
+// returns word of first list element
+// return NULL if no first element or list doesn't exist
+char* getFirstWord(List* list);

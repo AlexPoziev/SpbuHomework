@@ -26,6 +26,16 @@ HashTable* createHashTable(unsigned int tableSize) {
     return temp;
 }
 
+bool isFullOccupancy(HashTable *hashTable) {
+    for (int i = 0; i < hashTable->hashTableSize; ++i) {
+        if (hashTable->hashTable[i] == NULL) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 // djb2 algorithm
 unsigned int hashFunction(unsigned int tableSize, char *word) {
     unsigned long hash = 5381;
@@ -136,6 +146,37 @@ void deleteHashTable(HashTable **table) {
     free(*table);
     *table = NULL;
 }
+
+// returns 0 if all is ok
+// returns 1 if not enough memory
+int hashTableResize(HashTable *hashTable) {
+    List **tempHashTable = calloc(hashTable->hashTableSize * 2, sizeof(List*));
+    if (tempHashTable == NULL) {
+        return 1;
+    }
+
+    int errorCode = 0;
+
+    for (int i = 0; i < hashTable->hashTableSize; ++i) {
+        while (hashTable->hashTable[i] != NULL) {
+            List *tempList = getFirst(hashTable->hashTable[i], &errorCode);
+            if (errorCode == 1) {
+                return 1;
+            }
+
+            char *tempString = getFirstWord(tempList);
+            putList(tempHashTable[hashFunction(hashTable->hashTableSize * 2, tempString)], tempList);
+        }
+    }
+
+    free(hashTable->hashTable);
+    hashTable->hashTable = tempHashTable;
+    hashTable->hashTableSize *= 2;
+
+    return 0;
+}
+
+// tests
 
 bool createHashTableTest(void) {
     HashTable *table = createHashTable(10);

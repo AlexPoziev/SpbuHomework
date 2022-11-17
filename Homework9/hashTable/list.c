@@ -11,7 +11,7 @@ typedef struct Node {
 
 typedef struct List {
     Node *head;
-} list;
+} List;
 
 List* createList(void) {
     List *temp = malloc(sizeof(List));
@@ -78,6 +78,62 @@ int addWord(List *list, char *word) {
     ++(currentNode->frequency);
 
     return 0;
+}
+
+List* getFirst(List *list, int *errorCode) {
+    if (list == NULL || list->head == NULL) {
+        return NULL;
+    }
+
+    List *tempList = createList();
+    if (tempList == NULL) {
+        *errorCode = 1;
+        return NULL;
+    }
+
+    tempList->head = list->head;
+    Node *tempNode = list->head->next;
+    free(list->head);
+    list->head = tempNode;
+    if (list->head == NULL) {
+        deleteList(&list);
+    }
+
+    return tempList;
+}
+
+int putList(List *destinationList, List *sourceList) {
+    if (destinationList == NULL || sourceList == NULL) {
+        return -1;
+    }
+
+    if (sourceList->head == NULL) {
+        deleteList(&sourceList);
+        return 0;
+    }
+
+    if (destinationList->head == NULL) {
+        destinationList->head = sourceList->head;
+        deleteList(&sourceList);
+
+        return 0;
+    }
+
+    Node *currentNode = sourceList->head;
+    while (currentNode->next != NULL) {
+        currentNode = currentNode->next;
+    }
+
+    currentNode->next = destinationList->head;
+    destinationList->head = sourceList->head;
+
+    deleteList(&sourceList);
+
+    return 0;
+}
+
+char* getFirstWord(List* list) {
+    return list == NULL || list->head == NULL ? NULL : list->head->word;
 }
 
 int printList(List *list) {
