@@ -80,8 +80,8 @@ int addWord(List *list, char *word) {
     return 0;
 }
 
-List* getFirst(List *list, int *errorCode) {
-    if (list == NULL || list->head == NULL) {
+List* getFirst(List **list, int *errorCode) {
+    if (list == NULL || (*list)->head == NULL) {
         return NULL;
     }
 
@@ -91,45 +91,48 @@ List* getFirst(List *list, int *errorCode) {
         return NULL;
     }
 
-    tempList->head = list->head;
-    Node *tempNode = list->head->next;
-    free(list->head);
-    list->head = tempNode;
-    if (list->head == NULL) {
-        deleteList(&list);
+    tempList->head = (*list)->head;
+    tempList->head->next = NULL;
+    (*list)->head = (*list)->head->next;
+    if ((*list)->head == NULL) {
+        deleteList(list);
     }
 
     return tempList;
 }
 
-int putList(List *destinationList, List *sourceList) {
-    if (destinationList == NULL || sourceList == NULL) {
-        return -1;
+void putList(List *destinationList, List **sourceList) {
+    if (sourceList == NULL) {
+        return;
     }
 
-    if (sourceList->head == NULL) {
-        deleteList(&sourceList);
-        return 0;
+    if ((*sourceList)->head == NULL) {
+        deleteList(sourceList);
+        return;
+    }
+
+    if (destinationList == NULL) {
+        destinationList = (*sourceList);
+        return;
     }
 
     if (destinationList->head == NULL) {
-        destinationList->head = sourceList->head;
-        deleteList(&sourceList);
+        destinationList->head = (*sourceList)->head;
+        free(*sourceList);
+        *sourceList = NULL;
 
-        return 0;
+        return;
     }
 
-    Node *currentNode = sourceList->head;
+    Node *currentNode = (*sourceList)->head;
     while (currentNode->next != NULL) {
         currentNode = currentNode->next;
     }
 
     currentNode->next = destinationList->head;
-    destinationList->head = sourceList->head;
+    destinationList->head = (*sourceList)->head;
 
-    deleteList(&sourceList);
-
-    return 0;
+    free(*sourceList);
 }
 
 char* getFirstWord(List* list) {

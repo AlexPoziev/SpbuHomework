@@ -4,20 +4,8 @@
 #include <stdlib.h>
 
 int main() {
-    if (!hashTableTest() || !listTest()) {
-        printf("Tests Failed");
-        return 1;
-    }
-    printf("Print approximate number of words, larger than zero: ");
-    unsigned int tableSize = 0;
-    int errorCode = scanf("%u", &tableSize);
-    while (errorCode <= 0) {
-        fflush(stdin);
-        printf("it's string, please repeat input: ");
-        errorCode = scanf("%u", &tableSize);
-    }
-
-    HashTable *table = createHashTable((unsigned int)(tableSize * 1.3));
+    int errorCode = 0;
+    HashTable *table = createHashTable();
     if (table == NULL) {
         printf("Not enough memory");
         return 1;

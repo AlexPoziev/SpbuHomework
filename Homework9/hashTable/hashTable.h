@@ -4,8 +4,8 @@
 
 typedef struct HashTable HashTable;
 
-// create Hash table, get hash table size, need to check for NULL
-HashTable* createHashTable(unsigned int tableSize);
+// create Hash table, need to check for NULL
+HashTable* createHashTable(void);
 
 // fills in the table words (separated by spaces). Gets file's name and pointer to hash table
 // return -1 if no file with this name

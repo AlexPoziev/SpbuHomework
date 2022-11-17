@@ -9,19 +9,21 @@ typedef struct HashTable {
     unsigned int hashTableSize;
 } HashTable;
 
-HashTable* createHashTable(unsigned int tableSize) {
+HashTable* createHashTable(void) {
+    const int8_t baseHashTableSize = 2;
+
     HashTable *temp = malloc(sizeof(HashTable));
     if (temp == NULL) {
         return NULL;
     }
 
-    temp->hashTable = calloc(tableSize, sizeof(List*));
+    temp->hashTable = calloc(baseHashTableSize, sizeof(List*));
     if (temp->hashTable == NULL) {
         free(temp);
         return NULL;
     }
 
-    temp->hashTableSize = tableSize;
+    temp->hashTableSize = baseHashTableSize;
 
     return temp;
 }
@@ -37,7 +39,7 @@ bool isFullOccupancy(HashTable *hashTable) {
 }
 
 // djb2 algorithm
-unsigned int hashFunction(unsigned int tableSize, char *word) {
+unsigned int hashFunction(unsigned int tableSize, const char *word) {
     unsigned long hash = 5381;
 
     int i = 0;
@@ -49,10 +51,17 @@ unsigned int hashFunction(unsigned int tableSize, char *word) {
     return hash % tableSize;
 }
 
+int hashTableResize(HashTable *hashTable, unsigned int *bucketsLeft);
+
 int getFromFile(char *fileName, HashTable *table) {
     FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
+        return -1;
+    }
+
     // the longest word has 37 symbols
     char word[37];
+    unsigned int bucketsLeft = table->hashTableSize;
 
     while (!feof(file)) {
         int eofCheck = fscanf(file, "%s", word);
@@ -64,12 +73,26 @@ int getFromFile(char *fileName, HashTable *table) {
         unsigned int hash = hashFunction(table->hashTableSize, word);
         if (table->hashTable[hash] == NULL) {
             table->hashTable[hash] = createList();
+            if (table->hashTable == NULL) {
+                return 1;
+            }
+
+            --bucketsLeft;
         }
 
         int errorCode = addWord(table->hashTable[hash], word);
         if (errorCode == 1) {
             fclose(file);
             return 1;
+        }
+
+        if (bucketsLeft == 0 && !feof(file)) {
+            bucketsLeft = table->hashTableSize * 2;
+
+            errorCode = hashTableResize(table, &bucketsLeft);
+            if (errorCode == 1) {
+                return 1;
+            }
         }
 
         if (fgetc(file) == EOF) {
@@ -149,7 +172,7 @@ void deleteHashTable(HashTable **table) {
 
 // returns 0 if all is ok
 // returns 1 if not enough memory
-int hashTableResize(HashTable *hashTable) {
+int hashTableResize(HashTable *hashTable, unsigned int *bucketsLeft) {
     List **tempHashTable = calloc(hashTable->hashTableSize * 2, sizeof(List*));
     if (tempHashTable == NULL) {
         return 1;
@@ -159,17 +182,24 @@ int hashTableResize(HashTable *hashTable) {
 
     for (int i = 0; i < hashTable->hashTableSize; ++i) {
         while (hashTable->hashTable[i] != NULL) {
-            List *tempList = getFirst(hashTable->hashTable[i], &errorCode);
+            List *tempList = getFirst(&hashTable->hashTable[i], &errorCode);
             if (errorCode == 1) {
                 return 1;
             }
 
             char *tempString = getFirstWord(tempList);
-            putList(tempHashTable[hashFunction(hashTable->hashTableSize * 2, tempString)], tempList);
+            unsigned int hash = hashFunction(hashTable->hashTableSize * 2, tempString);
+            if (tempHashTable[hash] == NULL) {
+                --(*bucketsLeft);
+                tempHashTable[hash] = tempList;
+            } else {
+                putList(tempHashTable[hash], &tempList);
+            }
         }
     }
 
     free(hashTable->hashTable);
+
     hashTable->hashTable = tempHashTable;
     hashTable->hashTableSize *= 2;
 
@@ -179,7 +209,7 @@ int hashTableResize(HashTable *hashTable) {
 // tests
 
 bool createHashTableTest(void) {
-    HashTable *table = createHashTable(10);
+    HashTable *table = createHashTable();
     if (table == NULL) {
         return false;
     }
@@ -192,7 +222,7 @@ bool createHashTableTest(void) {
 }
 
 bool getFromFileTest(void) {
-    HashTable *table = createHashTable(10);
+    HashTable *table = createHashTable();
     if (table == NULL) {
         return false;
     }
@@ -227,7 +257,7 @@ bool getFromFileTest(void) {
 }
 
 bool getHashTableOccupancyTest(void) {
-    HashTable *table = createHashTable(100);
+    HashTable *table = createHashTable();
     if (table == NULL) {
         return false;
     }
@@ -249,7 +279,7 @@ bool getHashTableOccupancyTest(void) {
 }
 
 bool getHashTablesListsInfoTest(void) {
-    HashTable *table = createHashTable(100);
+    HashTable *table = createHashTable();
     if (table == NULL) {
         return false;
     }
@@ -274,7 +304,7 @@ bool getHashTablesListsInfoTest(void) {
 }
 
 bool deleteHashTableTest(void) {
-    HashTable *table = createHashTable(100);
+    HashTable *table = createHashTable();
     if (table == NULL) {
         return false;
     }
