@@ -214,7 +214,7 @@ bool createHashTableTest(void) {
         return false;
     }
 
-    bool test = table != NULL && table->hashTableSize == 10;
+    bool test = table != NULL && table->hashTableSize == 2;
 
     deleteHashTable(&table);
 
@@ -233,27 +233,16 @@ bool getFromFileTest(void) {
         return false;
     }
 
-    // just
-    bool firstTest = table->hashTable[7] != NULL;
-    // for
-    bool secondTest = table->hashTable[2] != NULL;
-    // test
-    bool thirdTest = table->hashTable[3] != NULL;
-    // text
-    bool fourthTest = table->hashTable[8] != NULL;
-    // NULL
-    bool fifthTest = table->hashTable[0] == NULL;
-    bool sixthTest = table->hashTable[1] == NULL;
-    bool seventhTest = table->hashTable[4] == NULL;
-    bool eighthTest = table->hashTable[5] == NULL;
-    bool ninthTest = table->hashTable[6] == NULL;
-    bool tenthTest = table->hashTable[9] == NULL;
+    bool firstTest = !strcmp("for", getFirstWord(table->hashTable[0]));
+    bool secondTest = !strcmp("test", getFirstWord(table->hashTable[1]));
+    bool thirdTest = !strcmp("text", getFirstWord(table->hashTable[2]));
+    bool fourthTest = !strcmp("just", getFirstWord(table->hashTable[3]));
+    bool fifthTest = table->hashTableSize == 4;
 
     deleteHashTable(&table);
 
     return firstTest && secondTest && thirdTest && fourthTest
-        && fifthTest && sixthTest && seventhTest && eighthTest
-        && ninthTest && tenthTest;
+        && fifthTest;
 }
 
 bool getHashTableOccupancyTest(void) {
@@ -271,7 +260,7 @@ bool getHashTableOccupancyTest(void) {
         return false;
     }
 
-    bool secondTest = (getHashTableOccupancy(table) - 0.91) < delta;
+    bool secondTest = (getHashTableOccupancy(table) - 0.96875) < delta;
 
     deleteHashTable(&table);
 
@@ -296,7 +285,7 @@ bool getHashTablesListsInfoTest(void) {
 
     getHashTablesListsInfo(table, &max, &average);
 
-    bool test = max == 6 && average - 2.53 < delta;
+    bool test = max == 6 && average - 2.5 < delta;
 
     deleteHashTable(&table);
 
