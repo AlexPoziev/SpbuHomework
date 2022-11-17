@@ -206,7 +206,7 @@ int hashTableResize(HashTable *hashTable, unsigned int *bucketsLeft) {
     return 0;
 }
 
-// tests
+// =========================tests=========================
 
 bool createHashTableTest(void) {
     HashTable *table = createHashTable();
@@ -260,7 +260,7 @@ bool getHashTableOccupancyTest(void) {
         return false;
     }
 
-    bool secondTest = (getHashTableOccupancy(table) - 0.96875) < delta;
+    bool secondTest = (getHashTableOccupancy(table) - 0.984375) < delta;
 
     deleteHashTable(&table);
 
@@ -285,7 +285,7 @@ bool getHashTablesListsInfoTest(void) {
 
     getHashTablesListsInfo(table, &max, &average);
 
-    bool test = max == 6 && average - 2.5 < delta;
+    bool test = max == 8 && average - 3.66667 < delta;
 
     deleteHashTable(&table);
 

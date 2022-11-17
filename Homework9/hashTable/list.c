@@ -92,8 +92,8 @@ List* getFirst(List **list, int *errorCode) {
     }
 
     tempList->head = (*list)->head;
-    tempList->head->next = NULL;
     (*list)->head = (*list)->head->next;
+    tempList->head->next = NULL;
     if ((*list)->head == NULL) {
         deleteList(list);
     }
@@ -256,6 +256,63 @@ bool deleteListTest(void) {
     return list == NULL;
 }
 
+bool getFirstTest(void) {
+    List *list = createList();
+
+    addWord(list, "check");
+    addWord(list, "test");
+
+    int errorCode = 0;
+    List *test = getFirst(&list, &errorCode);
+    if (errorCode == 1) {
+        return false;
+    }
+
+    bool firstTest = !strcmp(test->head->word, "check");
+    bool secondTest = !strcmp(list->head->word, "test");
+
+    deleteList(&test);
+
+    List *check = getFirst(&list, &errorCode);
+    if (errorCode == 1) {
+        return false;
+    }
+
+    bool thirdTest = test == NULL;
+    bool fourthTest = !strcmp(check->head->word, "test");
+
+    deleteList(&check);
+
+    return firstTest && secondTest && thirdTest && fourthTest;
+}
+
+bool putListTest(void) {
+    List *list = createList();
+    if (list == NULL) {
+        return false;
+    }
+
+    List *testList = createList();
+    if (testList == NULL) {
+        free(list);
+        return false;
+    }
+
+    addWord(list, "check");
+    addWord(list, "test");
+
+    putList(testList, &list);
+
+    bool firstTest = list == NULL;
+    bool secondTest = !strcmp(testList->head->word, "check");
+    bool thirdTest = !strcmp(testList->head->next->word, "test");
+
+    deleteList(&testList);
+
+    return firstTest && secondTest && thirdTest;
+}
+
 bool listTest(void) {
-    return createListTest() && addWordTest() && deleteListTest() && getListLengthTest();
+    return createListTest() && addWordTest() && deleteListTest()
+        && getListLengthTest() && getFirstTest() && putListTest();
 }

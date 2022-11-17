@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 int main() {
-    if (!hashTableTest()) {
+    if (!hashTableTest() || !listTest()) {
         printf("Tests Failed");
         return 1;
     }
