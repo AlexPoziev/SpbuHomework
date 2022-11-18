@@ -51,7 +51,7 @@ unsigned int hashFunction(unsigned int tableSize, const char *word) {
     return hash % tableSize;
 }
 
-int hashTableResize(HashTable *hashTable, unsigned int *bucketsLeft);
+int hashTableResize(HashTable *hashTable);
 
 int getFromFile(char *fileName, HashTable *table) {
     FILE *file = fopen(fileName, "r");
@@ -60,8 +60,7 @@ int getFromFile(char *fileName, HashTable *table) {
     }
 
     // the longest word has 37 symbols
-    char word[37];
-    unsigned int bucketsLeft = table->hashTableSize;
+    char word[37] = {0};
 
     while (!feof(file)) {
         int eofCheck = fscanf(file, "%s", word);
@@ -76,8 +75,6 @@ int getFromFile(char *fileName, HashTable *table) {
             if (table->hashTable == NULL) {
                 return 1;
             }
-
-            --bucketsLeft;
         }
 
         int errorCode = addWord(table->hashTable[hash], word);
@@ -86,12 +83,11 @@ int getFromFile(char *fileName, HashTable *table) {
             return 1;
         }
 
-        if (bucketsLeft == 0 && !feof(file)) {
-            bucketsLeft = table->hashTableSize * 2;
-
-            errorCode = hashTableResize(table, &bucketsLeft);
-            if (errorCode == 1) {
-                return 1;
+        if (!feof(file)) {
+            double occupancyRate = getHashTableOccupancy(table);
+            const double delta = 0.000001;
+            if ((1 - occupancyRate) < delta) {
+                hashTableResize(table);
             }
         }
 
@@ -111,10 +107,10 @@ double getHashTableOccupancy(HashTable *table) {
         return 0;
     }
 
-    int occupancy = 0;
+    unsigned int occupancy = 0;
     for (int i = 0; i < table->hashTableSize; ++i) {
         if (table->hashTable[i] != NULL) {
-            ++occupancy;
+            occupancy += getListLength(table->hashTable[i]);
         }
     }
 
@@ -172,7 +168,7 @@ void deleteHashTable(HashTable **table) {
 
 // returns 0 if all is ok
 // returns 1 if not enough memory
-int hashTableResize(HashTable *hashTable, unsigned int *bucketsLeft) {
+int hashTableResize(HashTable *hashTable) {
     List **tempHashTable = calloc(hashTable->hashTableSize * 2, sizeof(List*));
     if (tempHashTable == NULL) {
         return 1;
@@ -190,7 +186,6 @@ int hashTableResize(HashTable *hashTable, unsigned int *bucketsLeft) {
             char *tempString = getFirstWord(tempList);
             unsigned int hash = hashFunction(hashTable->hashTableSize * 2, tempString);
             if (tempHashTable[hash] == NULL) {
-                --(*bucketsLeft);
                 tempHashTable[hash] = tempList;
             } else {
                 putList(tempHashTable[hash], &tempList);
@@ -260,7 +255,7 @@ bool getHashTableOccupancyTest(void) {
         return false;
     }
 
-    bool secondTest = (getHashTableOccupancy(table) - 0.984375) < delta;
+    bool secondTest = (getHashTableOccupancy(table) - 0.902344) < delta;
 
     deleteHashTable(&table);
 
@@ -285,7 +280,7 @@ bool getHashTablesListsInfoTest(void) {
 
     getHashTablesListsInfo(table, &max, &average);
 
-    bool test = max == 8 && average - 3.66667 < delta;
+    bool test = max == 4 && average - 1.5 < delta;
 
     deleteHashTable(&table);
 

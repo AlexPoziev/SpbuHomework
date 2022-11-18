@@ -8,6 +8,7 @@ int main() {
         printf("Tests Failed");
         return 1;
     }
+
     int errorCode = 0;
     HashTable *table = createHashTable();
     if (table == NULL) {
