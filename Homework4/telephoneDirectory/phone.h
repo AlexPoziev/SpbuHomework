@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define maxContactSize 20
+#define MAX_CONTACT_SIZE 20
 
 // find number/name by name/number in the file
 int findByString(FILE *file, const char* fileName, char* string, char* answer);

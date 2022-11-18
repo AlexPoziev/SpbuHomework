@@ -37,7 +37,7 @@ int main() {
 
         switch (choice) {
             case 1: {
-                data[inputUse] = (char*)(calloc(maxContactSize * 2, sizeof(char)));
+                data[inputUse] = (char*)(calloc(MAX_CONTACT_SIZE * 2, sizeof(char)));
                 if (data[inputUse] == NULL) {
                     printf("Not enough memory");
                     return 1;
@@ -60,13 +60,13 @@ int main() {
                 PhoneBook number;
 
                 printf("Input name with length below 15 to find name: ");
-                number.phone = (char*)(calloc(maxContactSize, sizeof(char)));
+                number.phone = (char*)(calloc(MAX_CONTACT_SIZE, sizeof(char)));
                 if (number.phone == NULL) {
                     printf("Not enough memory for program work");
                     return 1;
                 }
 
-                number.name = (char*)(calloc(maxContactSize, sizeof(char)));
+                number.name = (char*)(calloc(MAX_CONTACT_SIZE, sizeof(char)));
                 if (number.name == NULL) {
                     printf("Not enough memory for program work\n");
                     free(number.phone);
@@ -92,13 +92,13 @@ int main() {
                 PhoneBook number;
 
                 printf("Input phone number with length below 15 to find name: ");
-                number.phone = (char*)(calloc(maxContactSize, sizeof(char)));
+                number.phone = (char*)(calloc(MAX_CONTACT_SIZE, sizeof(char)));
                 if (number.phone == NULL) {
                     printf("Not enough memory for program work");
                     return 1;
                 }
 
-                number.name = (char*)(calloc(maxContactSize, sizeof(char)));
+                number.name = (char*)(calloc(MAX_CONTACT_SIZE, sizeof(char)));
                 if (number.name == NULL) {
                     printf("Not enough memory for program work");
                     free(number.phone);
