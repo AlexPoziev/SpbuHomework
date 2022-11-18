@@ -4,14 +4,24 @@
 
 #define MAX_CONTACT_SIZE 20
 
+typedef struct PhoneBook{
+    char phone[MAX_CONTACT_SIZE];
+    char name[MAX_CONTACT_SIZE];
+} PhoneBook;
+
+// put contacts from file to array
+// return 0 is all is ok
+// return 1 if no file with that name
+int getFileData(char* fileName, PhoneBook data[], unsigned int *size);
+
 // find number/name by name/number in the file
-int findByString(FILE *file, const char* fileName, char* string, char* answer);
+char* findByString(PhoneBook data[], char* string, unsigned int size);
 
 // print all names and numbers
-void printAllContacts(FILE *file, const char* fileName);
+void printAllContacts(PhoneBook data[], unsigned int size);
 
 // save all names and phone numbers to file
-void saveContacts(FILE *file, char* data[], int newContacts, const char* fileName);
+void saveContacts(char *fileName, PhoneBook data[], unsigned int size);
 
 // correct test
 bool correctTests(void);

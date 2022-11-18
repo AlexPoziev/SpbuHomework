@@ -3,137 +3,116 @@
 #include <string.h>
 #include <stdio.h>
 
-typedef struct {
-    char *phone;
-    char *name;
-}PhoneBook;
-
-// code 1 - not enough memory, code 2 - no compares
-// find number/name by name/number in the file
-int findByString(FILE *file, const char* fileName, char* string, char* answer) {
-    PhoneBook entry;
-
-    file = fopen(fileName, "r");
-
-    entry.name = calloc(MAX_CONTACT_SIZE, sizeof(char));
-    if (entry.name == NULL) {
-        return 1;
-    }
-    entry.phone = calloc(MAX_CONTACT_SIZE,sizeof(char));
-    if (entry.phone == NULL) {
-        free(entry.name);
+int getFileData(char* fileName, PhoneBook data[], unsigned int *size) {
+    FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
         return 1;
     }
 
-    int eofCheck = fscanf(file, "%s", entry.name);
-    if (eofCheck == EOF) {
-        free(entry.name);
-        free(entry.phone);
-
-        return 2;
-    }
-
-    getc(file);
-    eofCheck = fscanf(file, "%[^\n]", entry.phone);
-    if (eofCheck == EOF) {
-        free(entry.name);
-        free(entry.phone);
-
-        return 2;
-    }
-
-    int checkName = strcmp(entry.name, string);
-    int checkPhone = strcmp(entry.phone, string);
-
-    while (!feof(file) && checkName && checkPhone) {
-        eofCheck = fscanf(file, "%s", entry.name);
+    *size = 0;
+    while(!feof(file)) {
+        int eofCheck = fscanf(file, "%s", data[*size].name);
         if (eofCheck == EOF) {
-            free(entry.name);
-            free(entry.phone);
-
-            return 2;
+            return 0;
         }
-        getc(file);
-        eofCheck = fscanf(file, "%[^\n]", entry.phone);
+        fgetc(file);
+        eofCheck = fscanf(file, "%[^\n]", data[*size].phone);
         if (eofCheck == EOF) {
-            free(entry.name);
-            free(entry.phone);
-
-            return 2;
+            return 0;
         }
-        checkName = strcmp(entry.name, string);
-        checkPhone = strcmp(entry.phone, string);
+
+        ++(*size);
     }
-    if (feof(file) && checkName && checkPhone) {
-        return 2;
-    }
-
-    fclose(file);
-
-    strcpy(answer, !strcmp(entry.name, string) ? entry.phone : entry.name);
-
-    free(entry.name);
-    free(entry.phone);
-
     return 0;
 }
 
-
-//print all names and numbers
-void printAllContacts(FILE *file, const char* fileName) {
-    fopen(fileName, "r");
-    char *input = (char*)(calloc(MAX_CONTACT_SIZE, sizeof(char)));
-    while (!feof(file)) {
-        fscanf(file,"%s", input);
-        printf("%s ",input);
-        fscanf(file, "%[^\n]", input);
-        printf("%s \n", input);
+// return NULL if no corresponding
+// find number/name by name/number in the file
+char* findByString(PhoneBook data[], char* string, unsigned int size) {
+    for (int i = 0; i < size; ++i) {
+        if (!strcmp(data[i].phone, string)) {
+            return data[i].name;
+        }
+        if (!strcmp(data[i].name, string)) {
+            return data[i].phone;
+        }
     }
 
-    free(input);
+    return NULL;
+}
+
+// print all names and numbers
+void printAllContacts(PhoneBook data[], unsigned int size) {
+    for (int i = 0; i < size; ++i) {
+        printf("%s %s \n", data[i].name, data[i].phone);
+    }
+}
+
+// print all inserted contacts to file
+void saveContacts(char *fileName, PhoneBook data[], unsigned int size) {
+    FILE *file = fopen(fileName, "w");
+
+    for (int i = 0; i < size - 1; ++i) {
+        fprintf(file, "%s %s\n", data[i].name, data[i].phone);
+    }
+
+    fprintf(file, "%s %s\n", data[size - 1].name, data[size - 1].phone);
+
     fclose(file);
 }
 
-//print all inserted contacts to file
-void saveContacts(FILE *file, char* data[], int newContacts, const char* fileName) {
-    file = fopen(fileName, "a");
-    fseek(file, 0, SEEK_END);
-    long size = ftell(file);
-    if (size) {
-        fprintf(file, "\n");
-    }
+// tests
+bool getFileDataTest(void) {
+    PhoneBook data[3];
+    unsigned int size = 0;
+    getFileData("test.txt", data, &size);
 
-    for (int i = 0; i < newContacts - 1; ++i) {
-        fprintf(file, "%s\n", data[i]);
-    }
-    fprintf(file, "%s", data[newContacts - 1]);
+    bool firstTest = !strcmp("Tarantino", data[0].name);
+    bool secondTest = !strcmp("8999133777", data[0].phone);
+    bool thirdTest = !strcmp("Kel'Thas", data[2].name);
+    bool fourthTest = !strcmp("+7 (918) 147-14-70", data[2].phone);
+
+    return firstTest && secondTest && thirdTest && fourthTest;
+}
+
+bool findByStringTest(void) {
+    PhoneBook data[10];
+    unsigned int size = 1;
+    getFileData("test.txt", data, &size);
+
+    bool firstTest = !strcmp("014-554-3", findByString(data, "Paradox", size));
+    bool secondTest = !strcmp("Paradox", findByString(data, "014-554-3", size));
+
+    return firstTest && secondTest;
+}
+
+bool saveContactsTest(void) {
+    PhoneBook data[2];
+    unsigned int size = 2;
+    strcpy(data[0].name, "testFirst");
+    strcpy(data[0].phone, "1");
+    strcpy(data[1].name, "testSecond");
+    strcpy(data[1].phone, "2");
+
+    saveContacts("saveTest.txt", data, size);
+    FILE *file = fopen("saveTest.txt", "r");
+
+    fscanf(file, "%s", data[0].name);
+    bool firstTest = !strcmp(data[0].name, "testFirst");
+    fgetc(file);
+    fscanf(file, "%[^\n]", data[0].name);
+    bool secondTest = !strcmp(data[0].name, "1");
+    fscanf(file, "%s", data[0].name);
+    bool thirdTest = !strcmp(data[0].name, "testSecond");
+    fgetc(file);
+    fscanf(file, "%[^\n]", data[0].name);
+    bool fourthTest = !strcmp(data[0].name, "2");
 
     fclose(file);
+
+    return firstTest && secondTest && thirdTest && fourthTest;
 }
 
 bool correctTests(void) {
-    const char *testFile = "test.txt";
-    FILE *file = fopen(testFile, "w");
-    fclose(file);
-
-    char* data[3] = {"Tarantino 8999133777", "Paradox 014-554-3", "Kel'Thas +7 (918) 147-14-70"};
-    saveContacts(file, data, 3,testFile);
-    char firstCheck[10] = {0};
-    char secondCheck[7] = {0};
-    char thirdCheck[18] = {0};
-
-    // test to find by name/phone number
-    findByString(file, testFile, "Tarantino", firstCheck);
-    findByString(file, testFile, "014-554-3", secondCheck);
-    findByString(file, testFile, "Kel'Thas", thirdCheck);
-
-    char firstInputCheck[10] = {0};
-    char secondInputCheck[10] = {0};
-    file = fopen(testFile, "r");
-    fscanf(file, "%s", firstInputCheck);
-    fgetc(file);
-    fscanf(file, "%[^\n]", secondInputCheck);
-    fclose(file);
-
-    return !strcmp(firstCheck, "8999133777") && !strcmp(secondCheck, "Paradox") && !strcmp(thirdCheck, "+7 (918) 147-14-70") && !strcmp(firstInputCheck, "Tarantino") && !strcmp(secondInputCheck, "8999133777");
+    return getFileDataTest() && findByStringTest() && saveContactsTest();
 }
