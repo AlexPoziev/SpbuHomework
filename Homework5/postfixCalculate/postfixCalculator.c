@@ -32,6 +32,7 @@ double postfixCalculator(char *expression, unsigned expressionSize, int *errorCo
         if (expression[i] == ' ') {
             continue;
         }
+
         if (expression[i] >= '0' && expression[i] <= '9') {
             *errorCode = pushDouble(&head, expression[i] - '0');
             //check for memory in push
@@ -39,6 +40,7 @@ double postfixCalculator(char *expression, unsigned expressionSize, int *errorCo
                 clearDoubleStack(&head);
                 return 1;
             }
+
         } else {
             double firstNumber = popDouble(&head, errorCode);
             //check that stack has enough numbers for completing operation
@@ -47,11 +49,13 @@ double postfixCalculator(char *expression, unsigned expressionSize, int *errorCo
                 //code 2 incorrect expression
                 return 0;
             }
+
             double secondNumber = popDouble(&head, errorCode);
             if (*errorCode == -1) {
                 clearDoubleStack(&head);
                 return 0;
             }
+
             //get a result of operation
             firstNumber = performOperation(firstNumber, secondNumber, expression[i], errorCode);
             if (*errorCode == -1) {
@@ -85,7 +89,8 @@ bool correctTest(void) {
     char expressionThird[1] = "0";
     int errorCode = 0;
 
-    return (postfixCalculator(expressionFirst, 13, &errorCode) == 9 && postfixCalculator(expressionSecond, 13, &errorCode) == 8
+    return (postfixCalculator(expressionFirst, 13, &errorCode) == 9
+    && postfixCalculator(expressionSecond, 13, &errorCode) == 8
     && postfixCalculator(expressionThird, 1, &errorCode) == 0);
 }
 
