@@ -5,14 +5,14 @@
 
 
 int main() {
-    if (!correctTest() || !stackTest()) {
+    if (!postfixConverterTest() || !stackTest()) {
         printf("Tests Failed");
         return 1;
     }
 
     char expression[1000] = {0};
 
-    printf("Input postfix expression with length below 1000: ");
+    printf("Input infix expression with length below 1000: ");
     fgets(expression, sizeof(expression), stdin);
     int errorCode = postfixConverter(expression, strlen(expression) - 1);
 

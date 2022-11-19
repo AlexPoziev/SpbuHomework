@@ -24,6 +24,7 @@ int postfixConverter(char *expression, unsigned size) {
     if (tempString == NULL) {
         return 1;
     }
+
     IntStack *head = NULL;
 
     int errorCode = 0;
@@ -33,7 +34,7 @@ int postfixConverter(char *expression, unsigned size) {
         if (expression[i] == ' ') {
             continue;
         }
-        // if number then add to string
+        // if number add to string
         if ((expression[i] >= '0' && expression[i] <= '9')) {
             inputChar(tempString, &postfixStep, expression[i]);
         } else if (expression[i] == '(') {
@@ -42,12 +43,14 @@ int postfixConverter(char *expression, unsigned size) {
                 clearIntStack(&head);
                 return 1;
             }
+
         } else if (expression[i] == ')') {
             if (closingParentheses(tempString, &postfixStep, &head)) {
                 free(tempString);
                 clearIntStack(&head);
                 return -1;
             }
+
         } else {
             int current = priorityDeterminant(expression[i]);
             while (head != NULL && priorityDeterminant((char)(head->value)) >= current) {
@@ -80,6 +83,7 @@ int closingParentheses(char *tempString, unsigned *postfixStep, IntStack **head)
     if (*head == NULL) {
         return -1;
     }
+    
     popInt(head, &errorCode);
 
     return 0;
@@ -92,7 +96,7 @@ void inputChar(char *tempString, unsigned *postfixStep, char value) {
     ++(*postfixStep);
 }
 
-bool correctTest(void) {
+bool postfixConverterTest(void) {
     char expressionFirst[17] = "(1 + 2) * (3 + 4)";
     char expressionSecond[17] = "1 + 2 / 3 * 5 + 3";
     char expressionThird[13] = "1 + 2 + 3 + 4";
