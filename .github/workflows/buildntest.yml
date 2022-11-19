@@ -1,0 +1,17 @@
+name: C/C++ CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: open test folder
+      run: cd GitHubAction/
+    - name: make executable
+      run: chmod +x GitHubActions.sh
+    - name: run .sh script
+      run: sh GitHubActions.sh
