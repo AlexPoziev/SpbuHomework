@@ -88,11 +88,8 @@ int main(int argc, char *argv[]) {
     if (argc >= 2) {
         if (!strcmp(argv[1], "--test")) {
             if (!correctTest()) {
-                printf("modulesFiles tests: Failed");
                 return 1;
             }
-            
-            printf("modulesFiles tests: Passed");
             
             return 0;
         }

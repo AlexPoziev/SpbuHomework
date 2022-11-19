@@ -48,11 +48,8 @@ int main(int argc, char *argv[]) {
     if (argc >= 2) {
         if (!strcmp(argv[1], "--test")) {
             if (!correctTestFast() || !correctTestLine()) {
-                printf("lineAndLogPow tests: Failed");
                 return 1;
             }
-            
-            printf("lineAndLogPow tests: Passed");
             
             return 0;
         }

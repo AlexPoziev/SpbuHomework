@@ -36,11 +36,8 @@ int main(int argc, char *argv[]) {
     if (argc >= 2) {
         if (!strcmp(argv[1], "--test")) {
             if (!correctTestIteration() || !correctTestRecursion()) {
-                printf("recursiveAndIterFibonacci tests: Failed");
                 return 1;
             }
-            
-            printf("recursiveAndIterFibonacci tests: Passed");
             
             return 0;
         }

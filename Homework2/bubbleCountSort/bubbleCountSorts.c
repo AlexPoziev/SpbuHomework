@@ -112,11 +112,8 @@ int main(int argc, char *argv[]) {
     if (argc >= 2) {
         if (!strcmp(argv[1], "--test")) {
             if (!correctTestBubble() || !correctTestCount()) {
-                printf("bubbleCountSorts tests: Failed");
                 return 1;
             }
-            
-            printf("bubbleCountSorts tests: Passed");
             
             return 0;
         }

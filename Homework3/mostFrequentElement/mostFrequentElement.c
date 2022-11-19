@@ -113,11 +113,8 @@ int main(int argc, char *argv[]) {
     if (argc >= 2) {
         if (!strcmp(argv[1], "--test")) {
             if (!correctTest()) {
-                printf("mostFrequentElement tests: Failed");
                 return 1;
             }
-            
-            printf("mostFrequentElement tests: Passed");
             
             return 0;
         }

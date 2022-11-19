@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 void fillRandomArray(unsigned int arraySize, int array[]) {
     if (arraySize < 1) {
@@ -105,11 +106,8 @@ int main(int argc, char *argv[]) {
     if (argc >= 2) {
         if (!strcmp(argv[1], "--test")) {
             if (!correctTest()) {
-                printf("smartQsort tests: Failed");
                 return 1;
             }
-            
-            printf("smartQsort tests: Passed");
             
             return 0;
         }
