@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 double linePower(double base, int degree) {
     if (degree == 0 || base == 1) {
@@ -43,14 +44,18 @@ bool correctTestLine(void) {
     return linePower(1.0, -1) == 1 && linePower(2.5, -2) == 0.16 && linePower(-100.0, 2) == 10000.0 && linePower(-10.0, 3) == -1000.0 && linePower(0, 0) == 1.0;
 }
 
-int main() {
-    if (!correctTestFast()) {
-        printf("Fast test failed \n");
-        return 1;
-    }
-    if (!correctTestLine()) {
-        printf("Line test failed \n");
-        return 1;
+int main(int argc, char *argv[]) {
+    if (argc >= 2) {
+        if (!strcmp(argv[1], "--test")) {
+            if (!correctTestFast() || !correctTestLine()) {
+                printf("lineAndLogPow tests: Failed");
+                return 1;
+            }
+            
+            printf("lineAndLogPow tests: Passed");
+            
+            return 0;
+        }
     }
     
     printf("Print base and degree separated by a space: ");

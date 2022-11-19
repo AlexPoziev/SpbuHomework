@@ -101,10 +101,18 @@ bool correctTest(void) {
     return testModel(arrayCheckFirst, 1, 1) && testModel(arrayCheckSecond, 10, 9) && testModel(arrayCheckThird, 5, 5) && testModel(arrayCheckFourth, 6, 5) && testModel(arrayCheckFifth, 10, 10) && testModel(arrayCheckSixth, 10000, 2);
 }
 
-int main() {
-    if (!correctTest()) {
-        printf("Test Failed");
-        return 1;
+int main(int argc, char *argv[]) {
+    if (argc >= 2) {
+        if (!strcmp(argv[1], "--test")) {
+            if (!correctTest()) {
+                printf("smartQsort tests: Failed");
+                return 1;
+            }
+            
+            printf("smartQsort tests: Passed");
+            
+            return 0;
+        }
     }
 
     printf("Enter a count of numbers, except zero: ");

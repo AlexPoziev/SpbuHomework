@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <string.h>
 
 bool testCase(int array[], int firstNumber, int arraySize) {//тест на правильное расположение, все числа до первого должны быть меньше, дальше - больше либо равно
     unsigned int i = 0;
@@ -75,10 +76,18 @@ bool correctTest(void) {
     return testCase(arrayCheckFirst, 5, 1) && testCase(arrayCheckSecond, -1, 10) && testCase(arrayCheckThird, 0, 10000) && testCase(arrayCheckFourth, 100000, 5);
 }
 
-int main() {
-    if (!correctTest()) {
-        printf("Tests Failed");
-        return 1;
+int main(int argc, char *argv[]) {
+    if (argc >= 2) {
+        if (!strcmp(argv[1], "--test")) {
+            if (!correctTest()) {
+                printf("semiQsort tests: Failed");
+                return 1;
+            }
+            
+            printf("semiQsort tests: Passed");
+            
+            return 0;
+        }
     }
     
     printf("Enter a count of numbers, except zero: ");

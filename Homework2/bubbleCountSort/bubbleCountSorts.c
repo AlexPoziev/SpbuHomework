@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 void randomArrayFilling(unsigned int arraySize, int array[]) {
     if (arraySize < 1) {
@@ -107,14 +108,18 @@ bool correctTestCount(void) {
     return testModel(arrayCheckFirst, 1) && testModel(arrayCheckSecond, 10) && testModel(arrayCheckThird, 100000) && testModel(arrayCheckFourth, 5) && testModel(arraycheckFifth, 6);
 }
 
-int main() {
-    if (!correctTestBubble()) {
-        printf("Bubble Tests Failed");
-        return 1;
-    }
-    if (!correctTestCount()) {
-        printf("Count Tests Failed");
-        return 1;
+int main(int argc, char *argv[]) {
+    if (argc >= 2) {
+        if (!strcmp(argv[1], "--test")) {
+            if (!correctTestBubble() || !correctTestCount()) {
+                printf("bubbleCountSorts tests: Failed");
+                return 1;
+            }
+            
+            printf("bubbleCountSorts tests: Passed");
+            
+            return 0;
+        }
     }
     
     const int arraySize = 100000;
