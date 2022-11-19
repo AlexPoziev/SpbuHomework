@@ -109,10 +109,15 @@ bool correctTest(void) {
     && mostFrequentNumber(arrayFourth, 3) == 0;
 }
 
-int main() {
-    if (!correctTest()) {
-        printf("Test Failed");
-        return 1;
+int main(int argc, char *argv[]) {
+    if (argc >= 2) {
+        if (!strcmp(argv[1], "--test")) {
+            if (!correctTest()) {
+                return 1;
+            }
+            
+            return 0;
+        }
     }
 
     printf("Enter a count of numbers, except zero: ");

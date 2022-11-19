@@ -119,10 +119,15 @@ bool incorrectTest(void) {
     return !search(-12444, arrayFirst, 8) && !search(44433, arrayFirst, 8) && !search(8, arrayFirst, 8) && !search(9, arraySecond, 1);
 }
 
-int main() {
-    if (!correctTest() || !incorrectTest()) {
-        printf("Tests Failed");
-        return 1;
+int main(int argc, char *argv[]) {
+    if (argc >= 2) {
+        if (!strcmp(argv[1], "--test")) {
+            if (!correctTest() || !incorrectTest()) {
+                return 1;
+            }
+            
+            return 0;
+        }
     }
 
     printf("Enter main array size greater than zero: ");

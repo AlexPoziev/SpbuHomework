@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 unsigned long int recursiveFibonacci(unsigned number) {
     return ((number <= 1) ? (number) : (recursiveFibonacci(number - 1) + recursiveFibonacci(number - 2)));
@@ -31,25 +32,16 @@ bool correctTestRecursion(void) {
     return recursiveFibonacci(0) == 0 && recursiveFibonacci(1) == 1 && recursiveFibonacci(10) == 55 && recursiveFibonacci(25) == 75025;
 }
 
-int main() {
-    if (!correctTestIteration()) {
-        printf("Iteration tests failed");
-        return 1;
+int main(int argc, char *argv[]) {
+    if (argc >= 2) {
+        if (!strcmp(argv[1], "--test")) {
+            if (!correctTestIteration() || !correctTestRecursion()) {
+                return 1;
+            }
+            
+            return 0;
+        }
     }
-    if (!correctTestRecursion()) {
-        printf("Recursion tests failed");
-        return 1;
-    }
-    
-    /*printf("Enter non-negative number: ");
-    int number = 0;
-    scanf("%d", &number);
-    while (number < 0) {
-        printf("It's negative number, please, repeat enter: ");
-        scanf("%d", &number);
-    }
-    printf("Recursion method out: %lu \n", recursiveFibonacci((unsigned)(number)));
-    printf("Iteration method out: %lu \n", iterationFibonacci((unsigned)(number)));*/
     
     unsigned timeDifferent = 1;
     int currentNumber = 0;

@@ -64,16 +64,16 @@ void readFile(FILE *file, int *array, int arrayLength, int *errorCode) {
 bool correctTest(void) {
     int firstCheck[10] = {0};
     int errorCode = 0;
-    FILE *file = fopen("test1.txt", "r");
+    FILE *file = fopen("../test1.txt", "r");
 
     readFile(file, firstCheck, 10, &errorCode);
     fclose(file);
     int secondCheck[1] = {0};
-    file = fopen("test2.txt", "r");
+    file = fopen("../test2.txt", "r");
     readFile(file, secondCheck, 1, &errorCode);
     fclose(file);
     int thirdCheck[5] = {0};
-    file = fopen("test3.txt", "r");
+    file = fopen("../test3.txt", "r");
     readFile(file, thirdCheck, 10, &errorCode);
     fclose(file);
 
@@ -84,13 +84,18 @@ bool correctTest(void) {
 }
 
 // first number in file is arrayLength
-int main() {
-    if (!correctTest()) {
-        printf("Test Failed");
-        return 1;
+int main(int argc, char *argv[]) {
+    if (argc >= 2) {
+        if (!strcmp(argv[1], "--test")) {
+            if (!correctTest()) {
+                return 1;
+            }
+            
+            return 0;
+        }
     }
 
-    FILE *file = fopen("data.txt", "r");
+    FILE *file = fopen("../data.txt", "r");
     if (file == NULL) {
         printf("File not found");
         return 1;
