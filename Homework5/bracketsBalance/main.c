@@ -11,8 +11,9 @@ int main() {
 
     char string[1000] = {0};
 
-    printf("Input a string of brackets balance with length below 1000: ");
+    printf("Input a string of brackets balance with length less than 1000: ");
     fgets(string, sizeof string, stdin);
+
     int errorCode = 0;
     bool isBalanced = bracketsBalance(string, strlen(string) - 1, &errorCode);
     if (errorCode == 1) {
