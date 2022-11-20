@@ -14,6 +14,8 @@ while read currentFolder
     if [[ $? -eq 0 ]]
     then
         array[i]=0
+    else
+        array[i]=1
     fi
     
     cd ..
