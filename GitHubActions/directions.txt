@@ -1,8 +1,0 @@
-../Homework2/bubbleCountSort
-../Homework2/lineAndLogPow
-../Homework2/recursiveAndIterFibonacci
-../Homework2/semiQsort
-../Homework3/mostFrequentElement
-../Homework3/search
-../Homework3/smartQsort
-../Homework4/module
