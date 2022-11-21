@@ -228,16 +228,21 @@ bool getFromFileTest(void) {
         return false;
     }
 
-    bool firstTest = !strcmp("for", getFirstWord(table->hashTable[0]));
-    bool secondTest = !strcmp("test", getFirstWord(table->hashTable[1]));
+    bool firstTest = !strcmp("task", getFirstWord(table->hashTable[0]));
+    bool secondTest = table->hashTable[1] == NULL;
     bool thirdTest = !strcmp("text", getFirstWord(table->hashTable[2]));
     bool fourthTest = !strcmp("just", getFirstWord(table->hashTable[3]));
-    bool fifthTest = table->hashTableSize == 4;
+    bool fifthTest = table->hashTableSize == 8;
+    bool sixthTest = !strcmp("for", getFirstWord(table->hashTable[4]));
+    bool seventhTest = !strcmp("test", getFirstWord(table->hashTable[5]));
+    bool eighthTest = !strcmp("new", getFirstWord(table->hashTable[7]));
+    bool ninthTest = table->hashTable[6] == NULL;
 
     deleteHashTable(&table);
 
     return firstTest && secondTest && thirdTest && fourthTest
-        && fifthTest;
+        && fifthTest && sixthTest && seventhTest && eighthTest
+        && ninthTest;
 }
 
 bool getHashTableOccupancyTest(void) {
