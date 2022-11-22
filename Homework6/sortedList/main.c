@@ -16,6 +16,11 @@ int main() {
     }
 
     List *list = createList();
+    if (list == NULL) {
+        printf("Not enough memory");
+        return 1;
+    }
+    
     choose();
 
     int option = 1;
