@@ -40,15 +40,6 @@ unsigned int** createMatrix(unsigned int size) {
     return matrix;
 }
 
-void printMatrix(unsigned int **matrix, unsigned int size) {
-    for (int i = 0; i < size; ++i) {
-        for (int j = 0; j < size; ++j) {
-            printf("%u ", matrix[i][j]);
-        }
-        printf("\n");
-    }
-}
-
 States* createStates(void) {
     return malloc(sizeof(States));
 }
@@ -141,6 +132,11 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
             return 2;
         }
 
+        eofCheck = fgetc(file);
+        if (eofCheck == EOF && i != states->statesCount - 1) {
+            return 2;
+        }
+
         states->states[i] = createList();
         if (states->states[i] == NULL) {
             fclose(file);
@@ -152,11 +148,6 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
             fclose(file);
             return 1;
         }
-    }
-
-    printMatrix(cities->roads, cities->citiesCount);
-    for (unsigned int i = 0; i < states->statesCount; ++i) {
-        printList(states->states[i]);
     }
 
     fclose(file);

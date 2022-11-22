@@ -89,7 +89,7 @@ void printList(List *list) {
 }
 
 void deleteList(List **list) {
-    if (list == NULL) {
+    if (list == NULL || *list == NULL) {
         return;
     }
 
