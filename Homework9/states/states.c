@@ -155,7 +155,7 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
     }
 
     printMatrix(cities->roads, cities->citiesCount);
-    for (int i = 0; i < states->statesCount; ++i) {
+    for (unsigned int i = 0; i < states->statesCount; ++i) {
         printList(states->states[i]);
     }
 
@@ -166,15 +166,24 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
 
 // if city in state zero its column
 void zeroColumn(Cities *cities, unsigned int columnNumber) {
-    for (int i = 0; i < cities->citiesCount; ++i) {
+    for (unsigned int i = 0; i < cities->citiesCount; ++i) {
         cities->roads[i][columnNumber] = 0;
+    }
+}
+
+void getMinInLine(Cities *cities, unsigned value, unsigned *minLength, unsigned *minCityNumber) {
+    for (unsigned int i = 0; i < cities->citiesCount; ++i) {
+        if (cities->roads[value][i] < *minLength) {
+            *minLength = cities->roads[value][i];
+            *minCityNumber = i;
+        }
     }
 }
 
 int divideCities(Cities *cities, States *states) {
     int errorCode = 0;
     // zero capitals columns
-    for (int i = 0; i < states->statesCount; ++i) {
+    for (unsigned int i = 0; i < states->statesCount; ++i) {
         unsigned int city = getListElementValue(getFirstListElement(states->states[i]), &errorCode);
         zeroColumn(cities, city);
     }
@@ -183,9 +192,34 @@ int divideCities(Cities *cities, States *states) {
     unsigned int citiesLeft = cities->citiesCount - states->statesCount;
 
     while (citiesLeft != 0) {
-        for (int i = 0; i < states->statesCount; ++i) {
-            int minLength = UINT32_MAX;
+        // check for case if no way to city
+        bool wasAction = false;
+        for (unsigned int i = 0; i < states->statesCount; ++i) {
+            unsigned int minLength = UINT32_MAX;
+            unsigned int minCityNumber = UINT32_MAX;
+            ListElement *element = getFirstListElement(states->states[i]);
+            while (element != NULL) {
+                unsigned int value = getListElementValue(element, &errorCode);
+                getMinInLine(cities, value, &minLength, &minCityNumber);
+                element = getNextElement(element);
+            }
 
+            if (minLength != UINT32_MAX) {
+                wasAction = true;
+                errorCode = addValue(states->states[i], minCityNumber);
+                if (errorCode == 1) {
+                    return 1;
+                }
+
+                --citiesLeft;
+                zeroColumn(cities, minCityNumber);
+            }
+        }
+
+        if (!wasAction) {
+            return -1;
         }
     }
+
+    return 0;
 }

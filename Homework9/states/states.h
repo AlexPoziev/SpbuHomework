@@ -25,7 +25,8 @@ int getDataFromFile(char *fileName, Cities *cities, States *states);
 
 // divide cities between states
 // return 0 if all is ok
-// return 1 if cities or states don't exist
+// return 1 if pointer to cities or states don't exist
+// return -1 if no roads to city
 int divideCities(Cities *cities, States *states);
 
 // print all states and cities in its own
