@@ -20,6 +20,10 @@ int main() {
 
     choose();
     Dictionary *dictionary = createDictionary();
+    if (dictionary == NULL) {
+        printf("Not enough memory");
+        return 1;
+    }
 
     int option = 1;
     while (option != 0) {
