@@ -23,7 +23,7 @@ List* createList(void) {
     return temp;
 }
 
-ListElement* createNode(unsigned int value) {
+ListElement* createListElement(unsigned int value) {
     ListElement *tempElement = malloc(sizeof(ListElement));
     if (tempElement == NULL) {
         return NULL;
@@ -40,7 +40,7 @@ int addValue(List *list, unsigned int value) {
         return -1;
     }
 
-    ListElement *tempElement = createNode(value);
+    ListElement *tempElement = createListElement(value);
     if (tempElement == NULL) {
         return 1;
     }
@@ -83,7 +83,7 @@ void printList(List *list) {
 
     ListElement *currentElement = list->head;
     while (currentElement != NULL) {
-        printf("%u", currentElement->value);
+        printf("%u\n", currentElement->value);
         currentElement = currentElement->next;
     }
 }
@@ -103,4 +103,5 @@ void deleteList(List **list) {
     }
 
     free(*list);
+    *list = NULL;
 }

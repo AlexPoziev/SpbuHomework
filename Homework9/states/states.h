@@ -23,22 +23,16 @@ Cities* createCities(void);
 // return 0 if all is ok
 int getDataFromFile(char *fileName, Cities *cities, States *states);
 
-// i dont know what will return maybe nothing
 // divide cities between states
+// return 0 if all is ok
+// return 1 if cities or states don't exist
 int divideCities(Cities *cities, States *states);
 
-// print number of state and numbers of cities in its own
+// print all states and cities in its own
 void printStates(States *states);
 
 // delete states and clear memory
 void deleteStates(States **states);
 
 // delete road and clear memory
-void deleteRoads(Cities **roads);
-
-// get from file info about cities and state and divide it between themselves
-// print number of state and all cities in its own
-// return 0 if all is ok
-// return 1 if not enough memory
-// return -1 idk at that moment
-int states(char *fileName);
+void deleteCities(Cities **roads);
