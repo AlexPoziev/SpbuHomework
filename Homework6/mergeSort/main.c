@@ -10,6 +10,10 @@ int main() {
     }
 
     List *list = createList();
+    if (list == NULL) {
+        printf("Not enough memory");
+        return 1;
+    }
     printf("Please enter name of .txt file, with length less than 25: ");
     char fileName[25] = {0};
     scanf("%s", fileName);
