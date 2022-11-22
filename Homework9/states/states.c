@@ -173,7 +173,7 @@ void zeroColumn(Cities *cities, unsigned int columnNumber) {
 
 void getMinInLine(Cities *cities, unsigned value, unsigned *minLength, unsigned *minCityNumber) {
     for (unsigned int i = 0; i < cities->citiesCount; ++i) {
-        if (cities->roads[value][i] < *minLength) {
+        if (cities->roads[value][i] != 0 && cities->roads[value][i] < *minLength) {
             *minLength = cities->roads[value][i];
             *minCityNumber = i;
         }
@@ -222,4 +222,23 @@ int divideCities(Cities *cities, States *states) {
     }
 
     return 0;
+}
+
+void printStates(States *states) {
+    if (states == NULL || states->states == NULL) {
+        return;
+    }
+
+    int errorCode = 0;
+
+    for (int i = 0; i < states->statesCount; ++i) {
+        printf("State %u contains cities: ", i + 1);
+        ListElement *element = getFirstListElement(states->states[i]);
+        while (element != NULL) {
+            printf("%u ", getListElementValue(element, &errorCode) + 1);
+            element = getNextElement(element);
+        }
+
+        printf("\n");
+    }
 }

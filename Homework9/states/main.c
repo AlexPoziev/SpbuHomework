@@ -8,6 +8,8 @@ int main(int argc, char *argv[]) {
     States *states = createStates();
 
     getDataFromFile("test.txt", cities, states);
+    divideCities(cities, states);
+    printStates(states);
 
     return 0;
 }
