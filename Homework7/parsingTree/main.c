@@ -22,6 +22,10 @@ int main() {
     fclose(file);
 
     Tree *tree = createTree();
+    if (tree == NULL) {
+        printf("Not enough memory");
+        return 1;
+    }
 
     int errorCode = fileGetTree(file, fileName, tree);
     if (errorCode == 1) {
