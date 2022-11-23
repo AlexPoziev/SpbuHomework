@@ -27,9 +27,6 @@ ListElement* getNextElement(ListElement* element);
 // errorCode stay 0 if all is ok
 unsigned int getListElementValue(ListElement* element, int *errorCode);
 
-// print full list.
-void printList(List *list);
-
 // deallocate list's memory
 void deleteList(List **list);
 

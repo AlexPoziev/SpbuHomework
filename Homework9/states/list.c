@@ -76,18 +76,6 @@ unsigned int getListElementValue(ListElement* element, int *errorCode) {
     return element->value;
 }
 
-void printList(List *list) {
-    if (list == NULL) {
-        return;
-    }
-
-    ListElement *currentElement = list->head;
-    while (currentElement != NULL) {
-        printf("%u\n", currentElement->value);
-        currentElement = currentElement->next;
-    }
-}
-
 void deleteList(List **list) {
     if (list == NULL || *list == NULL) {
         return;
@@ -104,4 +92,122 @@ void deleteList(List **list) {
 
     free(*list);
     *list = NULL;
+}
+
+// tests
+
+bool createListTest(void) {
+    List *list = createList();
+
+    bool test = list != NULL;
+
+    deleteList(&list);
+
+    return test;
+}
+
+bool addValueTest(void) {
+    List *list = createList();
+
+    addValue(list, 1);
+    addValue(list, 2);
+    addValue(list,3);
+
+    bool firstTest = list->head->value == 3;
+    bool secondTest = list->head->next->value == 2;
+    bool thirdTest = list->head->next->next->value == 1;
+
+    deleteList(&list);
+
+    return firstTest && secondTest && thirdTest;
+}
+
+
+bool deleteListTest(void) {
+    List *list = createList();
+
+    addValue(list, 1);
+
+    deleteList(&list);
+
+    return list == NULL;
+}
+
+bool getFirstListElementTest(void) {
+    List *list = createList();
+
+    ListElement *element = getFirstListElement(list);
+
+    bool firstTest = element == NULL;
+
+    addValue(list, 1);
+    addValue(list, 2);
+    addValue(list,3);
+
+    element = getFirstListElement(list);
+
+    bool secondTest = element->value == 3;
+
+    deleteList(&list);
+
+    return firstTest && secondTest;
+}
+
+bool getNextElementTest(void) {
+    List *list = createList();
+
+    ListElement *element = getFirstListElement(list);
+    bool firstTest = element == NULL;
+
+    addValue(list, 1);
+    addValue(list, 2);
+    addValue(list,3);
+
+    element = getFirstListElement(list);
+    bool secondTest = element->value == 3;
+
+    element = getNextElement(element);
+    bool thirdTest = element->value == 2;
+
+    element = getNextElement(element);
+    bool fourthTest = element->value == 1;
+
+    element = getNextElement(element);
+    bool fifthTest = element == NULL;
+
+    deleteList(&list);
+
+    return firstTest && secondTest && thirdTest && fourthTest && fifthTest;
+}
+
+bool getNextElementValueTest(void) {
+    List *list = createList();
+
+    ListElement *element = getFirstListElement(list);
+    bool firstTest = element == NULL;
+
+    addValue(list, 1);
+    addValue(list, 2);
+    addValue(list,3);
+
+    int errorCode = 0;
+
+    element = getFirstListElement(list);
+    bool secondTest = getListElementValue(element, &errorCode) == 3;
+
+    element = getNextElement(element);
+    bool thirdTest = getListElementValue(element, &errorCode) == 2;
+
+    element = getNextElement(element);
+    bool fourthTest = getListElementValue(element, &errorCode) == 1;
+
+
+    deleteList(&list);
+
+    return firstTest && secondTest && thirdTest && fourthTest;
+}
+
+bool listTest(void) {
+    return addValueTest() && getFirstListElementTest() && getNextElementTest()
+        && deleteListTest() && createListTest() && getNextElementValueTest();
 }

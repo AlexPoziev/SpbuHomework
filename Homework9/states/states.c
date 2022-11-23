@@ -14,6 +14,15 @@ typedef struct Cities {
     unsigned int citiesCount;
 } Cities;
 
+// idea:
+// create matrix of roads to cities and states lists
+// matrix: if exists road to city it contains length of it, else - 0
+// if some city contains in state - zero column to this city
+// going through all states and find min way to not stated city
+// add it to state list
+// check for case if no roads to city exists
+// print all states
+
 void freeMatrix(unsigned int **matrix, unsigned int size) {
     for (unsigned int i = 0; i < size; ++i) {
         free(matrix[i]);
@@ -75,6 +84,7 @@ void deleteCities(Cities **roads) {
 // return -1 if no file with fileName
 // return 0 if all is ok
 // return 1 if not enough memory
+// return 2 if not enough data in test file
 int getDataFromFile(char *fileName, Cities *cities, States *states) {
     FILE *file = fopen(fileName, "r");
     if (file == NULL) {
@@ -188,7 +198,9 @@ int divideCities(Cities *cities, States *states) {
         for (unsigned int i = 0; i < states->statesCount; ++i) {
             unsigned int minLength = UINT32_MAX;
             unsigned int minCityNumber = UINT32_MAX;
+
             ListElement *element = getFirstListElement(states->states[i]);
+
             while (element != NULL) {
                 unsigned int value = getListElementValue(element, &errorCode);
                 getMinInLine(cities, value, &minLength, &minCityNumber);
@@ -224,7 +236,9 @@ void printStates(States *states) {
 
     for (int i = 0; i < states->statesCount; ++i) {
         printf("State %u contains cities: ", i + 1);
+
         ListElement *element = getFirstListElement(states->states[i]);
+
         while (element != NULL) {
             printf("%u ", getListElementValue(element, &errorCode) + 1);
             element = getNextElement(element);
