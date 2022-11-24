@@ -4,11 +4,6 @@
 #include <stdlib.h>
 
 int main() {
-    if (!hashTableTest() || !listTest()) {
-        printf("Tests Failed");
-        return 1;
-    }
-
     int errorCode = 0;
     HashTable *table = createHashTable();
     if (table == NULL) {

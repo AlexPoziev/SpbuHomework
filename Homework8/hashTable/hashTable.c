@@ -201,6 +201,33 @@ int hashTableResize(HashTable *hashTable) {
     return 0;
 }
 
+unsigned int getFrequencyByWord(HashTable *table, char *word, int *errorCode) {
+    if (table == NULL || word == NULL) {
+        *errorCode = -1;
+        return 0;
+    }
+
+    unsigned int hashValue = hashFunction(table->hashTableSize, word);
+    ListElement *element = getFirstListElement(table->hashTable[hashValue]);
+    while (element != NULL) {
+        if (!strcmp(word, getElementWord(element))) {
+            return getElementFrequency(element, errorCode);
+        }
+
+        element = getNextListElement(element);
+    }
+
+    return 0;
+}
+
+unsigned int getHashTableSize(HashTable *table) {
+    if (table == NULL) {
+        return 0;
+    }
+
+    return table->hashTableSize;
+}
+
 // =========================tests=========================
 
 bool createHashTableTest(void) {

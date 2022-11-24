@@ -4,6 +4,8 @@
 
 typedef struct List List;
 
+typedef struct ListElement ListElement;
+
 // create list, need to check for NULL
 List* createList(void);
 
@@ -41,3 +43,16 @@ void putList(List *destinationList, List **sourceList);
 // returns word of first list element
 // return NULL if no first element or list doesn't exist
 char* getFirstWord(List* list);
+
+// return string of list element
+char* getElementWord(ListElement *element);
+
+// return frequency value of list element
+// errorCode gets -1 value if NULL element
+unsigned int getElementFrequency(ListElement *element, int *errorCode);
+
+// return pointer to first list element of list
+ListElement* getFirstListElement(List* list);
+
+// return pointer to next list element
+ListElement* getNextListElement(ListElement *element);

@@ -3,14 +3,14 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef struct Node {
+typedef struct ListElement {
     int frequency;
     char *word;
-    struct Node* next;
-} Node;
+    struct ListElement* next;
+} ListElement;
 
 typedef struct List {
-    Node *head;
+    ListElement *head;
 } List;
 
 List* createList(void) {
@@ -20,8 +20,8 @@ List* createList(void) {
     return temp;
 }
 
-Node *createNode(char *word) {
-    Node *newNode = malloc(sizeof(Node));
+ListElement *createNode(char *word) {
+    ListElement *newNode = malloc(sizeof(ListElement));
     if (newNode == NULL) {
         return NULL;
     }
@@ -42,7 +42,7 @@ Node *createNode(char *word) {
 
 int addWord(List *list, char *word) {
     if (list->head == NULL) {
-        Node *newNode = createNode(word);
+        ListElement *newNode = createNode(word);
         if (newNode == NULL) {
             return 1;
         }
@@ -52,7 +52,7 @@ int addWord(List *list, char *word) {
         return 0;
     }
 
-    Node *currentNode = list->head;
+    ListElement *currentNode = list->head;
     bool isSame = true;
 
     while (isSame && currentNode->next != NULL) {
@@ -65,7 +65,7 @@ int addWord(List *list, char *word) {
     }
 
     if (isSame) {
-        Node *newNode = createNode(word);
+        ListElement *newNode = createNode(word);
         if (newNode == NULL) {
             return 1;
         }
@@ -124,7 +124,7 @@ void putList(List *destinationList, List **sourceList) {
         return;
     }
 
-    Node *currentNode = (*sourceList)->head;
+    ListElement *currentNode = (*sourceList)->head;
     while (currentNode->next != NULL) {
         currentNode = currentNode->next;
     }
@@ -144,7 +144,7 @@ int printList(List *list) {
         return 0;
     }
 
-    Node *currentNode = list->head;
+    ListElement *currentNode = list->head;
     int printedCount = 0;
 
     while (currentNode != NULL) {
@@ -161,8 +161,8 @@ void deleteList(List **list) {
         return;
     }
 
-    Node *nextNode = (*list)->head;
-    Node *currentNode = NULL;
+    ListElement *nextNode = (*list)->head;
+    ListElement *currentNode = NULL;
 
     while (nextNode != NULL) {
         currentNode = nextNode;
@@ -182,7 +182,7 @@ unsigned int getListLength(List *list) {
         return 0;
     }
 
-    Node *currentNode = list->head;
+    ListElement *currentNode = list->head;
     unsigned int length = 0;
 
     while (currentNode != NULL) {
@@ -191,6 +191,39 @@ unsigned int getListLength(List *list) {
     }
 
     return length;
+}
+
+ListElement* getFirstListElement(List* list) {
+    if (list == NULL) {
+        return NULL;
+    }
+
+    return list->head;
+}
+
+ListElement* getNextListElement(ListElement *element) {
+    if (element == NULL) {
+        return NULL;
+    }
+
+    return element->next;
+}
+
+char* getElementWord(ListElement *element) {
+    if (element == NULL) {
+        return NULL;
+    }
+
+    return element->word;
+}
+
+unsigned int getElementFrequency(ListElement *element, int *errorCode) {
+    if (element == NULL) {
+        *errorCode = -1;
+        return 0;
+    }
+
+    return element->frequency;
 }
 
 // tests

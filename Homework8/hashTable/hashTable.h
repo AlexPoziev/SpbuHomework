@@ -28,4 +28,8 @@ int getHashTablesListsInfo(HashTable *table, unsigned int *maxLength, double *av
 // delete hashTable and clear memory
 void deleteHashTable(HashTable **table);
 
-bool hashTableTest(void);
+// get frequency from hashTable by word
+unsigned int getFrequencyByWord(HashTable *table, char *word, int *errorCode);
+
+// return hashTable size
+unsigned int getHashTableSize(HashTable *table);
