@@ -23,6 +23,10 @@ Dictionary* createDictionary(void) {
 
 Node* findPosition(Dictionary *dictionary, int token, bool *isEnd) {
     Node *currentNode = dictionary->root;
+    if (currentNode == NULL) {
+        *isEnd = true;
+        return NULL;
+    }
     if (currentNode->token == token) {
         *isEnd = false;
         return currentNode;
@@ -96,6 +100,7 @@ char* getWord(Dictionary *dictionary, int token) {
     if (dictionary == NULL) {
         return NULL;
     }
+
     bool isEnd = false;
     Node *currentNode = findPosition(dictionary, token, &isEnd);
     return isEnd ? NULL : currentNode->word;
@@ -105,6 +110,7 @@ bool isContain(Dictionary *dictionary, int token) {
     if (dictionary == NULL) {
         return false;
     }
+
     bool isEnd = false;
     findPosition(dictionary, token, &isEnd);
 
@@ -135,6 +141,14 @@ int deleteWord(Dictionary *dictionary, int token) {
     }
     // childfree case
     if (currentNode->leftChild == NULL && currentNode->rightChild == NULL) {
+        if (currentNode->parent == NULL) {
+            free(currentNode->word);
+            free(currentNode);
+            dictionary->root = NULL;
+
+            return 0;
+        }
+
         currentNode->parent->token > token
         ? (currentNode->parent->leftChild = NULL)
         : (currentNode->parent->rightChild = NULL);
@@ -148,6 +162,15 @@ int deleteWord(Dictionary *dictionary, int token) {
     if (currentNode->leftChild == NULL || currentNode->rightChild == NULL) {
         Node *temp = currentNode->leftChild == NULL ? currentNode->rightChild : currentNode->leftChild;
         temp->parent = currentNode->parent;
+        if (currentNode->parent == NULL) {
+            dictionary->root = temp;
+            free(currentNode->word);
+            free(currentNode);
+
+            return 0;
+        }
+
+        temp->parent = currentNode->parent;
         currentNode->parent->token > token
         ? (currentNode->parent->leftChild = temp)
         : (currentNode->parent->rightChild = temp);
@@ -158,19 +181,20 @@ int deleteWord(Dictionary *dictionary, int token) {
         return 0;
     }
     // case two children
-    Node *mostRight = getMostRight(currentNode);
-    currentNode->token = mostRight->token;
+    Node *mostLeftRight = getMostRight(currentNode);
+    currentNode->token = mostLeftRight->token;
     free(currentNode->word);
-    currentNode->word = mostRight->word;
-    if (mostRight->leftChild != NULL) {
-        mostRight->leftChild->parent = mostRight->parent;
+    currentNode->word = mostLeftRight->word;
+    if (mostLeftRight->leftChild != NULL) {
+        mostLeftRight->leftChild->parent = mostLeftRight->parent;
     }
-    // case if most right is first right child of current
-    mostRight->parent != currentNode
-    ? (mostRight->parent->rightChild = mostRight->leftChild)
-    : (mostRight->parent->leftChild = mostRight->leftChild);
 
-    free(mostRight);
+    // case if most right is first right child of current
+    mostLeftRight->parent != currentNode
+    ? (mostLeftRight->parent->rightChild = mostLeftRight->leftChild)
+    : (mostLeftRight->parent->leftChild = mostLeftRight->leftChild);
+
+    free(mostLeftRight);
 
     return 0;
 }
