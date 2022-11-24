@@ -22,11 +22,6 @@ int printList(List *list);
 // deallocate list's memory
 void deleteList(List **list);
 
-// test all lists functions
-// returns true if all tests passed
-// returns false if tests didn't pass
-bool listTest(void);
-
 // returns length of list
 unsigned int getListLength(List *list);
 

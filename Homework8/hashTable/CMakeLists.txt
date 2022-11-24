@@ -3,4 +3,4 @@ project(hashTable C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(hashTable main.c list.c list.h hashTable.c hashTable.h hashTableTest.c hashTableTest.h)
+add_executable(hashTable main.c list.c list.h hashTable.c hashTable.h hashTableTest.c hashTableTest.h listTest.c listTest.h)

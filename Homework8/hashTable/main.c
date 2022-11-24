@@ -1,11 +1,11 @@
-#include "list.h"
+#include "listTest.h"
 #include "hashTable.h"
 #include "hashTableTest.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 int main() {
-    if (!hashTableTest()) {
+    if (!hashTableTest() || !listTest()) {
         printf("Tests Failed");
         return 1;
     }
