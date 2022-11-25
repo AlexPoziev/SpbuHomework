@@ -15,10 +15,10 @@ typedef struct PhoneBook{
 int getFileData(const char* fileName, PhoneBook data[], unsigned int *size);
 
 // find phone number by name
-char* findByName(PhoneBook data[], char* name, unsigned int size);
+char* findByName(PhoneBook data[], const char* name, unsigned int size);
 
 // find name by phone number
-char* findByPhoneNumber(PhoneBook data[], char* string, unsigned int size);
+char* findByPhoneNumber(PhoneBook data[], const char* string, unsigned int size);
 
 // print all names and numbers
 void printAllContacts(PhoneBook data[], unsigned int size);

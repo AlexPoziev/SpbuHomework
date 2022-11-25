@@ -27,7 +27,7 @@ int getFileData(const char* fileName, PhoneBook data[], unsigned int *size) {
 
 // return NULL if no corresponding
 // find number/name by name/number in the file
-char* findByName(PhoneBook data[], char* name, unsigned int size) {
+char* findByName(PhoneBook data[], const char* name, unsigned int size) {
     for (int i = 0; i < size; ++i) {
         if (!strcmp(data[i].name, name)) {
             return data[i].phone;
@@ -37,7 +37,7 @@ char* findByName(PhoneBook data[], char* name, unsigned int size) {
     return NULL;
 }
 
-char* findByPhoneNumber(PhoneBook data[], char* phoneNumber, unsigned int size) {
+char* findByPhoneNumber(PhoneBook data[], const char* phoneNumber, unsigned int size) {
     for (int i = 0; i < size; ++i) {
         if (!strcmp(data[i].phone, phoneNumber)) {
             return data[i].name;
