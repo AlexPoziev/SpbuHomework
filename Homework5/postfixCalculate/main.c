@@ -11,7 +11,7 @@ int main() {
 
     char expression[1000] = {0};
 
-    printf("Input postfix expression with length below 1000: ");
+    printf("Input postfix expression with length less than 1000: ");
     fgets(expression, sizeof(expression), stdin);
     
     int errorCode = 0;
