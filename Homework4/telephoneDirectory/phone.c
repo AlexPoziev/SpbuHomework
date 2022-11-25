@@ -1,16 +1,15 @@
 #include "phone.h"
-#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-int getFileData(char* fileName, PhoneBook data[], unsigned int *size) {
+int getFileData(const char* fileName, PhoneBook data[], unsigned int *size) {
     FILE *file = fopen(fileName, "r");
     if (file == NULL) {
         return 1;
     }
 
     *size = 0;
-    while(!feof(file)) {
+    while (!feof(file)) {
         int eofCheck = fscanf(file, "%s", data[*size].name);
         if (eofCheck == EOF) {
             return 0;
@@ -28,13 +27,20 @@ int getFileData(char* fileName, PhoneBook data[], unsigned int *size) {
 
 // return NULL if no corresponding
 // find number/name by name/number in the file
-char* findByString(PhoneBook data[], char* string, unsigned int size) {
+char* findByName(PhoneBook data[], char* name, unsigned int size) {
     for (int i = 0; i < size; ++i) {
-        if (!strcmp(data[i].phone, string)) {
-            return data[i].name;
-        }
-        if (!strcmp(data[i].name, string)) {
+        if (!strcmp(data[i].name, name)) {
             return data[i].phone;
+        }
+    }
+
+    return NULL;
+}
+
+char* findByPhoneNumber(PhoneBook data[], char* phoneNumber, unsigned int size) {
+    for (int i = 0; i < size; ++i) {
+        if (!strcmp(data[i].phone, phoneNumber)) {
+            return data[i].name;
         }
     }
 
@@ -49,7 +55,7 @@ void printAllContacts(PhoneBook data[], unsigned int size) {
 }
 
 // print all inserted contacts to file
-void saveContacts(char *fileName, PhoneBook data[], unsigned int size) {
+void saveContacts(const char *fileName, PhoneBook data[], unsigned int size) {
     FILE *file = fopen(fileName, "w");
 
     for (int i = 0; i < size - 1; ++i) {
@@ -80,8 +86,8 @@ bool findByStringTest(void) {
     unsigned int size = 1;
     getFileData("test.txt", data, &size);
 
-    bool firstTest = !strcmp("014-554-3", findByString(data, "Paradox", size));
-    bool secondTest = !strcmp("Paradox", findByString(data, "014-554-3", size));
+    bool firstTest = !strcmp("014-554-3", findByName(data, "Paradox", size));
+    bool secondTest = !strcmp("Paradox", findByPhoneNumber(data, "014-554-3", size));
 
     return firstTest && secondTest;
 }

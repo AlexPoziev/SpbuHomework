@@ -9,7 +9,7 @@ int main() {
         return 1;
     }
 
-    char *mainFile = "telephoneNumbers.txt";
+    const char *mainFile = "telephoneNumbers.txt";
 
     // check on file exist, if it doesn't, creates it
     FILE *file = fopen(mainFile, "r");
@@ -61,13 +61,13 @@ int main() {
                 char name[MAX_CONTACT_SIZE] = {0};
                 scanf("%s", name);
 
-                char *answer = findByString(data, name, inputUse);
+                char *answer = findByName(data, name, inputUse);
                 if (answer == NULL) {
                     printf("No contact with this name\n");
                     continue;
                 }
 
-                printf("Name: %s \n", findByString(data, name, inputUse));
+                printf("Name: %s \n", answer);
 
                 continue;
             }
@@ -76,7 +76,7 @@ int main() {
                 char phone[MAX_CONTACT_SIZE] = {0};
                 scanf("%s", phone);
 
-                char *answer = findByString(data, phone, inputUse);
+                char *answer = findByPhoneNumber(data, phone, inputUse);
                 if (answer == NULL) {
                     printf("No contact with this phone number\n");
                     continue;

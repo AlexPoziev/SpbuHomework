@@ -12,16 +12,19 @@ typedef struct PhoneBook{
 // put contacts from file to array
 // return 0 is all is ok
 // return 1 if no file with that name
-int getFileData(char* fileName, PhoneBook data[], unsigned int *size);
+int getFileData(const char* fileName, PhoneBook data[], unsigned int *size);
 
-// find number/name by name/number in the file
-char* findByString(PhoneBook data[], char* string, unsigned int size);
+// find phone number by name
+char* findByName(PhoneBook data[], char* name, unsigned int size);
+
+// find name by phone number
+char* findByPhoneNumber(PhoneBook data[], char* string, unsigned int size);
 
 // print all names and numbers
 void printAllContacts(PhoneBook data[], unsigned int size);
 
 // save all names and phone numbers to file
-void saveContacts(char *fileName, PhoneBook data[], unsigned int size);
+void saveContacts(const char *fileName, PhoneBook data[], unsigned int size);
 
 // correct test
 bool correctTests(void);
