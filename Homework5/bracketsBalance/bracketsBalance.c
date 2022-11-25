@@ -21,9 +21,8 @@ bool bracketsBalance(char *string, unsigned long size, int *errorCode) {
             //get last value } ] )
             int value = popInt(&head, errorCode);
             //if stack empty and close bracket its false
-            if (*errorCode == -1 ||
-            !((value == '(' && string[i] == ')') || (value == '[' && string[i] == ']')
-            || (value == '{' && string[i] == '}'))) {
+            if (*errorCode == -1 || !((value == '(' && string[i] == ')')
+                || (value == '[' && string[i] == ']') || (value == '{' && string[i] == '}'))) {
                 clearIntStack(&head);
                 return false;
             }
