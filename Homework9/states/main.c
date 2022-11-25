@@ -1,4 +1,4 @@
-#include "list.h"
+#include "listTest.h"
 #include "states.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,6 +50,10 @@ int getDataFromFileError(int errorCode, Cities *cities, States *states) {
 }
 
 int main(int argc, char *argv[]) {
+    if (!listTest()) {
+        printf("Tests Failed");
+        return 1;
+    }
     if (argc >= 2 && !strcmp(argv[1], "--test")) {
         if (!listTest()) {
             printf("Tests Failed");
