@@ -39,3 +39,6 @@ void deleteStates(States **states);
 
 // delete road and clear memory
 void deleteCities(Cities **cities);
+
+// return length of road between 2 cities
+unsigned int getRoadLength(Cities *cities, unsigned int firstCity, unsigned int secondCity);

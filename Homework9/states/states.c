@@ -241,6 +241,15 @@ int divideCities(Cities *cities, States *states) {
     return 0;
 }
 
+unsigned int getRoadLength(Cities *cities, unsigned int firstCity, unsigned int secondCity) {
+    if (firstCity > cities->citiesCount || secondCity > cities->citiesCount ||
+        firstCity < cities->citiesCount || secondCity < cities->citiesCount) {
+        return 0;
+    }
+
+    return cities->roads[firstCity][secondCity];
+}
+
 void printStates(States *states) {
     if (states == NULL || states->states == NULL) {
         return;
@@ -260,54 +269,4 @@ void printStates(States *states) {
 
         printf("\n");
     }
-}
-
-// tests
-
-bool createStatesTest(void) {
-    States *states = createStates();
-
-    bool test = states != NULL;
-
-    deleteStates(&states);
-
-    return test;
-}
-
-bool createCitiesTest(void) {
-    Cities *cities = createCities();
-
-    bool test = cities != NULL;
-
-    deleteCities(&cities);
-
-    return test;
-}
-
-bool deleteStatesTest(void) {
-    States *states = createStates();
-
-    bool firstTest = states != NULL;
-
-    deleteStates(&states);
-
-    bool secondTest = states == NULL;
-
-    return firstTest && secondTest;
-}
-
-bool deleteCitiesTest(void) {
-    Cities *cities = createCities();
-
-    bool firstTest = cities != NULL;
-
-    deleteCities(&cities);
-
-    bool secondTest = cities == NULL;
-
-    return firstTest && secondTest;
-}
-
-bool getDataFromFileTest(void) {
-
 }

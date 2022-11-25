@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
         printf("Tests Failed");
         return 1;
     }
+
     if (argc >= 2 && !strcmp(argv[1], "--test")) {
         if (!listTest()) {
             printf("Tests Failed");
