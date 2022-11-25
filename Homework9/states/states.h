@@ -19,8 +19,10 @@ Cities* createCities(void);
 // get data from file and create roads between cities and create states with only capitals
 // return 2 if not enough data in the file
 // return 1 if not enough memory
-// return -1 if no file with this name
 // return 0 if all is ok
+// return -1 if no file with this name
+// return -2 if city has number more than cities count
+// return -3 if states count more than cities count
 int getDataFromFile(char *fileName, Cities *cities, States *states);
 
 // divide cities between states
@@ -36,4 +38,4 @@ void printStates(States *states);
 void deleteStates(States **states);
 
 // delete road and clear memory
-void deleteCities(Cities **roads);
+void deleteCities(Cities **cities);

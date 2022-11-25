@@ -71,14 +71,14 @@ void deleteStates(States **states) {
 }
 
 // delete road and clear memory
-void deleteCities(Cities **roads) {
-    if (roads == NULL || *roads == NULL) {
+void deleteCities(Cities **cities) {
+    if (cities == NULL || *cities == NULL) {
         return;
     }
-    freeMatrix((*roads)->roads, (*roads)->citiesCount);
+    freeMatrix((*cities)->roads, (*cities)->citiesCount);
 
-    free(*roads);
-    *roads = NULL;
+    free(*cities);
+    *cities = NULL;
 }
 
 // return -1 if no file with fileName
@@ -114,7 +114,11 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
         eofCheck = fscanf(file, "%u %u %u", &firstCity, &secondCity, &roadLength);
         if (eofCheck == EOF) {
             fclose(file);
+            return 2;
+        }
 
+        if (firstCity > cities->citiesCount || secondCity > cities->citiesCount) {
+            fclose(file);
             return 2;
         }
 
@@ -124,8 +128,13 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
     eofCheck = fscanf(file, "%u", &states->statesCount);
     if (eofCheck == EOF) {
         fclose(file);
-
         return 2;
+    }
+
+    if (states->statesCount > cities->citiesCount) {
+        fclose(file) ;
+        return -3;
+
     }
 
     states->states = calloc(states->statesCount, sizeof(List*));
@@ -140,6 +149,11 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
         if (eofCheck == EOF) {
             fclose(file);
             return 2;
+        }
+
+        if (capital > cities->citiesCount) {
+            fclose(file);
+            return -2;
         }
 
         eofCheck = fgetc(file);
@@ -246,4 +260,54 @@ void printStates(States *states) {
 
         printf("\n");
     }
+}
+
+// tests
+
+bool createStatesTest(void) {
+    States *states = createStates();
+
+    bool test = states != NULL;
+
+    deleteStates(&states);
+
+    return test;
+}
+
+bool createCitiesTest(void) {
+    Cities *cities = createCities();
+
+    bool test = cities != NULL;
+
+    deleteCities(&cities);
+
+    return test;
+}
+
+bool deleteStatesTest(void) {
+    States *states = createStates();
+
+    bool firstTest = states != NULL;
+
+    deleteStates(&states);
+
+    bool secondTest = states == NULL;
+
+    return firstTest && secondTest;
+}
+
+bool deleteCitiesTest(void) {
+    Cities *cities = createCities();
+
+    bool firstTest = cities != NULL;
+
+    deleteCities(&cities);
+
+    bool secondTest = cities == NULL;
+
+    return firstTest && secondTest;
+}
+
+bool getDataFromFileTest(void) {
+
 }

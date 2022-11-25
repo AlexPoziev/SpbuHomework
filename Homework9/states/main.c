@@ -4,6 +4,51 @@
 #include <stdlib.h>
 #include <string.h>
 
+// return 0 if all is ok and need to continue programs work
+// return not 0 if catch error, need to return 
+int getDataFromFileError(int errorCode, Cities *cities, States *states) {
+    switch (errorCode) {
+        case 0: {
+            return 0;
+        }
+        case -3: {
+            printf("States count more than cities count");
+            deleteCities(&cities);
+            deleteStates(&states);
+            return -1;
+        }
+        case -2: {
+            printf("City has number more than cities count");
+            deleteCities(&cities);
+            deleteStates(&states);
+            return -1;
+        }
+        case -1: {
+            printf("No file with this name");
+            deleteCities(&cities);
+            deleteStates(&states);
+            return -1;
+        }
+        case 1: {
+            printf("Not enough memory");
+            deleteCities(&cities);
+            deleteStates(&states);
+            return 1;
+        }
+        case 2: {
+            printf("Not enough data in the file");
+            deleteCities(&cities);
+            deleteStates(&states);
+            return -1;
+        }
+        default: {
+            deleteCities(&cities);
+            deleteStates(&states);
+            return -1;
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     if (argc >= 2 && !strcmp(argv[1], "--test")) {
         if (!listTest()) {
@@ -15,6 +60,7 @@ int main(int argc, char *argv[]) {
 
         return 0;
     }
+
     Cities *cities = createCities();
     if (cities == NULL) {
         printf("Not enough memory");
@@ -33,32 +79,14 @@ int main(int argc, char *argv[]) {
     char fileName[20] = {0};
     scanf("%s", fileName);
 
-    int errorCode = getDataFromFile(fileName, cities, states);
-    if (errorCode == 2) {
-        printf("Not enough data in the file");
-        deleteCities(&cities);
-        deleteStates(&states);
-
-        return 0;
-    }
-    if (errorCode == 1) {
-        printf("Not enough memory");
-        deleteCities(&cities);
-        deleteStates(&states);
-
-        return 1;
-    }
-    if (errorCode == -1) {
-        printf("File with this name doesn't exist");
-        deleteCities(&cities);
-        deleteStates(&states);
-
-        return 0;
+    int errorCode = getDataFromFileError(getDataFromFile(fileName, cities, states), cities, states);
+    if (errorCode != 0) {
+        return errorCode;
     }
 
     errorCode = divideCities(cities, states);
     if (errorCode == -1) {
-        printf("Some city doesn't has any roads to it");
+        printf("Some city doesn't has roads");
         deleteCities(&cities);
         deleteStates(&states);
 
