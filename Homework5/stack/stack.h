@@ -6,13 +6,13 @@
 typedef struct IntStack {
     int value;
     struct IntStack *next;
-}IntStack;
+} IntStack;
 
 //double stack struct
 typedef struct DoubleStack {
     double value;
     struct DoubleStack *next;
-}DoubleStack;
+} DoubleStack;
 
 // add value to stack
 // returns 1 if not enough memory
