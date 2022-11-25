@@ -3,6 +3,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+bool isBracket(const char *string, int i);
+
+bool isBracket(const char *string, int i) {
+    return string[i] == '{' || string[i] == '(' || string[i] == '[';
+}
+
 bool bracketsBalance(char *string, unsigned long size, int *errorCode) {
     if (size == 0) {
         return true;
@@ -11,7 +17,7 @@ bool bracketsBalance(char *string, unsigned long size, int *errorCode) {
     IntStack *head = NULL;
 
     for (int i = 0; i < size; ++i) {
-        if (string[i] == '{' || string[i] == '(' || string[i] == '[') {
+        if (isBracket(string, i)) {
             *errorCode = pushInt(&head, string[i]);
             if (*errorCode) {
                 clearIntStack(&head);
@@ -29,12 +35,10 @@ bool bracketsBalance(char *string, unsigned long size, int *errorCode) {
         }
     }
 
-    if (isIntEmpty(head)) {
-        return true;
-    } else {
-        clearIntStack(&head);
-        return false;
-    }
+    bool tempIsEmpty = isIntEmpty(head);
+    clearIntStack(&head);
+
+    return tempIsEmpty;
 }
 
 bool correctTest(void) {
