@@ -2,7 +2,6 @@
 
 #include "list.h"
 #include "listTest.h"
-#include <stdlib.h>
 #include <string.h>
 
 bool createListTest(void) {

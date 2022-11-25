@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include <stdbool.h>
 
@@ -40,5 +40,10 @@ void deleteStates(States **states);
 // delete road and clear memory
 void deleteCities(Cities **cities);
 
-// return length of road between 2 cities
+// return length of road between two cities
 unsigned int getRoadLength(Cities *cities, unsigned int firstCity, unsigned int secondCity);
+
+// get number of nth state state's city
+unsigned int getStateCityNumber(States *states, unsigned int stateNumber, unsigned int stateCityNumber);
+
+

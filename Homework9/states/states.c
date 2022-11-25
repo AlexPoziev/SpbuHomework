@@ -81,6 +81,55 @@ void deleteCities(Cities **cities) {
     *cities = NULL;
 }
 
+
+
+int readToMatrix(FILE *file, Cities *cities, unsigned roadsNumber) {
+    for (int i = 0; i < roadsNumber; ++i) {
+        unsigned int firstCity = 0;
+
+        int eofCheck = fscanf(file, "%u", &firstCity);
+        if (eofCheck == EOF || eofCheck == 0) {
+            fclose(file);
+            return 2;
+        }
+
+        eofCheck = fgetc(file);
+        if (eofCheck == EOF) {
+            fclose(file);
+            return 2;
+        }
+
+        unsigned int secondCity = 0;
+        eofCheck = fscanf(file, "%u", &secondCity);
+        if (eofCheck == EOF || eofCheck == 0) {
+            fclose(file);
+            return 2;
+        }
+
+        eofCheck = fgetc(file);
+        if (eofCheck == EOF) {
+            fclose(file);
+            return 2;
+        }
+
+        unsigned int roadLength = 0;
+        eofCheck = fscanf(file, "%u", &roadLength);
+        if (eofCheck == EOF || eofCheck == 0) {
+            fclose(file);
+            return 2;
+        }
+
+        if (firstCity > cities->citiesCount || secondCity > cities->citiesCount) {
+            fclose(file);
+            return 2;
+        }
+
+        cities->roads[firstCity - 1][secondCity - 1] = roadLength;
+    }
+
+    return 0;
+}
+
 // return -1 if no file with fileName
 // return 0 if all is ok
 // return 1 if not enough memory
@@ -106,27 +155,13 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
     }
 
     // get roads into the matrix
-    for (int i = 0; i < roadsNumber; ++i) {
-        unsigned int firstCity = 0;
-        unsigned int secondCity = 0;
-        unsigned int roadLength = 0;
-
-        eofCheck = fscanf(file, "%u %u %u", &firstCity, &secondCity, &roadLength);
-        if (eofCheck == EOF) {
-            fclose(file);
-            return 2;
-        }
-
-        if (firstCity > cities->citiesCount || secondCity > cities->citiesCount) {
-            fclose(file);
-            return 2;
-        }
-
-        cities->roads[firstCity - 1][secondCity - 1] = roadLength;
+    eofCheck = readToMatrix(file, cities, roadsNumber);
+    if (eofCheck == 2) {
+        return 2;
     }
 
     eofCheck = fscanf(file, "%u", &states->statesCount);
-    if (eofCheck == EOF) {
+    if (eofCheck == EOF || eofCheck == 0) {
         fclose(file);
         return 2;
     }
@@ -134,7 +169,6 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
     if (states->statesCount > cities->citiesCount) {
         fclose(file) ;
         return -3;
-
     }
 
     states->states = calloc(states->statesCount, sizeof(List*));
@@ -146,7 +180,7 @@ int getDataFromFile(char *fileName, Cities *cities, States *states) {
     for (int i = 0; i < states->statesCount; ++i) {
         unsigned int capital = 0;
         eofCheck = fscanf(file, "%u", &capital);
-        if (eofCheck == EOF) {
+        if (eofCheck == EOF || eofCheck == 0) {
             fclose(file);
             return 2;
         }
@@ -193,6 +227,25 @@ void getMinInLine(Cities *cities, unsigned value, unsigned *minLength, unsigned 
             *minCityNumber = i;
         }
     }
+}
+
+unsigned int getStateCityNumber(States *states, unsigned int stateNumber, unsigned int stateCityNumber) {
+    if (states == NULL || stateNumber > states->statesCount) {
+        return 0;
+    }
+
+    ListElement *element = getFirstListElement(states->states[stateNumber - 1]);
+    for (int i = 0; i < stateCityNumber - 1; ++i) {
+        if (element == NULL) {
+            return 0;
+        }
+
+        element = getNextElement(element);
+    }
+
+    int errorCode = 0;
+
+    return getListElementValue(element, &errorCode) + 1;
 }
 
 int divideCities(Cities *cities, States *states) {
@@ -242,12 +295,11 @@ int divideCities(Cities *cities, States *states) {
 }
 
 unsigned int getRoadLength(Cities *cities, unsigned int firstCity, unsigned int secondCity) {
-    if (firstCity > cities->citiesCount || secondCity > cities->citiesCount ||
-        firstCity < cities->citiesCount || secondCity < cities->citiesCount) {
+    if (firstCity > cities->citiesCount || secondCity > cities->citiesCount) {
         return 0;
     }
 
-    return cities->roads[firstCity][secondCity];
+    return cities->roads[firstCity - 1][secondCity - 1];
 }
 
 void printStates(States *states) {

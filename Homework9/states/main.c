@@ -1,5 +1,8 @@
 #include "listTest.h"
 #include "states.h"
+#include "statesTest.h"
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,7 +53,7 @@ int getDataFromFileError(int errorCode, Cities *cities, States *states) {
 }
 
 int main(int argc, char *argv[]) {
-    if (!listTest()) {
+    if (!listTest() || !statesTest()) {
         printf("Tests Failed");
         return 1;
     }
@@ -97,6 +100,8 @@ int main(int argc, char *argv[]) {
 
         return 0;
     }
+
+    unsigned test = getStateCityNumber(states, 1, 3);
 
     printStates(states);
 
