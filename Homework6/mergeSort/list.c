@@ -107,6 +107,7 @@ int getFromFile(char* fileName, List* list) {
             return errorCode;
         }
 
+        temp = temp->next;
         temp->next = NULL;
         previousNode->next = temp;
         previousNode = temp;
@@ -121,7 +122,7 @@ void cutList(ListElement* element) {
     element->next = NULL;
 }
 
-ListElement* getFirstPosition(List *list) {
+ListElement* getFirstListElement(List *list) {
     if (list == NULL) {
         return NULL;
     }
@@ -249,6 +250,6 @@ void deleteListMemory(List **list) {
     *list = NULL;
 }
 
-bool isPositionNull(ListElement *element) {
+bool isListElementNull(ListElement* element){
     return element == NULL;
 }

@@ -30,7 +30,7 @@ int getFromFile(char* fileName, List* list);
 void printList (List *list);
 
 // change input pointer to the first position of list \/
-ListElement* getFirstPosition(List *list);
+ListElement* getFirstListElement(List *list);
 
 // get position of next list element. If next doesn't exist, return NULL \/
 ListElement* getNextListElement(ListElement *element);

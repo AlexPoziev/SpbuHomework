@@ -2,10 +2,11 @@
 #include "list.h"
 #include "mergeSort.h"
 #include "listTest.h"
+#include "mergeSortTest.h"
 
 int main() {
-    if (!fullTest() || mergeSortTest()) {
-        printf("Test Failed");
+    if (!fullTest() || !mergeSortTest()) {
+        printf("Tests Failed");
         return 1;
     }
 
@@ -18,8 +19,7 @@ int main() {
     char fileName[25] = {0};
     scanf("%s", fileName);
 
-    FILE *file = NULL;
-    int errorCode = getFromFile(file, fileName, list);
+    int errorCode = getFromFile(fileName,  list);
     if (errorCode == -2) {
         printf("file with this name doesn't exist");
         return 0;
@@ -31,17 +31,22 @@ int main() {
     }
     if (errorCode == -1) {
         printf("No corresponding phone number or name in file");
+        deleteList(&list, true);
         return 0;
     }
 
-    printf("1 - name\n2 - phone number\nPlease choose sort data (if incorrect sign - sorts by name): ");
+    printf("1 - name"
+           "\n2 - phone number"
+           "\nPlease choose sort data (if incorrect sign - sorts by name): ");
     int chose = 0;
     scanf("%d", &chose);
     Priority priority = chose == 2 ? phoneNumber : name;
     printf("Sorted list: \n");
 
-    list = sort(list, priority);
-    if (list == NULL) {
+    errorCode = 0;
+    list = sort(list, priority, &errorCode);
+    if (list == NULL || errorCode) {
+        deleteList(&list, true);
         printf("Not enough memory");
         return 1;
     }
