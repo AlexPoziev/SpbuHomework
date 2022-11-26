@@ -138,28 +138,21 @@ ListElement* lastPosition(List *list) {
     return temp;
 }
 
-int insert(List *list, Position *position) {
+int insert(List *list, ListElement *element) {
     if (list == NULL) {
         return -1;
     }
 
     if (list->head == NULL) {
-        ListElement *temp = malloc(sizeof(ListElement));
-        if (temp == NULL) {
-            return 1;
-        }
-        temp->contact = position->position->contact;
-        temp->next = NULL;
-        list->head = temp;
+        list->head = element;
+        list->head->next = NULL;
 
         return 0;
     }
 
-    ListElement *temp = malloc(sizeof(ListElement));
-    temp->contact = position->position->contact;
-    temp->next = NULL;
     ListElement *lastElement = lastPosition(list);
-    lastElement->next = temp;
+    lastElement->next = element;
+    element->next = NULL;
 
     return 0;
 }
@@ -169,71 +162,63 @@ void putHead(List *list, char *name, char *phoneNumber) {
     if (temp == NULL) {
         return;
     }
-    temp->contact = malloc(sizeof(Contact));
 
-    if (temp->contact == NULL) {
-        return;
-    }
-    temp->contact->name = name;
-    temp->contact->phoneNumber = phoneNumber;
-    if (list->head == NULL) {
-        temp->next = NULL;
-        list->head = temp;
-
-        return;
-    }
+    temp->name = name;
+    temp->phoneNumber = phoneNumber;
 
     temp->next = list->head;
     list->head = temp;
 }
 
-void getNextPosition(Position *position) {
-    if (position->position == NULL) {
-        return;
+ListElement* getNextListElement(ListElement *element) {
+    if (element == NULL) {
+        return NULL;
     }
 
-    position->position = position->position->next;
+    return element->next;
 }
 
-char* getPositionValue(Position *position, Priority priority, int *errorCode) {
-    if (position == NULL) {
-        *errorCode = -1;
+char* getListElementValue(ListElement *element, Priority priority) {
+    if (element == NULL) {
         return NULL;
     }
 
     return priority == phoneNumber
-    ? position->position->contact->phoneNumber
-    : position->position->contact->name;
+    ? element->phoneNumber
+    : element->name;
 }
 
-void getMiddlePosition(List *list, Position *position) {
-    if (list->head != NULL) {
-        ListElement *smallStep = list->head;
-        ListElement *largeStep = list->head;
-        while (largeStep != NULL && largeStep->next != NULL) {
-            largeStep = largeStep->next->next;
-            smallStep = smallStep->next;
-        }
-        position->position = smallStep;
+ListElement* getMiddleListElement(List *list) {
+    if (list == NULL || list->head == NULL) {
+        return NULL;
     }
+
+    ListElement *smallStep = list->head;
+    ListElement *largeStep = list->head;
+    while (largeStep != NULL && largeStep->next != NULL) {
+        largeStep = largeStep->next->next;
+        smallStep = smallStep->next;
+    }
+
+    return smallStep;
 }
 
-bool isEnd(Position *position) {
-    if (position == NULL) {
+bool isEnd(ListElement *element) {
+    if (element == NULL) {
         return true;
     }
 
-    return position->position->next == NULL;
+    return element->next == NULL;
 }
 
-void printList (List *list) {
+void printList(List *list) {
     if (list == NULL) {
         return;
     }
 
     ListElement *temp = list->head;
     while (temp != NULL) {
-        printf("%s %s \n", temp->contact->name, temp->contact->phoneNumber);
+        printf("%s %s \n", temp->name, temp->phoneNumber);
         temp = temp->next;
     }
 }
@@ -243,25 +228,20 @@ void deleteList(List **list, bool isAllocated) {
         free(*list);
         return;
     }
+
     ListElement *temp = (*list)->head;
     while (temp != NULL) {
         (*list)->head = (*list)->head->next;
-        if (temp->contact != NULL) {
-            if (isAllocated) {
-                free(temp->contact->phoneNumber);
-                free(temp->contact->name);
-            }
-            free(temp->contact);
+        if (isAllocated) {
+            free(temp->phoneNumber);
+            free(temp->name);
         }
+
         temp = (*list)->head;
     }
+
     free(*list);
     *list = NULL;
-}
-
-void deletePosition(Position **position) {
-    free(*position);
-    *position = NULL;
 }
 
 void deleteListMemory(List **list) {
@@ -269,6 +249,6 @@ void deleteListMemory(List **list) {
     *list = NULL;
 }
 
-bool isPositionNull(Position *position) {
-    return position->position == NULL;
+bool isPositionNull(ListElement *element) {
+    return element == NULL;
 }

@@ -18,10 +18,7 @@ typedef enum Priority {
 List* createList(void);
 
 // create list with started position \/
-List* createPositionList(Position *position);
-
-// create Position, need to check ton NULL pointer \/
-Position* createPosition(void);
+List* createListByElement(ListElement *element);
 
 // get data from file and put it into the list
 // return 1 if not enough memory
@@ -36,13 +33,13 @@ void printList (List *list);
 ListElement* getFirstPosition(List *list);
 
 // get position of next list element. If next doesn't exist, return NULL \/
-void getNextPosition(Position *position);
+ListElement* getNextListElement(ListElement *element);
 
-// get position of middle element of list \/
-void getMiddlePosition(List *list, Position *position);
+// get middle element of list \/
+ListElement* getMiddleListElement(List *list);
 
-// get value by Position \/
-char* getPositionValue(Position *position, Priority priority, int *errorCode);
+// get value of list element \/
+char* getListElementValue(ListElement *element, Priority priority);
 
 // cut list by position \/
 void cutList(ListElement *element);
@@ -50,20 +47,17 @@ void cutList(ListElement *element);
 // put to head
 void putHead(List *list, char *name, char *phoneNumber);
 
-// check is Position end of list \/
-bool isEnd(Position *position);
+// check is element end of list \/
+bool isEnd(ListElement *element);
 
 // insert value by list element to end of list. Return -1 if list doesn't exist \/
 int insert(List *list, ListElement *element);
 
-// delete Position \/
-void deletePosition(Position **position);
-
-// clear memory only to list struct
+// clear memory list struct
 void deleteListMemory(List **list);
 
 // delete List, second parameter if got 1 - free memory for pointers of contacts, else doesn't \/
 void deleteList(List **list, bool isAllocated);
 
-// check is pointer to element NULL
-bool isPositionNull(Position *position);
+// check is element NULL
+bool isListElementNull(ListElement* element);
