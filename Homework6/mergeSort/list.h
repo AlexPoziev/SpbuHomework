@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 // pointer to list element
-typedef struct Position Position;
+typedef struct ListElement ListElement;
 
 typedef struct List List;
 
@@ -27,13 +27,13 @@ Position* createPosition(void);
 // return 1 if not enough memory
 // return -1 if no corresponding phone number or name
 // return -2 if file with fileName value doesn't exist\/
-int getFromFile(FILE* file, char* fileName, List* list);
+int getFromFile(char* fileName, List* list);
 
 // print list \/
 void printList (List *list);
 
 // change input pointer to the first position of list \/
-void getFirstPosition(List *list, Position *position);
+ListElement* getFirstPosition(List *list);
 
 // get position of next list element. If next doesn't exist, return NULL \/
 void getNextPosition(Position *position);
@@ -45,7 +45,7 @@ void getMiddlePosition(List *list, Position *position);
 char* getPositionValue(Position *position, Priority priority, int *errorCode);
 
 // cut list by position \/
-void cutList(Position *position);
+void cutList(ListElement *element);
 
 // put to head
 void putHead(List *list, char *name, char *phoneNumber);
@@ -53,8 +53,8 @@ void putHead(List *list, char *name, char *phoneNumber);
 // check is Position end of list \/
 bool isEnd(Position *position);
 
-// insert value by position pointer to end of list. Return -1 if list doesn't exist \/
-int insert(List *list, Position *position);
+// insert value by list element to end of list. Return -1 if list doesn't exist \/
+int insert(List *list, ListElement *element);
 
 // delete Position \/
 void deletePosition(Position **position);

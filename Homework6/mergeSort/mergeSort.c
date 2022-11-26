@@ -23,6 +23,7 @@ List* merge(List *firstOne, List *secondOne, Priority priority) {
                 deleteListMemory(&secondOne);
                 return NULL;
             }
+
             getNextPosition(firstPiece);
         } else {
             errorCode = insert(temp, secondPiece);
@@ -33,6 +34,7 @@ List* merge(List *firstOne, List *secondOne, Priority priority) {
                 deleteListMemory(&secondOne);
                 return NULL;
             }
+
             getNextPosition(secondPiece);
         }
     }
@@ -47,8 +49,10 @@ List* merge(List *firstOne, List *secondOne, Priority priority) {
             deleteListMemory(&secondOne);
             return NULL;
         }
+
         getNextPosition(firstPiece);
     }
+
     while (!isPositionNull(secondPiece)) {
         errorCode = insert(temp, secondPiece);
         if (errorCode) {
@@ -58,6 +62,7 @@ List* merge(List *firstOne, List *secondOne, Priority priority) {
             deleteListMemory(&secondOne);
             return NULL;
         }
+
         getNextPosition(secondPiece);
     }
 
@@ -75,12 +80,14 @@ List* sort(List* head, Priority priority) {
     if (head == NULL) {
         return NULL;
     }
+
     Position *first = createPosition();
     getFirstPosition(head, first);
     if (isEnd(first)) {
         deletePosition(&first);
         return head;
     }
+
     deletePosition(&first);
 
     // create position on middle of list

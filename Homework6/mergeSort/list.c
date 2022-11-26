@@ -3,23 +3,15 @@
 
 #define MAX_SIZE 20
 
-typedef struct Contact {
+typedef struct ListElement {
     char* name;
     char* phoneNumber;
-} Contact;
-
-typedef struct Node {
-    Contact *contact;
-    struct Node *next;
-} Node;
+    struct ListElement *next;
+} ListElement;
 
 typedef struct List {
-    Node *head;
+    ListElement *head;
 } List;
-
-typedef struct Position {
-    Node *position;
-} Position;
 
 List* createList(void) {
     List *temp = malloc(sizeof(List));
@@ -28,119 +20,91 @@ List* createList(void) {
     return temp;
 }
 
-Position* createPosition(void) {
-    Position *temp = malloc(sizeof(Position));
-    temp->position = NULL;
-
-    return temp;
-}
-
-List* createPositionList(Position *position) {
+List* createListByElement(ListElement *element) {
     List *temp = malloc(sizeof(List));
-    temp->head = position->position;
+    temp->head = element;
+
     return temp;
 }
 
-int getFromFile(FILE* file, char* fileName, List* list) {
-    file = fopen(fileName, "r");
-    if (feof(file)) {
-        fclose(file);
+ListElement* getElementFromFile(FILE *file, int *errorCode) {
+    ListElement *temp = malloc(sizeof(ListElement));
+    if (temp == NULL) {
+        *errorCode = 1;
+        return NULL;
+    }
+
+    temp->name = calloc(MAX_SIZE, sizeof(char));
+    if (temp->name == NULL) {
+        free(temp);
+        *errorCode = 1;
+
+        return NULL;
+    }
+
+    int eofCheck = fscanf(file, "%s",  temp->name);
+    if (eofCheck == EOF) {
+        free(temp->name);
+        free(temp);
+        *errorCode = -1;
+
+        return NULL;
+    }
+
+    eofCheck = fgetc(file);
+    if (eofCheck == EOF) {
+        free(temp->name);
+        free(temp);
+        *errorCode = -1;
+
+        return NULL;
+    }
+
+    temp->phoneNumber = calloc(MAX_SIZE, sizeof(char));
+    if (temp->phoneNumber == NULL) {
+        free(temp->name);
+        free(temp);
+        *errorCode = 1;
+
+        return NULL;
+    }
+
+    eofCheck = fscanf(file, "%[^\n]",  temp->phoneNumber);
+    if (eofCheck == EOF) {
+        free(temp->phoneNumber);
+        free(temp->name);
+        free(temp);
+        *errorCode = -1;
+
+        return NULL;
+    }
+
+    return temp;
+}
+
+int getFromFile(char* fileName, List* list) {
+    FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
         return -2;
     }
 
-    Node *temp = malloc(sizeof(Node));
-    if (temp == NULL) {
-        return 1;
-    }
+    int errorCode = 0;
 
-    temp->contact = malloc(sizeof(Contact));
-    if (temp->contact == NULL) {
-        free(temp);
-        return 1;
-    }
-    temp->contact->name = calloc(MAX_SIZE, sizeof(char));
-    if (temp->contact->name == NULL) {
-        free(temp->contact);
-        free(temp);
-
-        return 1;
-    }
-    int eofCheck = fscanf(file, "%s",  temp->contact->name);
-    if (eofCheck == EOF) {
-        free(temp->contact->name);
-        free(temp->contact);
-        free(temp);
-
-        return -1;
-    }
-
-    fgetc(file);
-    temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
-    if (temp->contact->phoneNumber == NULL) {
-        free(temp->contact->name);
-        free(temp->contact);
-        free(temp);
-
-        return 1;
-    }
-    eofCheck = fscanf(file, "%[^\n]",  temp->contact->phoneNumber);
-    if (eofCheck == EOF) {
-        free(temp->contact->phoneNumber);
-        free(temp->contact->name);
-        free(temp->contact);
-        free(temp);
-
-        return -1;
+    ListElement* temp = getElementFromFile(file, &errorCode);
+    if (errorCode) {
+        fclose(file);
+        return errorCode;
     }
 
     list->head = temp;
     list->head->next = NULL;
-    Node *previousNode = list->head;
+    ListElement *previousNode = list->head;
 
     while (!feof(file)) {
-        temp = temp->next;
-        temp = malloc(sizeof(Node));
-        if (temp == NULL) {
-            return 1;
-        }
-        temp->contact = malloc(sizeof(Contact));
-        if (temp->contact == NULL) {
-            free(temp);
-
-            return 1;
-        }
-        temp->contact->name = calloc(MAX_SIZE, sizeof(char));
-        if (temp->contact->name == NULL) {
-            free(temp->contact);
-            free(temp);
-
-            return 1;
-        }
-        eofCheck = fscanf(file, "%s", temp->contact->name);
-        if (eofCheck == EOF) {
-            free(temp->contact->name);
-            free(temp->contact);
-            free(temp);
-
-            return -1;
-        }
-        fgetc(file);
-        temp->contact->phoneNumber = calloc(MAX_SIZE, sizeof(char));
-        if (temp->contact->phoneNumber == NULL) {
-            free(temp->contact->name);
-            free(temp->contact);
-            free(temp);
-
-            return 1;
-        }
-        eofCheck = fscanf(file, "%[^\n]", temp->contact->phoneNumber);
-        if (eofCheck == EOF) {
-            free(temp->contact->phoneNumber);
-            free(temp->contact->name);
-            free(temp->contact);
-            free(temp);
-
-            return -1;
+        temp->next = getElementFromFile(file, &errorCode);
+        if (errorCode) {
+            fclose(file);
+            return errorCode;
         }
 
         temp->next = NULL;
@@ -153,16 +117,20 @@ int getFromFile(FILE* file, char* fileName, List* list) {
     return 0;
 }
 
-void cutList(Position *position) {
-    position->position->next = NULL;
+void cutList(ListElement* element) {
+    element->next = NULL;
 }
 
-void getFirstPosition(List *list, Position *position) {
-    position->position = list->head;
+ListElement* getFirstPosition(List *list) {
+    if (list == NULL) {
+        return NULL;
+    }
+
+    return list->head;
 }
 
-Node* lastPosition(List *list) {
-    Node *temp = list->head;
+ListElement* lastPosition(List *list) {
+    ListElement *temp = list->head;
     while (temp->next != NULL) {
         temp = temp->next;
     }
@@ -176,7 +144,7 @@ int insert(List *list, Position *position) {
     }
 
     if (list->head == NULL) {
-        Node *temp = malloc(sizeof(Node));
+        ListElement *temp = malloc(sizeof(ListElement));
         if (temp == NULL) {
             return 1;
         }
@@ -187,17 +155,17 @@ int insert(List *list, Position *position) {
         return 0;
     }
 
-    Node *temp = malloc(sizeof(Node));
+    ListElement *temp = malloc(sizeof(ListElement));
     temp->contact = position->position->contact;
     temp->next = NULL;
-    Node *lastElement = lastPosition(list);
+    ListElement *lastElement = lastPosition(list);
     lastElement->next = temp;
 
     return 0;
 }
 
 void putHead(List *list, char *name, char *phoneNumber) {
-    Node *temp = malloc(sizeof(Node));
+    ListElement *temp = malloc(sizeof(ListElement));
     if (temp == NULL) {
         return;
     }
@@ -240,8 +208,8 @@ char* getPositionValue(Position *position, Priority priority, int *errorCode) {
 
 void getMiddlePosition(List *list, Position *position) {
     if (list->head != NULL) {
-        Node *smallStep = list->head;
-        Node *largeStep = list->head;
+        ListElement *smallStep = list->head;
+        ListElement *largeStep = list->head;
         while (largeStep != NULL && largeStep->next != NULL) {
             largeStep = largeStep->next->next;
             smallStep = smallStep->next;
@@ -263,7 +231,7 @@ void printList (List *list) {
         return;
     }
 
-    Node *temp = list->head;
+    ListElement *temp = list->head;
     while (temp != NULL) {
         printf("%s %s \n", temp->contact->name, temp->contact->phoneNumber);
         temp = temp->next;
@@ -275,7 +243,7 @@ void deleteList(List **list, bool isAllocated) {
         free(*list);
         return;
     }
-    Node *temp = (*list)->head;
+    ListElement *temp = (*list)->head;
     while (temp != NULL) {
         (*list)->head = (*list)->head->next;
         if (temp->contact != NULL) {
