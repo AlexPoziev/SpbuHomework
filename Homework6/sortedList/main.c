@@ -36,9 +36,9 @@ int main() {
                 int value = 0;
                 scanf("%d", &value);
                 int errorCode = errorCode = insert(list, value);
-
                 if (errorCode) {
                     printf("Not enough memory");
+                    deleteList(&list);
                     return 1;
                 }
 
@@ -66,6 +66,7 @@ int main() {
             }
         }
     }
+    
     deleteList(&list);
 
     return 0;

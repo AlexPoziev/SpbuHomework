@@ -15,9 +15,26 @@ typedef struct List {
 
 List* createList(void) {
     List *temp = malloc(sizeof(List));
+    if (temp == NULL) {
+        return NULL;
+    }
+
     temp->head = NULL;
 
     return temp;
+}
+
+Node* createNode(int value, Node* next, Node* previous) {
+    Node *newNode = malloc(sizeof(Node));
+    if (newNode == NULL) {
+        return NULL;
+    }
+
+    newNode->value = value;
+    newNode->next = next;
+    newNode->previous = previous;
+
+    return newNode;
 }
 
 int insert(List *list, int value) {
@@ -25,15 +42,12 @@ int insert(List *list, int value) {
         return -1;
     }
 
-    Node* temp = malloc(sizeof(Node));
-    if (temp == NULL) {
-        return 1;
-    }
-
     if (list->head == NULL) {
-        temp->value = value;
-        temp->previous = NULL;
-        temp->next = NULL;
+        Node *temp = createNode(value, NULL, NULL);
+        if (temp == NULL) {
+            return 1;
+        }
+
         list->head = temp;
 
         return 0;
@@ -50,21 +64,26 @@ int insert(List *list, int value) {
     bool isEnd = currentNode->value < value;
 
     if (isEnd) {
-        temp->value = value;
-        temp->previous = currentNode;
-        temp->next = NULL;
+        Node *temp = createNode(value, NULL, currentNode);
+        if (temp == NULL) {
+            return 1;
+        }
+
         currentNode->next = temp;
 
         return 0;
     }
 
+    Node *temp = createNode(value, currentNode, currentNode->previous);
+    if (temp == NULL) {
+        return 1;
+    }
+
     if (currentNode->previous != NULL) {
         currentNode->previous->next = temp;
     }
-    temp->value = value;
-    temp->previous = currentNode->previous;
+
     currentNode->previous = temp;
-    temp->next = currentNode;
     if (list->head == currentNode) {
         list->head = temp;
     }
@@ -109,11 +128,13 @@ void deleteList(List **list) {
         free(*list);
         return;
     }
+
     Node *currentNode = (*list)->head;
     while (currentNode != NULL) {
         delete(*list, currentNode->value);
         currentNode = (*list)->head;
     }
+
     free(*list);
     *list = NULL;
 }
@@ -131,6 +152,7 @@ int printList(List *list) {
     if (list == NULL) {
         return -1;
     }
+
     printf("Sorted list: ");
     Node *temp = list->head;
     while (temp != NULL) {
