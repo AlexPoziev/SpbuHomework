@@ -5,7 +5,7 @@
 // return -2 if no file with this name
 // return 0 if all is ok
 int getMatrixToDotFile(char *fileName) {
-    FILE *graphFile = fopen("graph.dot", "w");
+    FILE *graphFile = fopen("../graph.dot", "w");
     FILE *matrixFile = fopen(fileName, "r");
     if (matrixFile == NULL) {
         fclose(graphFile);
