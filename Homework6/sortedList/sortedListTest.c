@@ -29,7 +29,7 @@ bool deleteTest(void) {
     int errorCodeFirst = delete(list, 10);
     int testFirst = getValue(list, &errorCode);
     int errorCodeSecond = delete(list, -1);
-    int testSecond = getValue(list, &errorCodeNull);
+    getValue(list, &errorCodeNull);
 
     bool fullCheck = errorCodeTest == -1 && testFirst == -1 && !errorCode && !errorCodeFirst
     && !errorCodeSecond && errorCodeNull;

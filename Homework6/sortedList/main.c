@@ -35,7 +35,7 @@ int main() {
                 printf("input value: ");
                 int value = 0;
                 scanf("%d", &value);
-                int errorCode = errorCode = insert(list, value);
+                int errorCode = insert(list, value);
                 if (errorCode) {
                     printf("Not enough memory");
                     deleteList(&list);

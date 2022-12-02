@@ -96,7 +96,6 @@ int delete(List *list, int value) {
         return -1;
     }
 
-    bool isEnd = 0;
     Node *currentNode = list->head;
     while (currentNode != NULL) {
         if (currentNode->value == value) {
