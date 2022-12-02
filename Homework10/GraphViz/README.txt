@@ -9,4 +9,6 @@ chmod +x dotter.sh
 sh dotter.sh
 
 3) Enjoy incredible graph
+
+/* To start test need change < ./GraphViz ../matrix.txt >  ->  < ./GraphViz ../matrix.txt --test >
 	
