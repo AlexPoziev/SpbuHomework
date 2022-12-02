@@ -78,7 +78,7 @@ bool getMatrixToDotFileTest(void) {
     bool firstTest = !strcmp(test, "digraph Matrix {");
     fscanf(file, "%[^\n]", test);
     fgetc(file);
-    bool secondtest = !strcmp(test, "\t1 -> 2;");
+    bool secondTest = !strcmp(test, "\t1 -> 2;");
     fscanf(file, "%[^\n]", test);
     fgetc(file);
     bool thirdTest = !strcmp(test, "\t1 -> 3;");
@@ -94,7 +94,7 @@ bool getMatrixToDotFileTest(void) {
     remove("test.txt");
     remove("../graph.dot");
 
-    return firstTest && secondtest && thirdTest
+    return firstTest && secondTest && thirdTest
             && fourthTest && fifthTest && sixthTest;
 }
 
