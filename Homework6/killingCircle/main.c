@@ -21,14 +21,14 @@ int circleOfDeath(int numbersCount, int gap, int *errorCode) {
 
     for (int i = 0; i < numbersCount; ++i) {
         *errorCode = insert(list, i + 1, i);
-        if (*errorCode) {
+        if (*errorCode != 0) {
             return *errorCode;
         }
     }
 
     ListElement *element = getFirstElement(list);
     int step = 1;
-    while(!isSingle(list)) {
+    while (!isSingle(list)) {
         ++step;
         element = getNextListElement(element);
         if (step == gap) {

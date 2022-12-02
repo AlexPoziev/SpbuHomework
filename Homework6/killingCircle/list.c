@@ -46,7 +46,7 @@ bool isEmptyNode(ListElement *node) {
 
 void plusOnePosition(ListElement *next, List *list) {
     ListElement *temp = next;
-    while(temp != list->head->previous) {
+    while (temp != list->head->previous) {
         ++(temp->position);
         temp = temp->next;
     }
@@ -129,7 +129,7 @@ int insert(List *list, int value, int position) {
     }
 
     ListElement *currentNode = findPosition(list, position);
-    if ((currentNode) == NULL) {
+    if (currentNode == NULL) {
         return -1;
     }
 
