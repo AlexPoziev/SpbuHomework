@@ -6,16 +6,16 @@ cmake ..
 make
 
 ./GraphViz ../matrix.txt
-cd ..
 
 if [[ $? -ne 0 ]]
 then
+    cd ..
     rm graph.dot
     rm -r build
-    exit 1
+else
+    cd ..
+    dot -Tpng graph.dot -o image.png
+    open image.png
+    rm graph.dot
+    rm -r build
 fi
-
-dot -Tpng graph.dot -o image.png
-open image.png
-rm graph.dot
-rm -r build
