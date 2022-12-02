@@ -1,60 +1,82 @@
 #include "testList.h"
 
-bool insertTest(void) {
+bool insertAndDeleteAndGetFirstTest(void) {
     int errorCode = 0;
     List *list = createList();
+    if (list == NULL) {
+        return false;
+    }
+
     insert(list, 0, 0);
     insert(list, 1, 1);
     insert(list, 2, 0);
     int fourthTest = insert(list, 10, 10);
     int fifthTest = insert(list, 10, -1);
 
-    Position *position = createPosition(list);
-    int firstTest = deletePosition(list, position, &errorCode);
-    int secondTest = deletePosition(list, position, &errorCode);
-    int thirdTest = deletePosition(list, position, &errorCode);
+    ListElement *element = getFirstElement(list);
+    int firstTest = deleteListElement(list, &element);
+    int secondTest = deleteListElement(list, &element);
+    int thirdTest = deleteListElement(list, &element);
 
     clear(&list);
-    deletePositionMemory(&position);
 
     return firstTest == 2 && secondTest == 0 && thirdTest == 1 && fourthTest == -1 && fifthTest == -1;
 }
 
 bool isSingleTest(void) {
     List *list = createList();
+    if (list == NULL) {
+        return false;
+    }
+
     insert(list, 0, 0);
     bool firstTest = isSingle(list);
     insert(list, 1, 0);
     bool secondTest = isSingle(list);
-    Position *position = createPosition(list);
 
     clear(&list);
-    deletePositionMemory(&position);
 
     return firstTest && !secondTest;
 }
 
-bool positionTest(void) {
-    int errorCode = 0;
+bool clearTest(void) {
     List *list = createList();
-    insert(list, 0, 0);
-    insert(list, 1, 0);
-    bool secondTest = isSingle(list);
+    if (list == NULL) {
+        return false;
+    }
 
-    Position *position = createPosition(list);
-    Position *firstTest = position;
-    getNextPosition(firstTest);
-    int thirdTest = deletePosition(list, position, &errorCode);
+    insert(list, 1, 1);
+    insert(list, 2, 2);
 
-    bool test = firstTest == position && !secondTest && thirdTest == 0;
+    bool firstTest = getFirstElement(list) != NULL;
 
     clear(&list);
-    deletePositionMemory(&position);
 
-    return test;
+    return firstTest && list == NULL;
+}
+
+bool getNextListElementTest(void) {
+    List *list = createList();
+    if (list == NULL) {
+        return false;
+    }
+
+    insert(list, 10, 1);
+    insert(list, 20, 2);
+
+    ListElement *element = getFirstElement(list);
+    element = getNextListElement(element);
+    bool firstTest = element != getFirstElement(list);
+    element = getNextListElement(element);
+    bool secondTest = element == getFirstElement(list);
+
+    clear(&list);
+
+    return firstTest && secondTest;
 }
 
 bool fullTest(void) {
-    return insertTest() && isSingleTest() && positionTest();
+    return insertAndDeleteAndGetFirstTest() && isSingleTest()
+        && clearTest() && getNextListElementTest();
 }
 

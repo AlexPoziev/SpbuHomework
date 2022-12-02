@@ -1,99 +1,104 @@
 #include "list.h"
+
 #include <stdio.h>
 
-typedef struct Node {
+typedef struct ListElement {
     int value;
     int position;
-    struct Node *previous;
-    struct Node *next;
-} Node;
+    struct ListElement *previous;
+    struct ListElement *next;
+} ListElement;
 
 typedef struct List {
-    Node *head;
+    ListElement *head;
 } List;
-
-typedef struct Position {
-    Node *position;
-} Position;
 
 int isSingle(List* list) {
     return list->head == list->head->next;
 }
 
-List* createList(void) {
-    List *temp = malloc(sizeof(List));
-    temp->head == NULL;
-    return temp;
-}
-
-Position* createPosition(List *list) {
+ListElement* getFirstElement(List *list) {
     if (list == NULL) {
         return NULL;
     }
-    Position *temp = malloc(sizeof(Position));
-    temp->position = list->head;
+
+    return list->head;
+}
+
+List* createList(void) {
+    List *temp = malloc(sizeof(List));
+    temp->head = NULL;
+
     return temp;
 }
 
-int getNextPosition(Position *position) {
-    if (position == NULL) {
-        return -1;
+ListElement* getNextListElement(ListElement *element) {
+    if (element == NULL) {
+        return NULL;
     }
-    position->position = position->position->next;
-    return 0;
+
+    return element->next;
 }
 
-bool isEmptyNode(Node *node) {
+bool isEmptyNode(ListElement *node) {
     return node == NULL;
 }
 
-void plusOnePosition(Node *next, List *list) {
-    Node *temp = next;
+void plusOnePosition(ListElement *next, List *list) {
+    ListElement *temp = next;
     while(temp != list->head->previous) {
         ++(temp->position);
         temp = temp->next;
     }
+
     ++(list->head->previous->position);
 }
 
-Node* findPosition(List *list, int position) {
+ListElement* findPosition(List *list, int position) {
     if (isEmpty(list) || isEmptyNode(list->head)) {
         return NULL;
     }
-    Node *temp = list->head;
+
+    ListElement *temp = list->head;
 
     while (temp->position != position) {
         if (temp->next == NULL) {
             return NULL;
         }
+
         temp = temp->next;
     }
 
     return temp;
 }
 
-int deletePosition(List *list, Position *position, int *errorCode) {
-    position->position->previous->next = position->position->next;
-    position->position->next->previous = position->position->previous;
-    if (position->position == list->head) {
-        list->head = position->position->next;
+int deleteListElement(List *list, ListElement **element) {
+    (*element)->previous->next = (*element)->next;
+    (*element)->next->previous = (*element)->previous;
+    if ((*element) == list->head) {
+        list->head = (*element)->next;
     }
 
-    int temp = position->position->value;
-    Node *nextElement = position->position->next;
-    free(position->position);
-    position->position = nextElement;
+    int temp = (*element)->value;
+
+    ListElement *previousElement = *element;
+    *element = getNextListElement(*element);
+    free(previousElement);
 
     return temp;
 }
 
 int insert(List *list, int value, int position) {
+    if (list == NULL) {
+        return -1;
+    }
 
     if (list->head == NULL) {
-        Node *newNode = malloc(sizeof(Node));
+        ListElement *newNode = malloc(sizeof(ListElement));
         if (newNode == NULL) {
             return 1;
         }
+
         newNode->next = newNode;
         newNode->previous = newNode;
         newNode->value = value;
@@ -108,10 +113,11 @@ int insert(List *list, int value, int position) {
     }
 
     if (position == list->head->previous->position + 1) {
-        Node *newNode = malloc(sizeof(Node));
+        ListElement *newNode = malloc(sizeof(ListElement));
         if (newNode == NULL) {
             return 1;
         }
+
         newNode->next = list->head;
         newNode->previous = list->head->previous;
         list->head->previous->next = newNode;
@@ -122,14 +128,16 @@ int insert(List *list, int value, int position) {
         return 0;
     }
 
-    Node *currentNode = findPosition(list, position);
+    ListElement *currentNode = findPosition(list, position);
     if ((currentNode) == NULL) {
         return -1;
     }
-    Node *newNode = malloc(sizeof(Node));
+
+    ListElement *newNode = malloc(sizeof(ListElement));
     if (newNode == NULL) {
         return 1;
     }
+
     newNode->value = value;
     newNode->position = position;
     currentNode->previous->next = newNode;
@@ -139,6 +147,7 @@ int insert(List *list, int value, int position) {
     if (position == 0) {
         list->head = newNode;
     }
+
     plusOnePosition(newNode->next, list);
 
     return 0;
@@ -149,18 +158,14 @@ bool isEmpty(List *list) {
 }
 
 void clear(List **list) {
-    Node *next = (*list)->head;
+    ListElement *next = (*list)->head;
     while (next != (*list)->head) {
         (*list)->head = (*list)->head->next;
         free(next);
         next = (*list)->head;
     }
+
     free(*list);
     (*list) = NULL;
 }
 
-void deletePositionMemory(Position** position)
-{
-    free(*position);
-    *position = NULL;
-}

@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #include "testList.h"
 #include "list.h"
 
@@ -7,6 +8,7 @@ int circleOfDeath(int numbersCount, int gap, int *errorCode) {
         *errorCode = -1;
         return -1;
     }
+
     if (gap == 1) {
         return numbersCount;
     }
@@ -16,34 +18,32 @@ int circleOfDeath(int numbersCount, int gap, int *errorCode) {
         *errorCode = 1;
         return 1;
     }
+
     for (int i = 0; i < numbersCount; ++i) {
         *errorCode = insert(list, i + 1, i);
         if (*errorCode) {
             return *errorCode;
         }
     }
-    Position *position = createPosition(list);
-    if (position == NULL) {
-        *errorCode = 1;
-        return 1;
-    }
+
+    ListElement *element = getFirstElement(list);
     int step = 1;
     while(!isSingle(list)) {
         ++step;
-        getNextPosition(position);
+        element = getNextListElement(element);
         if (step == gap) {
-            deletePosition(list, position, errorCode);
+            deleteListElement(list, &element);
             if (*errorCode) {
                 return *errorCode;
             }
+
             step = 1;
         }
     }
 
-    int temp = deletePosition(list, position, errorCode);
+    int temp = deleteListElement(list, &element);
 
     clear(&list);
-    deletePositionMemory(&position);
 
     return temp;
 }
@@ -64,6 +64,7 @@ int main() {
         printf("Tests Failed");
         return 1;
     }
+
     int errorCode = 0;
     printf("Input count of Suicide Squad, greater than zero: ");
     int numbers = 0;
