@@ -185,8 +185,8 @@ char* getListElementValue(ListElement *element, Priority priority) {
     }
 
     return priority == phoneNumber
-    ? element->phoneNumber
-    : element->name;
+            ? element->phoneNumber
+            : element->name;
 }
 
 ListElement* getMiddleListElement(List *list) {
@@ -250,6 +250,6 @@ void deleteListMemory(List **list) {
     *list = NULL;
 }
 
-bool isListElementNull(ListElement* element){
+bool isListElementNull(ListElement* element) {
     return element == NULL;
 }

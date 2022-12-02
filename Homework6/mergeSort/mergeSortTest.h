@@ -1,4 +1,4 @@
 #include "mergeSort.h"
 #include <stdbool.h>
 
-bool mergeSortListTest(void);
+bool mergeSortTest(void);

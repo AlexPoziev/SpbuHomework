@@ -85,7 +85,7 @@ List* sort(List* head, Priority priority, int *errorCode) {
         secondHead = createListByElement(middle);
         middle = getFirstListElement(head);
     } else {
-        ListElement *nextMiddle = getMiddleListElement(head);
+        ListElement *nextMiddle = middle;
         nextMiddle = getNextListElement(nextMiddle);
         secondHead = createListByElement(nextMiddle);
     }

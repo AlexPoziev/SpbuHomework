@@ -78,8 +78,6 @@ bool getFromFileTest(void) {
         return false;
     }
 
-    int errorCode = 0;
-
     getFromFile(fileName, list);
     ListElement *element = getFirstListElement(list);
 
