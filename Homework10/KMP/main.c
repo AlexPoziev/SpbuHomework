@@ -1,9 +1,21 @@
-#include <stdio.h>
 #include "substring.h"
+#include "substringTest.h"
+#include <stdio.h>
+#include <string.h>
 
 int main(int argc, char **argv) {
     if (argc < 2) {
         printf("Not enough data");
+        return 0;
+    }
+
+    if (argc == 3 && !strcmp("--test", argv[2])) {
+        if (!substringTest()) {
+            printf("Tests Failed");
+            return 1;
+        }
+
+        printf("Tests Passed");
         return 0;
     }
 
