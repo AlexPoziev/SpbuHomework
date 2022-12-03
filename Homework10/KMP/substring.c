@@ -26,5 +26,34 @@ unsigned* createSubstringPostfixTable(char *substring) {
 }
 
 int findSubstring(char *string, char *substring, int *errorCode) {
-    ;
+    if (string == NULL || substring == NULL) {
+        *errorCode = -1;
+        return -1;
+    }
+
+    unsigned *prefixTable = createSubstringPostfixTable(substring);
+    if (prefixTable == NULL) {
+        *errorCode = 1;
+        return -1;
+    }
+
+    unsigned currentTablePosition = 0;
+    unsigned stringLength = strlen(string);
+    unsigned substringLength = strlen(substring);
+
+    for (unsigned i = 0; i < stringLength; ++i) {
+        while (currentTablePosition > 0 && substring[currentTablePosition] != string[i]) {
+            currentTablePosition = prefixTable[currentTablePosition - 1];
+        }
+
+        if (substring[currentTablePosition] == string[i]) {
+            ++currentTablePosition;
+        }
+
+        if (currentTablePosition == substringLength) {
+            return (int)(i - substringLength + 1);
+        }
+    }
+
+    return -1;
 }
