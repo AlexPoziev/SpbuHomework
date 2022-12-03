@@ -9,7 +9,12 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    if (argc == 3 && !strcmp("--test", argv[2])) {
+    if (argc > 3) {
+        printf("Too many flags");
+        return 0;
+    }
+
+    if (!strcmp("--test", argv[1]) || !strcmp("--test", argv[2])) {
         if (!substringTest()) {
             printf("Tests Failed");
             return 1;
