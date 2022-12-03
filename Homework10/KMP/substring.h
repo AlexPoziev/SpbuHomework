@@ -6,4 +6,4 @@
 //  1 if not enough memory
 //  0 if all is ok
 // -1 if no string or substring array
-int findSubstring(char *string, char *substring, int *errorCode);
+int findSubstring(char *string, unsigned stringLength, char *substring, int *errorCode);

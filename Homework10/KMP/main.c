@@ -1,7 +1,43 @@
 #include "substring.h"
 #include "substringTest.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+unsigned getTotalSentenceLength(int argc, char **argv) {
+    unsigned length = 0;
+    for (int i = 1; i < argc; ++i) {
+        length += strlen(argv[i]);
+        // space
+        ++length;
+    }
+
+    return --length;
+}
+
+void argCat(int argc, char **argv, char *substring) {
+    unsigned currentSubstringPosition = 0;
+
+    for (int i = 1; i < argc - 1; ++i) {
+        unsigned j = 0;
+
+        while(argv[i][j] != '\0') {
+            substring[currentSubstringPosition] = argv[i][j];
+            ++currentSubstringPosition;
+            ++j;
+        }
+
+        substring[currentSubstringPosition] = ' ';
+        ++currentSubstringPosition;
+    }
+
+    unsigned j = 0;
+    while(argv[argc - 1][j] != '\0') {
+        substring[currentSubstringPosition] = argv[argc - 1][j];
+        ++currentSubstringPosition;
+        ++j;
+    }
+}
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -9,12 +45,7 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    if (argc > 3) {
-        printf("Too many flags");
-        return 0;
-    }
-
-    if (!strcmp("--test", argv[1]) || !strcmp("--test", argv[2])) {
+    if (!strcmp("--test", argv[1])) {
         if (!substringTest()) {
             printf("Tests Failed");
             return 1;
@@ -24,18 +55,14 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    printf("Input substring, with length less than 1000: ");
-    char substring[1000] = {0};
-    scanf("%s", substring);
-
-    int errorCode = 0;
-    int position = findSubstring(argv[1], substring, &errorCode);
-    if (errorCode == 1) {
-        printf("Not enough memory") ;
+    char *substring = calloc(getTotalSentenceLength(argc, argv), sizeof(char));
+    if (substring == NULL) {
+        printf("Not enough memory");
         return 1;
     }
 
-    printf("Position of the first occurrence: %d", position);
+    
+    /*printf("Position of the first occurrence: %d", position);*/
 
     return 0;
 }

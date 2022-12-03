@@ -25,7 +25,7 @@ unsigned* createSubstringPostfixTable(char *substring) {
     return postfixTable;
 }
 
-int findSubstring(char *string, char *substring, int *errorCode) {
+int findSubstring(char *string, unsigned stringLength, char *substring, int *errorCode) {
     if (string == NULL || substring == NULL) {
         *errorCode = -1;
         return -1;
@@ -38,7 +38,6 @@ int findSubstring(char *string, char *substring, int *errorCode) {
     }
 
     unsigned currentTablePosition = 0;
-    unsigned stringLength = strlen(string);
     unsigned substringLength = strlen(substring);
 
     for (unsigned i = 0; i < stringLength; ++i) {
