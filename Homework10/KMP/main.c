@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// count of all symbols in argv
 unsigned getTotalSentenceLength(int argc, char **argv) {
     unsigned length = 0;
     for (int i = 1; i < argc; ++i) {
@@ -15,6 +16,7 @@ unsigned getTotalSentenceLength(int argc, char **argv) {
     return --length;
 }
 
+// concatenate argv with spaces
 void argCat(int argc, char **argv, char *substring) {
     unsigned currentSubstringPosition = 0;
 
@@ -61,8 +63,33 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    
-    /*printf("Position of the first occurrence: %d", position);*/
+    printf("Input file name with length less than 20: ");
+    char fileName[20] = {0};
+    scanf("%s", fileName);
+
+    argCat(argc, argv, substring);
+
+    int errorCode = 0;
+
+    int answer = fileFindSubstring(fileName, substring, &errorCode);
+    if (errorCode == 1) {
+        printf("Not enough memory");
+        free(substring);
+        return 1;
+    }
+    if (errorCode == -2) {
+        printf("No file with this name exists");
+        free(substring);
+        return 0;
+    }
+
+    if (answer == -1) {
+        printf("No substring in the file");
+    } else {
+        printf("Index of the first occurrence: %d", answer);
+    }
+
+    free(substring);
 
     return 0;
 }

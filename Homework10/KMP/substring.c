@@ -1,6 +1,7 @@
 #include "substring.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 unsigned* createSubstringPostfixTable(char *substring) {
     unsigned substringLength = strlen(substring);
@@ -25,7 +26,7 @@ unsigned* createSubstringPostfixTable(char *substring) {
     return postfixTable;
 }
 
-int findSubstring(char *string, unsigned stringLength, char *substring, int *errorCode) {
+int findSubstring(const char *string, unsigned stringLength, char *substring, int *errorCode) {
     if (string == NULL || substring == NULL) {
         *errorCode = -1;
         return -1;
@@ -53,6 +54,49 @@ int findSubstring(char *string, unsigned stringLength, char *substring, int *err
             return (int)(i - substringLength + 1);
         }
     }
+
+    return -1;
+}
+
+int fileFindSubstring(char *fileName, char *substring, int *errorCode) {
+    FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
+        *errorCode = -2;
+        return -1;
+    }
+
+    unsigned currentPosition = 0;
+    while (!feof(file)) {
+        char string[298] = {0};
+        int eofCheck = fscanf(file, "%[^\n]", string);
+        if (eofCheck == EOF) {
+            fclose(file);
+            return -1;
+        }
+
+        unsigned stringLength = strlen(string);
+
+        int answer = findSubstring(string, stringLength, substring, errorCode);
+        if (*errorCode) {
+            fclose(file);
+            return -1;
+        }
+
+        if (answer != -1) {
+            fclose(file);
+            return (int)(answer + currentPosition);
+        }
+
+        eofCheck = fgetc(file);
+        if (eofCheck == EOF) {
+            fclose(file);
+            return -1;
+        }
+
+        currentPosition += stringLength + 1;
+    }
+
+    fclose(file);
 
     return -1;
 }
