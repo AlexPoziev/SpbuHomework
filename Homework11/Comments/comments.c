@@ -8,14 +8,21 @@ typedef enum Symbol {
     other
 } Symbol;
 
+typedef enum State {
+    notComment,
+    comment,
+    startComment,
+    endComment,
+} State;
+
 unsigned int** createMatrix() {
-    unsigned int **table = (unsigned**)calloc(3, sizeof(unsigned*));
+    unsigned int **table = (unsigned**)calloc(4, sizeof(unsigned*));
     if (table == NULL) {
         return NULL;
     }
 
-    for (int i = 0; i < 3; ++i) {
-        table[i] = calloc(4, sizeof(unsigned));
+    for (int i = 0; i < 4; ++i) {
+        table[i] = calloc(3, sizeof(unsigned));
         if (table[i] == NULL) {
             for (int j = 0; j < i; ++j) {
                 free(table[j]);
@@ -34,7 +41,7 @@ void deleteMatrix(unsigned **table) {
         return;
     }
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 4; ++i) {
         free(table[i]);
     }
 
@@ -58,13 +65,34 @@ unsigned int** getDFATable(char *fileName, int *errorCode) {
         return NULL;
     }
 
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            fscanf(file )
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            fscanf(file, "%u", &table[i][j]);
+            fgetc(file);
+        }
+    }
+
+    return table;
+}
+
+Symbol getSymbolToken(char symbol) {
+    switch (symbol) {
+        case '/': {
+            return slash;
+        }
+        case '*': {
+            return star;
+        }
+        default: {
+            return other;
         }
     }
 }
 
-int printCommentsFromFile(char *fileName) {
+State move(State currentState, Symbol currentSymbol, unsigned **table) {
+    return table[currentSymbol][currentSymbol];
+}
 
+int printCommentsFromFile(char *fileName) {
+    
 }

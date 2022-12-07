@@ -5,3 +5,5 @@
 // return 1 if not enough memory
 
 int printCommentsFromFile(char *fileName);
+
+unsigned int** getDFATable(char *fileName, int *errorCode);
