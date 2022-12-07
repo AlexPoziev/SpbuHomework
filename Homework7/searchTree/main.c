@@ -19,6 +19,7 @@ int main() {
     }
 
     choose();
+    
     Dictionary *dictionary = createDictionary();
     if (dictionary == NULL) {
         printf("Not enough memory");
@@ -41,8 +42,11 @@ int main() {
                 int errorCode = addWord(dictionary, token, value);
                 if (errorCode) {
                     printf("Not enough memory");
+                    deleteTree(&dictionary);
+
                     return 1;
                 }
+
                 printf("Value successfully added \n");
 
                 break;
@@ -65,8 +69,8 @@ int main() {
                 int token = 0;
                 scanf("%d", &token);
                 printf("The token %d %s in the dictionary \n", token, isContain(dictionary, token)
-                ? "is contained"
-                : "isn't contained");
+                        ? "is contained"
+                        : "isn't contained");
 
                 break;
             }

@@ -16,8 +16,7 @@ typedef struct Dictionary {
 } Dictionary;
 
 Dictionary* createDictionary(void) {
-    Dictionary *temp = malloc(sizeof(Dictionary));
-    temp->root = NULL;
+    Dictionary *temp = calloc(1, sizeof(Dictionary));
     return temp;
 }
 
@@ -31,6 +30,7 @@ Node* findPosition(Dictionary *dictionary, int token, bool *isEnd) {
         *isEnd = false;
         return currentNode;
     }
+
     Node *nextNode = currentNode->token > token ? currentNode->leftChild : currentNode->rightChild;
     while (nextNode != NULL) {
         currentNode = nextNode;
@@ -51,15 +51,17 @@ int addWord(Dictionary *dictionary, int token, char* word) {
     }
 
     if (dictionary->root == NULL) {
-        dictionary->root = malloc(sizeof(Node));
+        dictionary->root = calloc(sizeof(Node));
         if (dictionary->root == NULL) {
             return 1;
         }
-        dictionary->root->leftChild = NULL;
-        dictionary->root->rightChild = NULL;
-        dictionary->root->parent = NULL;
+
         dictionary->root->token = token;
         char *newWord = calloc(strlen(word), sizeof(char));
+        if (newWord == NULL) {
+            return 1;
+        }
+
         stpcpy(newWord, word);
         dictionary->root->word = newWord;
 
@@ -68,13 +70,12 @@ int addWord(Dictionary *dictionary, int token, char* word) {
 
     bool isEnd = false;
     Node *currentNode = findPosition(dictionary, token, &isEnd);
-    Node *newNode = malloc(sizeof(Node));
-    char *newWord = calloc(strlen(word), sizeof(char));
-    stpcpy(newWord, word);
 
-    if (newNode == NULL) {
+    char *newWord = calloc(strlen(word), sizeof(char));
+    if (newWord == NULL) {
         return 1;
     }
+
     // if found same token
     if (isEnd == false) {
         free(currentNode->word);
@@ -82,12 +83,19 @@ int addWord(Dictionary *dictionary, int token, char* word) {
 
         return 0;
     }
+
+    stpcpy(newWord, word);
+
+    Node *newNode = calloc(1, sizeof(Node));
+    if (newNode == NULL) {
+        free(newWord);
+        return 1;
+    }
+
     // if new token
     newNode->parent = currentNode;
     newNode->token = token;
     newNode->word = newWord;
-    newNode->rightChild = NULL;
-    newNode->leftChild = NULL;
 
     newNode->token < currentNode->token
     ? (currentNode->leftChild = newNode)

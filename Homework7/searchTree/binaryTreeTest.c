@@ -1,5 +1,4 @@
 #include "binaryTreeTest.h"
-#include <stdlib.h>
 #include <string.h>
 
 bool createDictionaryTest(void) {
