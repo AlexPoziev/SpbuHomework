@@ -1,7 +1,6 @@
 #include "binaryTree.h"
 #include "testBinaryTree.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 int main() {
     if (!deleteTreeTest() && !createTreeTest() && !calculateTreeTest() && !fileGetTreeTest()) {
@@ -19,6 +18,7 @@ int main() {
 
         return 0;
     }
+
     fclose(file);
 
     Tree *tree = createTree();
@@ -29,9 +29,11 @@ int main() {
 
     int errorCode = fileGetTree(file, fileName, tree);
     if (errorCode == 1) {
+        deleteTree(&tree);
         printf("Not enough memory");
         return 1;
     } else if (errorCode == -1) {
+        deleteTree(&tree);
         printf("Tree doesnt exist");
         return -1;
     }

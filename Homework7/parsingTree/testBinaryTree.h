@@ -9,5 +9,3 @@ bool fileGetTreeTest(void);
 bool deleteTreeTest(void);
 
 bool calculateTreeTest(void);
-
-bool fullTest(void);

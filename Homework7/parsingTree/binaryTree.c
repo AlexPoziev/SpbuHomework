@@ -15,8 +15,7 @@ typedef struct Tree {
 } Tree;
 
 Tree* createTree(void) {
-    Tree *temp = malloc(sizeof(Tree));
-    temp->root = NULL;
+    Tree *temp = calloc(1, sizeof(Tree));
 
     return temp;
 }
@@ -28,6 +27,7 @@ int fileGetTreeRecursion(FILE *file, Node *node) {
     if (node->value == NULL) {
         return 1;
     }
+
     // skip open parenthesis
     getc(file);
     // get operator
@@ -49,13 +49,16 @@ int fileGetTreeRecursion(FILE *file, Node *node) {
         if (newValue == NULL) {
             return 1;
         }
+
         node->leftChild = malloc(sizeof(Node));
         if (node->leftChild == NULL) {
             return 1;
         }
+
         node->leftChild->value = newValue;
         fscanf(file, "%s", node->leftChild->value);
     }
+
     // skip space
     getc(file);
 
@@ -74,10 +77,12 @@ int fileGetTreeRecursion(FILE *file, Node *node) {
         if (newValue == NULL) {
             return 1;
         }
+
         node->rightChild = malloc(sizeof(Node));
         if (node->rightChild == NULL) {
             return 1;
         }
+
         node->rightChild->value = newValue;
         fscanf(file, "%[^)]", node->rightChild->value);
         getc(file);
@@ -159,6 +164,7 @@ int printTree(Tree *tree) {
     if (tree == NULL) {
         return 1;
     }
+
     printTreeRecursion(tree->root);
 
     return 0;
@@ -188,6 +194,7 @@ double calculateTreeRecursion(Node *root) {
     if (!isOperator(root->value)) {
         return atoi(root->value);
     }
+
     return operations(calculateTreeRecursion(root->leftChild),
                       calculateTreeRecursion(root->rightChild), root->value[0]);
 }
