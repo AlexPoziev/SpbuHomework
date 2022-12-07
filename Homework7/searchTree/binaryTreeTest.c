@@ -51,6 +51,7 @@ bool addWordTest(void) {
     if (errorCode) {
         return false;
     }
+    char *test = getWord(dictionary, 0);
     bool fourthTest = strcmp(getWord(dictionary, 0), "RIP");
 
     deleteTree(&dictionary);

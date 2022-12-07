@@ -19,7 +19,7 @@ int main() {
     }
 
     choose();
-    
+
     Dictionary *dictionary = createDictionary();
     if (dictionary == NULL) {
         printf("Not enough memory");

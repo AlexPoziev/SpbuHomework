@@ -51,7 +51,7 @@ int addWord(Dictionary *dictionary, int token, char* word) {
     }
 
     if (dictionary->root == NULL) {
-        dictionary->root = calloc(sizeof(Node));
+        dictionary->root = calloc(1, sizeof(Node));
         if (dictionary->root == NULL) {
             return 1;
         }
@@ -76,6 +76,9 @@ int addWord(Dictionary *dictionary, int token, char* word) {
         return 1;
     }
 
+    stpcpy(newWord, word);
+
+
     // if found same token
     if (isEnd == false) {
         free(currentNode->word);
@@ -83,8 +86,6 @@ int addWord(Dictionary *dictionary, int token, char* word) {
 
         return 0;
     }
-
-    stpcpy(newWord, word);
 
     Node *newNode = calloc(1, sizeof(Node));
     if (newNode == NULL) {
