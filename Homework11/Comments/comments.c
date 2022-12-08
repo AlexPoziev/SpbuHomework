@@ -110,13 +110,17 @@ State move(State currentState, Symbol currentSymbol, unsigned **table) {
 // return -2 if last comment doesn't have end */
 int printCommentsFromFile(char *fileName) {
     int errorCode = 0;
-    unsigned **table = getDFATable("test.txt", &errorCode);
+    unsigned **table = getDFATable("matrix.txt", &errorCode);
     if (errorCode) {
         return errorCode;
     }
 
     // doesn't check for NULL because upper function do it
     FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
+        deleteMatrix(table);
+        return -1;
+    }
 
     char currentSymbol = (char)fgetc(file);
     State currentState = notComment;
