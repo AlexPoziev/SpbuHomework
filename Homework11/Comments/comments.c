@@ -49,7 +49,9 @@ void deleteMatrix(unsigned **table) {
 }
 
 // if user delete matrix.txt file it's his problem that it won't work
-// return -1 if no file
+// errorCode gets value:
+// -1 if no file
+// 1 if not enough memory
 unsigned int** getDFATable(char *fileName, int *errorCode) {
     FILE *file = fopen(fileName, "r");
     if (file == NULL) {
@@ -72,6 +74,8 @@ unsigned int** getDFATable(char *fileName, int *errorCode) {
         }
     }
 
+    fclose(file);
+
     return table;
 }
 
@@ -90,9 +94,51 @@ Symbol getSymbolToken(char symbol) {
 }
 
 State move(State currentState, Symbol currentSymbol, unsigned **table) {
-    return table[currentSymbol][currentSymbol];
+    State newState = table[currentState][currentSymbol];
+    if (currentState == startComment && newState == comment) {
+        printf("/*");
+    } else if (currentState == endComment && newState == notComment) {
+        printf("/\n");
+    }
+
+    return newState;
 }
 
+// return -1 if file doesn't exist
+// return 1 if not enough memory
+// return 0 if all is ok
+// return -2 if last comment doesn't have end */
 int printCommentsFromFile(char *fileName) {
-    
+    int errorCode = 0;
+    unsigned **table = getDFATable("test.txt", &errorCode);
+    if (errorCode) {
+        return errorCode;
+    }
+
+    // doesn't check for NULL because upper function do it
+    FILE *file = fopen(fileName, "r");
+
+    char currentSymbol = (char)fgetc(file);
+    State currentState = notComment;
+
+    while (currentSymbol != EOF) {
+        currentState = move(currentState, getSymbolToken(currentSymbol), table);
+        if (currentState != notComment && currentState != startComment) {
+            putchar(currentSymbol);
+        }
+
+        currentSymbol = (char)fgetc(file);
+    }
+
+    if (currentState == comment || currentState == endComment) {
+        fclose(file);
+        deleteMatrix(table);
+
+        return -2;
+    }
+
+    fclose(file);
+    deleteMatrix(table);
+
+    return 0;
 }
