@@ -4,7 +4,7 @@
 
 #define MAX_STRING_SIZE 100
 
-void choose(void) {
+void commandChooses(void) {
     printf("0 - exit\n");
     printf("1 - add value by token to dictionary. If token exists, change to new\n");
     printf("2 - get value by token\n");
@@ -18,7 +18,7 @@ int main() {
         return 1;
     }
 
-    choose();
+    commandChooses();
     Dictionary *dictionary = createDictionary();
     if (dictionary == NULL) {
         printf("Not enough memory");
@@ -41,8 +41,11 @@ int main() {
                 int errorCode = addValue(dictionary, token, value);
                 if (errorCode) {
                     printf("Not enough memory");
+                    deleteTree(&dictionary);
+
                     return 1;
                 }
+
                 printf("Value successfully added \n");
 
                 break;
@@ -83,9 +86,10 @@ int main() {
             case 0: {
                 break;
             }
+
             default: {
                 printf("There is not option with this number, please, repeat input: \n");
-                choose();
+                commandChooses();
 
                 break;
             }

@@ -28,17 +28,15 @@ Dictionary* createDictionary(void) {
 }
 
 Node* createNode(int token, char *value) {
-    Node *newNode = malloc(sizeof(Node));
+    Node *newNode = calloc(1, sizeof(Node));
     if (newNode == NULL) {
         return NULL;
     }
+
     newNode->token = token;
     char *newValue = calloc(strlen(value), sizeof(char));
     stpcpy(newValue, value);
     newNode->value = newValue;
-    newNode->leftChild = NULL;
-    newNode->rightChild = NULL;
-    newNode->balance = 0;
 
     return newNode;
 }
@@ -143,6 +141,7 @@ Node* bigRotateRight(Node* currentNode) {
             break;
         }
     }
+
     rightGrandson->balance = 0;
 
     return rightGrandson;
@@ -153,12 +152,15 @@ Node* balance(Node *node) {
         if (node->rightChild->balance >= 0) {
             return rotateLeft(node);
         }
+
         return bigRotateLeft(node);
     }
+
     if (node->balance == -2) {
         if (node->leftChild->balance <= 0){
             return rotateRight(node);
         }
+
         return bigRotateRight(node);
     }
 
@@ -174,6 +176,7 @@ Node* insert(Node *node, int token, char *value, bool *isPart, int8_t *errorCode
             *isPart = true;
             return NULL;
         }
+
         return newNode;
     }
 
@@ -211,6 +214,7 @@ Node* insert(Node *node, int token, char *value, bool *isPart, int8_t *errorCode
     if (node->balance == 2 || node->balance == -2 || node->balance == 0) {
         *isPart = true;
     }
+
     return balance(node);
 }
 
@@ -219,6 +223,7 @@ int addValue(Dictionary *dictionary, int token, char* value) {
     if (dictionary == NULL) {
         return -1;
     }
+    
     if (dictionary->dictionary == NULL) {
         Node *newValue = createNode(token, value);
         dictionary->dictionary = newValue;
