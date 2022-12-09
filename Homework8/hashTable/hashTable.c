@@ -60,7 +60,7 @@ int getFromFile(char *fileName, HashTable *table) {
     }
 
     // the longest word has 37 symbols
-    char word[37] = {0};
+    char word[38] = {0};
 
     while (!feof(file)) {
         int eofCheck = fscanf(file, "%s", word);
@@ -188,7 +188,7 @@ int hashTableResize(HashTable *hashTable) {
             if (tempHashTable[hash] == NULL) {
                 tempHashTable[hash] = tempList;
             } else {
-                putList(tempHashTable[hash], &tempList);
+                putList(&tempHashTable[hash], &tempList);
             }
         }
     }

@@ -53,18 +53,18 @@ int addWord(List *list, char *word) {
     }
 
     ListElement *currentNode = list->head;
-    bool isSame = true;
+    int strcmpResult = 1;
 
-    while (isSame && currentNode->next != NULL) {
-        isSame = strcmp(currentNode->word, word);
+    while (strcmpResult != 0 && currentNode->next != NULL) {
+        strcmpResult = strcmp(currentNode->word, word);
         currentNode = currentNode->next;
     }
 
-    if (isSame) {
-        isSame = strcmp(currentNode->word, word);
+    if (strcmpResult != 0) {
+        strcmpResult = strcmp(currentNode->word, word);
     }
 
-    if (isSame) {
+    if (strcmpResult != 0) {
         ListElement *newNode = createNode(word);
         if (newNode == NULL) {
             return 1;
@@ -101,7 +101,7 @@ List* getFirst(List **list, int *errorCode) {
     return tempList;
 }
 
-void putList(List *destinationList, List **sourceList) {
+void putList(List **destinationList, List **sourceList) {
     if (sourceList == NULL) {
         return;
     }
@@ -112,12 +112,12 @@ void putList(List *destinationList, List **sourceList) {
     }
 
     if (destinationList == NULL) {
-        destinationList = (*sourceList);
+        *destinationList = *sourceList;
         return;
     }
 
-    if (destinationList->head == NULL) {
-        destinationList->head = (*sourceList)->head;
+    if ((*destinationList)->head == NULL) {
+        (*destinationList)->head = (*sourceList)->head;
         free(*sourceList);
         *sourceList = NULL;
 
@@ -129,8 +129,8 @@ void putList(List *destinationList, List **sourceList) {
         currentNode = currentNode->next;
     }
 
-    currentNode->next = destinationList->head;
-    destinationList->head = (*sourceList)->head;
+    currentNode->next = (*destinationList)->head;
+    (*destinationList)->head = (*sourceList)->head;
 
     free(*sourceList);
 }

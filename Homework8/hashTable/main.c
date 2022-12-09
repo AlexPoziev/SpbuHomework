@@ -2,7 +2,6 @@
 #include "hashTable.h"
 #include "hashTableTest.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 int main() {
     if (!hashTableTest() || !listTest()) {
@@ -10,7 +9,6 @@ int main() {
         return 1;
     }
 
-    int errorCode = 0;
     HashTable *table = createHashTable();
     if (table == NULL) {
         printf("Not enough memory");
@@ -21,10 +19,11 @@ int main() {
     char fileName[20] = {0};
     scanf("%s", fileName);
 
-    errorCode = getFromFile(fileName, table);
+    int errorCode = getFromFile(fileName, table);
     if (errorCode == -1) {
         printf("No file with this name");
-        return 0;
+        deleteHashTable(&table);
+        return 2;
     }
     if (errorCode == 1) {
         deleteHashTable(&table);
