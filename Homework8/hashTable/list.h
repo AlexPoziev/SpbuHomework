@@ -33,7 +33,7 @@ List* getFirst(List **list, int *errorCode);
 
 // add sourceList into destinationList and delete sourceList
 // doesn't check for equal list elements
-void putList(List *destinationList, List **sourceList);
+void putList(List **destinationList, List **sourceList);
 
 // returns word of first list element
 // return NULL if no first element or list doesn't exist

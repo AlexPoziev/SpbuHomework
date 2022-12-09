@@ -87,7 +87,9 @@ int getFromFile(char *fileName, HashTable *table) {
             double occupancyRate = getHashTableOccupancy(table);
             const double delta = 0.000001;
             if ((1 - occupancyRate) < delta) {
-                hashTableResize(table);
+                if (hashTableResize(table)) {
+                    return 1;
+                }
             }
         }
 
@@ -180,6 +182,12 @@ int hashTableResize(HashTable *hashTable) {
         while (hashTable->hashTable[i] != NULL) {
             List *tempList = getFirst(&hashTable->hashTable[i], &errorCode);
             if (errorCode == 1) {
+                for (int j = 0; i < hashTable->hashTableSize * 2; ++j) {
+                    deleteList(&tempHashTable[i]);
+                }
+
+                free(tempHashTable);
+                
                 return 1;
             }
 
@@ -226,4 +234,30 @@ unsigned int getHashTableSize(HashTable *table) {
     }
 
     return table->hashTableSize;
+}
+
+int addValueToHashTable(HashTable *table, char *value) {
+    if (table == NULL || value == NULL) {
+        return -1;
+    }
+
+    unsigned int hash = hashFunction(table->hashTableSize, value);
+    if (table->hashTable[hash] == NULL) {
+        table->hashTable[hash] = createList();
+        if (table->hashTable == NULL) {
+            return 1;
+        }
+    }
+
+    int errorCode = addWord(table->hashTable[hash], value);
+    if (errorCode == 1) {
+        return 1;
+    }
+
+    const double delta = 0.0001;
+    if ((1 - getHashTableOccupancy(table)) < delta) {
+        hashTableResize(table);
+    }
+
+    return 0;
 }

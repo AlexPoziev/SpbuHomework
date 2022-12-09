@@ -33,3 +33,8 @@ unsigned int getFrequencyByWord(HashTable *table, char *word, int *errorCode);
 
 // return hashTable size
 unsigned int getHashTableSize(HashTable *table);
+
+// add value to hashTable
+// return 1 if not enough memory
+// return 0 if all is ok
+int addValueToHashTable(HashTable *table, char *value);
