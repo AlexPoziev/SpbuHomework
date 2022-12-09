@@ -14,8 +14,6 @@ int main() {
     FILE *file = fopen(fileName, "r");
     if (file == NULL) {
         printf("No file with this name");
-        fclose(file);
-
         return 0;
     }
 
@@ -27,7 +25,7 @@ int main() {
         return 1;
     }
 
-    int errorCode = fileGetTree(file, fileName, tree);
+    int errorCode = fileGetTree(fileName, tree);
     if (errorCode == 1) {
         deleteTree(&tree);
         printf("Not enough memory");

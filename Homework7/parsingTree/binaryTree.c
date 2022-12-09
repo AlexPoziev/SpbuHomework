@@ -1,6 +1,7 @@
 #include "binaryTree.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #define MAX_SIZE_NUMBER 10
 
@@ -91,10 +92,9 @@ int fileGetTreeRecursion(FILE *file, Node *node) {
     return 0;
 }
 
-int fileGetTree(FILE *file, char *fileName, Tree *tree) {
-    file = fopen(fileName, "r");
+int fileGetTree(char *fileName, Tree *tree) {
+    FILE *file = fopen(fileName, "r");
     if (file == NULL) {
-        fclose(file);
         return -1;
     }
 
@@ -129,9 +129,7 @@ void deleteTreeRecursion(Node *child) {
     deleteTreeRecursion(child->rightChild);
 
     free(child->value);
-    child->value = NULL;
     free(child);
-    child = NULL;
 }
 
 void deleteTree(Tree **tree) {
@@ -142,7 +140,7 @@ void deleteTree(Tree **tree) {
     deleteTreeRecursion((*tree)->root);
 
     free(*tree);
-    (*tree) = NULL;
+    *tree = NULL;
 }
 
 void printTreeRecursion(Node *child) {

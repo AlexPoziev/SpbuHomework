@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdbool.h>
-#include <stdio.h>
 
 typedef struct Tree Tree;
 
@@ -9,7 +8,7 @@ typedef struct Tree Tree;
 Tree* createTree(void);
 
 // build binary tree from file data
-int fileGetTree(FILE *file, char *fileName, Tree *tree);
+int fileGetTree(char *fileName, Tree *tree);
 
 // deallocate memory for binaryTree
 void deleteTree(Tree **tree);

@@ -1,5 +1,6 @@
 #include "binaryTree.h"
 #include "testBinaryTree.h"
+#include <stdio.h>
 
 bool createTreeTest(void) {
     Tree *tree = createTree();
@@ -13,8 +14,7 @@ bool createTreeTest(void) {
 
 bool calculateTreeTest(void) {
     Tree *firstTree = createTree();
-    FILE *file = NULL;
-    int errorCode = fileGetTree(file, "testFirst.txt", firstTree);
+    int errorCode = fileGetTree("testFirst.txt", firstTree);
     if (errorCode) {
         return false;
     }
@@ -22,7 +22,7 @@ bool calculateTreeTest(void) {
     bool firstTest = (1.71429 - calculateTree(firstTree)) < delta;
 
     Tree *secondTree = createTree();
-    errorCode = fileGetTree(file, "testSecond.txt", secondTree);
+    errorCode = fileGetTree("testSecond.txt", secondTree);
     if (errorCode) {
         return false;
     }
@@ -37,8 +37,7 @@ bool calculateTreeTest(void) {
 
 bool deleteTreeTest(void) {
     Tree *tree = createTree();
-    FILE *file = NULL;
-    fileGetTree(file, "testSecond.txt", tree);
+    fileGetTree("testSecond.txt", tree);
 
     deleteTree(&tree);
 
@@ -49,8 +48,7 @@ bool deleteTreeTest(void) {
 
 bool fileGetTreeTest(void) {
     Tree *treeTest = createTree();
-    FILE *file = NULL;
-    int errorCode = fileGetTree(file, "testSecond.txt", treeTest);
+    int errorCode = fileGetTree("testSecond.txt", treeTest);
     if (errorCode) {
         return false;
     }
