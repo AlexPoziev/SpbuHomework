@@ -33,8 +33,8 @@ int main() {
         switch (option) {
             case 1: {
                 printf("Input token: ");
-                int token = 0;
-                scanf("%d", &token);
+                char token[MAX_STRING_SIZE] = {0};
+                scanf("%s", token);
                 printf("Input value with length less than 100: ");
                 char value[MAX_STRING_SIZE] = {0};
                 scanf("%s", value);
@@ -52,22 +52,23 @@ int main() {
             }
             case 2: {
                 printf("Input token to get value of it: ");
-                int token = 0;
-                scanf("%d", &token);
+                char token[MAX_STRING_SIZE] = {0};
+                scanf("%s", token);
                 char *answer = getValue(dictionary, token);
                 if (answer == NULL) {
                     printf("No value with this token in the dictionary \n");
                     break;
                 }
-                printf("Value of token %d is '%s' \n", token, answer);
+
+                printf("Value of token %s is '%s' \n", token, answer);
 
                 break;
             }
             case 3: {
                 printf("Input token to check for its containing in the dictionary: ");
-                int token = 0;
-                scanf("%d", &token);
-                printf("The token %d %s in the dictionary \n", token,
+                char token[MAX_STRING_SIZE] = {0};
+                scanf("%s", token);
+                printf("The token %s %s in the dictionary \n", token,
                         isContain(dictionary, token)
                         ? "is contained"
                         : "isn't contained");
@@ -76,8 +77,8 @@ int main() {
             }
             case 4: {
                 printf("Input token to delete its and value from the dictionary: ");
-                int token = 0;
-                scanf("%d", &token);
+                char token[MAX_STRING_SIZE] = {0};
+                scanf("%s", token);
                 deleteValue(dictionary, token);
                 printf("Deletion completed\n");
 

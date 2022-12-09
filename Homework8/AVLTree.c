@@ -5,7 +5,7 @@
 
 typedef struct Node {
     char *value;
-    int token;
+    char *token;
     int8_t balance;
     struct Node *leftChild;
     struct Node *rightChild;
@@ -21,20 +21,34 @@ typedef enum Direction{
 } Direction;
 
 Dictionary* createDictionary(void) {
-    Dictionary *newDictionary = malloc(sizeof(Dictionary));
-    newDictionary->dictionary = NULL;
+    Dictionary *newDictionary = calloc(1, sizeof(Dictionary));
 
     return newDictionary;
 }
 
-Node* createNode(int token, char *value) {
+Node* createNode(char *token, char *value) {
     Node *newNode = calloc(1, sizeof(Node));
     if (newNode == NULL) {
         return NULL;
     }
 
-    newNode->token = token;
-    char *newValue = calloc(strlen(value), sizeof(char));
+    char *newToken = calloc(strlen(token) + 1, sizeof(char));
+    if (newToken == NULL) {
+        free(newNode);
+        return NULL;
+    }
+
+    strcpy(newToken, token);
+    newNode->token = newToken;
+
+    char *newValue = calloc(strlen(value) + 1, sizeof(char));
+    if (newValue == NULL) {
+        free(newNode);
+        free(newToken);
+
+        return NULL;
+    }
+
     stpcpy(newValue, value);
     newNode->value = newValue;
 
@@ -167,13 +181,14 @@ Node* balance(Node *node) {
     return node;
 }
 
-Node* insert(Node *node, int token, char *value, bool *isPart, int8_t *errorCode) {
+Node* insert(Node *node, char *token, char *value, bool *isPart, int8_t *errorCode) {
     // create leaf
     if (node == NULL) {
         Node *newNode = createNode(token, value);
         if (newNode == NULL) {
             *errorCode = 1;
             *isPart = true;
+
             return NULL;
         }
 
@@ -182,16 +197,16 @@ Node* insert(Node *node, int token, char *value, bool *isPart, int8_t *errorCode
 
     Direction direction = 0;
 
-    if (token < node->token) {
+    if (strcmp(token, node->token) < 0) {
         node->leftChild = insert(node->leftChild, token, value, isPart, errorCode);
         direction = left;
-    } else if (token > node->token) {
+    } else if (strcmp(token, node->token) > 0) {
         node->rightChild = insert(node->rightChild, token, value, isPart, errorCode);
         direction = right;
     } else {
         // case finding existing token
         *isPart = true;
-        char *newValue = calloc(strlen(value), sizeof(char));
+        char *newValue = calloc(strlen(value) + 1, sizeof(char));
         if (newValue == NULL) {
             *errorCode = 1;
         } else {
@@ -219,7 +234,7 @@ Node* insert(Node *node, int token, char *value, bool *isPart, int8_t *errorCode
 }
 
 // just a shell, call insert() function, that really adds values
-int addValue(Dictionary *dictionary, int token, char* value) {
+int addValue(Dictionary *dictionary, char *token, char* value) {
     if (dictionary == NULL) {
         return -1;
     }
@@ -250,7 +265,7 @@ Node* getMostRight(Node* root) {
     return currentNode;
 }
 
-Node* delete(Node *node, int token, bool *isPart, int8_t *errorCode) {
+Node* delete(Node *node, char *token, bool *isPart, int8_t *errorCode) {
     if (node == NULL) {
         // if not find node, then skip recursion
         *isPart = true;
@@ -259,10 +274,10 @@ Node* delete(Node *node, int token, bool *isPart, int8_t *errorCode) {
 
     Direction direction = 0;
 
-    if (token < node->token) {
+    if (strcmp(token, node->token) < 0) {
         node->leftChild = delete(node->leftChild, token, isPart, errorCode);
         direction = left;
-    } else if (token > node->token) {
+    } else if (strcmp(token, node->token) > 0) {
         node->rightChild = delete(node->rightChild, token, isPart, errorCode);
         direction = right;
     } else {
@@ -273,12 +288,13 @@ Node* delete(Node *node, int token, bool *isPart, int8_t *errorCode) {
             // no children
             if (child == NULL) {
                 free(node->value);
-                node->value = NULL;
+                free(node->token);
                 free(node);
                 node = NULL;
             } else {
             // only child
                 free(node->value);
+                free(node->token);
                 memcpy(node, child, sizeof(Node));
                 free(child);
             }
@@ -287,14 +303,24 @@ Node* delete(Node *node, int token, bool *isPart, int8_t *errorCode) {
             Node* approachChild = getMostRight(node);
 
             // copy values
-            int temp = approachChild->token;
-            char *tempValue = calloc(strlen(approachChild->value), sizeof(char));
-            if (tempValue == NULL) {
+            char *tempToken = calloc(strlen(approachChild->token) + 1, sizeof(char));
+            if (tempToken == NULL) {
                 *errorCode = 1;
                 *isPart = true;
+
                 return node;
             }
 
+            char *tempValue = calloc(strlen(approachChild->value) + 1, sizeof(char));
+            if (tempValue == NULL) {
+                *errorCode = 1;
+                *isPart = true;
+                free(tempToken);
+
+                return node;
+            }
+
+            strcpy(tempToken, approachChild->token);
             strcpy(tempValue, approachChild->value);
 
             // carry pointer to node for change its token after delete recursion
@@ -303,7 +329,7 @@ Node* delete(Node *node, int token, bool *isPart, int8_t *errorCode) {
             // recursion call to delete left most right element and balance it
             node = delete(node, approachChild->token, isPart, errorCode);
 
-            tempNode->token = temp;
+            tempNode->token = tempToken;
         }
     }
 
@@ -321,7 +347,7 @@ Node* delete(Node *node, int token, bool *isPart, int8_t *errorCode) {
 }
 
 // just a shell, call delete() function, that really delete values
-int deleteValue(Dictionary *dictionary, int token) {
+int deleteValue(Dictionary *dictionary, char *token) {
     if (dictionary == NULL) {
         return -1;
     }
@@ -333,20 +359,22 @@ int deleteValue(Dictionary *dictionary, int token) {
     return errorCode;
 }
 
-Node* findPosition(Dictionary *dictionary, int token, bool *isEnd) {
+Node* findPosition(Dictionary *dictionary, const char *token, bool *isEnd) {
     Node *currentNode = dictionary->dictionary;
-    if (currentNode->token == token) {
+    if (strcmp(currentNode->token, token) == 0) {
         *isEnd = false;
         return currentNode;
     }
-    Node *nextNode = currentNode->token > token ? currentNode->leftChild : currentNode->rightChild;
+
+    Node *nextNode = strcmp(currentNode->token, token) > 0 ? currentNode->leftChild : currentNode->rightChild;
     while (nextNode != NULL) {
         currentNode = nextNode;
-        if (currentNode->token == token) {
+        if (strcmp(currentNode->token, token) == 0) {
             *isEnd = false;
             return currentNode;
         }
-        nextNode = currentNode->token > token ? currentNode->leftChild : currentNode->rightChild;
+
+        nextNode = strcmp(currentNode->token, token) > 0 ? currentNode->leftChild : currentNode->rightChild;
     }
 
     *isEnd = true;
@@ -354,20 +382,23 @@ Node* findPosition(Dictionary *dictionary, int token, bool *isEnd) {
     return currentNode;
 }
 
-bool isContain(Dictionary *dictionary, int token) {
+bool isContain(Dictionary *dictionary, char *token) {
     if (dictionary == NULL) {
         return false;
     }
+
     bool isEnd = false;
+
     findPosition(dictionary, token, &isEnd);
 
     return !isEnd;
 }
 
-char* getValue(Dictionary *dictionary, int token) {
+char* getValue(Dictionary *dictionary, char *token) {
     if (dictionary == NULL) {
         return NULL;
     }
+
     bool isEnd = false;
     Node *currentNode = findPosition(dictionary, token, &isEnd);
 
@@ -383,9 +414,8 @@ void deleteTreeRecursion(Node *child) {
     deleteTreeRecursion(child->rightChild);
 
     free(child->value);
-    child->value = NULL;
+    free(child->token);
     free(child);
-    child = NULL;
 }
 
 void deleteTree(Dictionary **dictionary) {
@@ -411,39 +441,39 @@ int balanceTree(Node* node, bool *isBalanced) {
 
 bool AVLTreeBalanceTest(void) {
     Dictionary *test = createDictionary();
-    addValue(test, 5, "test");
-    addValue(test, 0, "test");
-    addValue(test, 10, "test");
-    addValue(test, 15, "test");
-    addValue(test, 20, "test");
+    addValue(test, "b", "test");
+    addValue(test, "a", "test");
+    addValue(test, "ba", "test");
+    addValue(test, "bc", "test");
+    addValue(test, "dc", "test");
     bool firstTest = true;
     balanceTree(test->dictionary, &firstTest);
 
-    deleteValue(test, 5);
+    deleteValue(test, "b");
     bool secondTest = true;
     balanceTree(test->dictionary, &secondTest);
 
-    addValue(test, 20, "test");
-    addValue(test, 25, "test");
-    addValue(test, 30, "test");
-    addValue(test, 35, "test");
-    addValue(test, 40, "test");
+    addValue(test, "bc", "test");
+    addValue(test, "dc", "test");
+    addValue(test, "lc", "test");
+    addValue(test, "ks", "test");
+    addValue(test, "dff", "test");
     bool thirdTest = true;
     balanceTree(test->dictionary, &thirdTest);
 
-    addValue(test, -10, "test");
-    addValue(test, -15, "test");
-    addValue(test, -20, "test");
-    addValue(test, -30, "test");
-    addValue(test, 50, "test");
+    addValue(test, "chchc", "test");
+    addValue(test,  "a", "test");
+    addValue(test, "b", "test");
+    addValue(test, "a", "test");
+    addValue(test, "125", "test");
     bool fourthTest = true;
     balanceTree(test->dictionary, &fourthTest);
 
-    deleteValue(test, 20);
-    deleteValue(test, 50);
-    deleteValue(test, -15);
-    deleteValue(test, 25);
-    deleteValue(test, 25);
+    deleteValue(test, "a");
+    deleteValue(test, "b");
+    deleteValue(test, "dc");
+    deleteValue(test, "ks");
+    deleteValue(test, "125");
     bool fifthTest = true;
     balanceTree(test->dictionary, &fifthTest);
 

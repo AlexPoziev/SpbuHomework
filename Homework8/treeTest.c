@@ -14,12 +14,13 @@ bool createDictionaryTest(void) {
 
 bool deleteTreeTest(void) {
     Dictionary *dictionary = createDictionary();
-    int errorCode = addValue(dictionary, 10, "ParahodEntertainment");
+    int errorCode = addValue(dictionary, "a", "ParahodEntertainment");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
-    errorCode = addValue(dictionary, 100, "Jaina");
+
+    errorCode = addValue(dictionary, "b", "Jaina");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
@@ -32,32 +33,32 @@ bool deleteTreeTest(void) {
 
 bool addWordTest(void) {
     Dictionary *dictionary = createDictionary();
-    int errorCode = addValue(dictionary, 10, "Osman");
+    int errorCode = addValue(dictionary, "a", "Osman");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
-    errorCode = addValue(dictionary, 100, "Commonwealth");
+    errorCode = addValue(dictionary, "b", "Commonwealth");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
-    errorCode = addValue(dictionary, 0, "Uther");
-    if (errorCode) {
-        deleteTree(&dictionary);
-        return false;
-    }
-
-    bool firstTest = strcmp(getValue(dictionary, 10), "Osman");
-    bool secondTest = strcmp(getValue(dictionary, 0), "Uther");
-    bool thirdTest = strcmp(getValue(dictionary, 100), "Commonwealth");
-    errorCode = addValue(dictionary, 0, "RIP");
+    errorCode = addValue(dictionary, "0", "Uther");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
 
-    bool fourthTest = strcmp(getValue(dictionary, 0), "RIP");
+    bool firstTest = strcmp(getValue(dictionary, "a"), "Osman");
+    bool secondTest = strcmp(getValue(dictionary, "0"), "Uther");
+    bool thirdTest = strcmp(getValue(dictionary, "b"), "Commonwealth");
+    errorCode = addValue(dictionary, "0", "RIP");
+    if (errorCode) {
+        deleteTree(&dictionary);
+        return false;
+    }
+
+    bool fourthTest = strcmp(getValue(dictionary, "0"), "RIP");
 
     deleteTree(&dictionary);
 
@@ -66,20 +67,21 @@ bool addWordTest(void) {
 
 bool getWordTest(void) {
     Dictionary *dictionary = createDictionary();
-    int errorCode = addValue(dictionary, 10, "Osman");
+    int errorCode = addValue(dictionary, "a", "Osman");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
-    errorCode = addValue(dictionary, 100, "Commonwealth");
+    errorCode = addValue(dictionary, "b", "Commonwealth");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
 
-    bool firstTest = strcmp(getValue(dictionary, 10), "Osman");
-    bool secondTest = strcmp(getValue(dictionary, 100), "Commonwealth");
-    bool thirdTest = getValue(dictionary, 0) == NULL;
+    bool firstTest = strcmp(getValue(dictionary, "a"), "Osman");
+    bool secondTest = strcmp(getValue(dictionary, "b"), "Commonwealth");
+    deleteValue(dictionary, "a");
+    bool thirdTest = getValue(dictionary, "a") == NULL;
 
     deleteTree(&dictionary);
 
@@ -88,33 +90,33 @@ bool getWordTest(void) {
 
 bool deleteWordTest(void) {
     Dictionary *dictionary = createDictionary();
-    int errorCode = addValue(dictionary, 10, "Osman");
+    int errorCode = addValue(dictionary, "a", "Osman");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
-    errorCode = addValue(dictionary, 100, "Commonwealth");
+    errorCode = addValue(dictionary, "b", "Commonwealth");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
-    errorCode = addValue(dictionary, 3, "Uther");
+    errorCode = addValue(dictionary, "1", "Uther");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
-    errorCode = addValue(dictionary, 0, "Scorch");
+    errorCode = addValue(dictionary, "0", "Scorch");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
 
-    deleteValue(dictionary, 10);
-    bool firstTest = !isContain(dictionary, 10);
-    deleteValue(dictionary, 0);
-    bool secondTest = !isContain(dictionary, 0);
-    bool thirdTest = isContain(dictionary, 100);
-    bool fourthTest = isContain(dictionary, 3);
+    deleteValue(dictionary, "a");
+    bool firstTest = !isContain(dictionary, "a");
+    deleteValue(dictionary, "0");
+    bool secondTest = !isContain(dictionary, "0");
+    bool thirdTest = isContain(dictionary, "b");
+    bool fourthTest = isContain(dictionary, "1");
 
     deleteTree(&dictionary);
 
@@ -123,22 +125,22 @@ bool deleteWordTest(void) {
 
 bool isContainTest(void) {
     Dictionary *dictionary = createDictionary();
-    int errorCode = addValue(dictionary, 10, "ParahodEntertainment");
+    int errorCode = addValue(dictionary, "a", "ParahodEntertainment");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
-    errorCode = addValue(dictionary, 100, "Jaina");
+    errorCode = addValue(dictionary, "b", "Jaina");
     if (errorCode) {
         deleteTree(&dictionary);
         return false;
     }
 
-    bool firstTest = isContain(dictionary, 10);
-    bool secondTest = isContain(dictionary, 100);
-    bool thirdTest = !isContain(dictionary, 0);
-    deleteValue(dictionary, 100);
-    bool fourthTest = !isContain(dictionary, 100);
+    bool firstTest = isContain(dictionary, "a");
+    bool secondTest = isContain(dictionary, "b");
+    bool thirdTest = !isContain(dictionary, "0");
+    deleteValue(dictionary, "b");
+    bool fourthTest = !isContain(dictionary, "b");
 
     deleteTree(&dictionary);
 
