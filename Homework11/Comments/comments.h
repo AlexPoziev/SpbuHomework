@@ -1,6 +1,6 @@
 #pragma once
 
-// return array of comments
+// return array of comments, with allocated memory, so need to free it
 // errorCode get values:
 // -1 if file doesn't exist
 // 1 if not enough memory
