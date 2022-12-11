@@ -3,4 +3,4 @@ project(RealNumber C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(RealNumber main.c lexer.c lexer.h)
+add_executable(RealNumber main.c lexer.c lexer.h lexerTest.c lexerTest.h)
