@@ -1,4 +1,4 @@
-# How to work with is:
+# How to work with it:
 
 1) Fill matrix.txt file with matrix like:
 
