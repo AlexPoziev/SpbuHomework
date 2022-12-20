@@ -11,7 +11,7 @@ bool commentsTest(void) {
     free(comment);
 
     comment = getCommentsFromFile("secondTest.txt", &errorCode);
-    bool secondTest = !strcmp(comment, "/*321123*/\n");
+    bool secondTest = !strcmp(comment, "/*321123*/\n/***/\n/*/123*/\n");
 
     free(comment);
 

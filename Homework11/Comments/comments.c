@@ -29,7 +29,7 @@ Symbol getSymbolToken(char symbol) {
     }
 }
 
-unsigned int** createMatrix() {
+unsigned int** createMatrix(void) {
     unsigned int **table = (unsigned**)calloc(4, sizeof(unsigned*));
     if (table == NULL) {
         return NULL;
@@ -66,7 +66,7 @@ void deleteMatrix(unsigned **table) {
 // errorCode gets value:
 // -1 if no file
 // 1 if not enough memory
-unsigned int** getDFATable(char *fileName, int *errorCode) {
+unsigned int** getDFATable(const char *fileName, int *errorCode) {
     FILE *file = fopen(fileName, "r");
     if (file == NULL) {
         *errorCode = -1;
@@ -97,7 +97,8 @@ State lengthMove(State currentState, Symbol currentSymbol, unsigned **table, uns
     State newState = table[currentState][currentSymbol];
     // get number of comments, because I want to add \n after each comment
     if (currentState == startComment && newState == comment) {
-        ++(*commentsCount);
+        // "/*" + '/' + '\n'
+        *commentsCount += 4;
     }
 
     return newState;
@@ -112,7 +113,7 @@ unsigned getCommentsLength(FILE *file, unsigned **table, int *errorCode) {
 
     while (currentSymbol != EOF) {
         currentState = lengthMove(currentState, getSymbolToken(currentSymbol), table, &commentsLength);
-        if (currentState == comment) {
+        if (currentState == comment || currentState == endComment) {
             ++commentsLength;
         }
 
@@ -123,8 +124,7 @@ unsigned getCommentsLength(FILE *file, unsigned **table, int *errorCode) {
         *errorCode = 1;
     }
 
-    // + 3 because don't count '/' and '/*'
-    return commentsLength + 3;
+    return commentsLength;
 }
 
 State move(State currentState, char currentSymbol, unsigned **table, unsigned int *currentArrayPosition, char *comments) {
@@ -141,6 +141,9 @@ State move(State currentState, char currentSymbol, unsigned **table, unsigned in
         comments[*currentArrayPosition] = '/';
         comments[*currentArrayPosition + 1] = '\n';
         *currentArrayPosition += 2;
+    } else if (currentState == endComment && newState == endComment) {
+        comments[*currentArrayPosition] = '*';
+        ++(*currentArrayPosition);
     }
 
     return newState;
@@ -190,6 +193,10 @@ char* getCommentsFromFile(char *fileName, int *errorCode) {
     while (currentSymbol != EOF) {
         currentState = move(currentState, currentSymbol, table, &currentArrayPosition, commentsArray);
         currentSymbol = (char)fgetc(file);
+    }
+
+    if (currentState == comment || currentState == endComment) {
+        *errorCode = -2;
     }
 
     fclose(file);
