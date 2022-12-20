@@ -22,16 +22,14 @@ bool isRealNumber(const char *expression) {
         char currentSymbol = expression[currentPosition];
         ++currentPosition;
 
-        // stupid warning
         switch (currentState) {
             case start: {
-                if (!isDigit(currentSymbol)) {
-                    return false;
+                if (isDigit(currentSymbol)) {
+                    currentState = startDigit;
+                    break;
                 }
 
-                currentState = startDigit;
-
-                break;
+                return false;
             }
 
             case startDigit: {
@@ -63,7 +61,7 @@ bool isRealNumber(const char *expression) {
                 if (isDigit(currentSymbol)) {
                     break;
                 }
-                if (currentSymbol == 'e' || currentSymbol == 'E') {
+                if (currentSymbol == 'E') {
                     currentState = exponent;
                     break;
                 }
