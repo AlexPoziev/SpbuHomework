@@ -40,7 +40,7 @@ bool isRealNumber(const char *expression) {
                     currentState = point;
                     break;
                 }
-                if (currentSymbol == 'e' || currentSymbol == 'E') {
+                if (currentSymbol == 'E') {
                     currentState = exponent;
                     break;
                 }
