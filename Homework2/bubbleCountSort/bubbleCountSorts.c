@@ -119,9 +119,9 @@ int main(int argc, char *argv[]) {
         }
     }
     
-    const int arraySize = 100000;
-    int arrayFirst[arraySize] = {0};
-    int arraySecond[arraySize] = {0};
+    const int arraySize = 10000;
+    int arrayFirst[10000] = {0};
+    int arraySecond[10000] = {0};
     
     randomArrayFilling(arraySize, arrayFirst);
     randomArrayFilling(arraySize, arraySecond);
